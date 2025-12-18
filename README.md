@@ -22,3 +22,5 @@ This repository demonstrates:
 ## Presentation
 
 See `docs/REPOSITORY_PRESENTATION.md` for checklists and evidence to capture.
+
+- Demo change
