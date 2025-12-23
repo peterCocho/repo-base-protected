@@ -36,6 +36,7 @@ backend/
     ├── ChurnInsightApiApplication.java
     ├── controller/
     ├── dto/
+    ├── model/
     ├── security/
     └── service/
 ```
