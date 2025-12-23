@@ -24,6 +24,9 @@ El sistema combina **Data Science (Python, scikit-learn)** y **Back-End (Java + 
 ## 📂 Estructura del proyecto
 
 ```text
+  1. Se realiza proceso ETL y se crea dataframe inicial.
+  2. Análisis de dataframe, despliegue de gráficas y selección de variables que aporten información.
+  3. Limpieza de dataframe con las variables de peso.
 data-science/
 ├── notebook.ipynb        # EDA, features, entrenamiento y métricas
 ├── model.pkl             # Modelo serializado
