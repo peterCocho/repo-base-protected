@@ -1,0 +1,56 @@
+package com.churninsight.backend_api.exception;
+
+import com.churninsight.backend_api.dto.ErrorResponse;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * Captura excepciones en toda la aplicación y las devuelve en un formato JSON limpio.
+ */
+
+public class GlobalExceptionHandler {
+
+    /**
+     * Maneja errores de validación (ej. campos obligatorios faltantes).
+     */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+
+        // Extraemos cada error de validación del objeto Exception
+        ex.getBindingResult().getFieldErrors().forEach(error ->
+                errors.put(error.getField(), error.getDefaultMessage())
+        );
+
+        ErrorResponse errorRes = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                "Error de Validación",
+                "Los datos enviados no son válidos",
+                errors
+        );
+        return new ResponseEntity<>(errorRes, HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * Maneja cualquier otro error inesperado (Error 500).
+     */
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleGlobalException(Exception ex) {
+        ErrorResponse errorRes = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "Error interno del servidor",
+                ex.getMessage(),
+                null
+        );
+        return new ResponseEntity<>(errorRes, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
