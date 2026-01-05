@@ -1,5 +1,4 @@
 package com.churninsight.backend_api.controller;
-
 import com.churninsight.backend_api.dto.PredictionRequest;
 import com.churninsight.backend_api.dto.PredictionResponse;
 import com.churninsight.backend_api.repository.CustomerRepository;

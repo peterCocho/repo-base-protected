@@ -4,23 +4,27 @@ import com.churninsight.backend_api.dto.PredictionRequest;
 import com.churninsight.backend_api.dto.PredictionResponse;
 import com.churninsight.backend_api.model.Customer;
 import com.churninsight.backend_api.repository.CustomerRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 @Service
+
 public class PredictionServiceImpl implements PredictionService{
-
     private final CustomerRepository customerRepository;
+    private final RestTemplate restTemplate;
+    @Value("${api.ds.url}")
+    private String dsServiceUrl;
 
-    // Inyectamos el repositorio para poder guardar en la DB
-    public PredictionServiceImpl(CustomerRepository customerRepository) {
+    public PredictionServiceImpl(CustomerRepository customerRepository, RestTemplate restTemplate) {
         this.customerRepository = customerRepository;
+        this.restTemplate = restTemplate;
     }
 
     @Override
     public PredictionResponse processPrediction(PredictionRequest request) {
-        // 1. Simular la lógica del modelo (esto luego será la llamada a Python)
-        String prevision = (request.getLastLoginDays() > 20) ? "Va a cancelar" : "Va a continuar";
-        double probabilidad = (prevision.equals("Va a cancelar")) ? 0.88 : 0.12;
+        // 1. Llamar al microservicio Python para obtener la predicción real
+        PredictionResponse response = restTemplate.postForObject(dsServiceUrl, request, PredictionResponse.class);
 
         // 2. CREAR Y GUARDAR EL CLIENTE EN LA BASE DE DATOS (Persistencia)
         Customer customer = new Customer();
@@ -37,19 +41,11 @@ public class PredictionServiceImpl implements PredictionService{
         customer.setNumberOfProfiles(request.getNumberOfProfiles());
         customer.setAvgWatchTimePerDay(request.getAvgWatchTimePerDay());
         customer.setFavoriteGenre(request.getFavoriteGenre());
-
-        // Guardamos si el modelo predijo Churn o no (opcional, pero útil)
-        customer.setChurned(prevision.equals("Va a cancelar"));
-
-        // Guardar físicamente en PostgreSQL
+        // Guardamos si el modelo predijo Churn o no
+        customer.setChurned(response != null && "Churn".equalsIgnoreCase(response.getPrediction()));
         customerRepository.save(customer);
 
-        // 3. Retornar la respuesta al Controller
-        return PredictionResponse.builder()
-                .customerId(request.getCustomerId())
-                .prevision(prevision)
-                .probabilidad(probabilidad)
-                .status("Success")
-                .build();
+        // 3. Retornar la respuesta del microservicio Python
+        return response;
     }
 }
