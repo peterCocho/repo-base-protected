@@ -6,13 +6,8 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-<<<<<<< HEAD
-		<version>3.2.1</version>
-		<relativePath/> <!-- lookup parent from repository -->
-=======
 		<version>3.4.1</version>
 		<relativePath/>
->>>>>>> 67093911e194976f80dbd0470f26c36a3f763b06
 	</parent>
 
 	<groupId>com.churninsight</groupId>
@@ -26,7 +21,6 @@
 	</properties>
 
 	<dependencies>
-<<<<<<< HEAD
 		<!-- JWT -->
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
@@ -44,12 +38,12 @@
 			<artifactId>jjwt-jackson</artifactId>
 			<version>0.11.5</version>
 			<scope>runtime</scope>
-=======
-		<!-- Web: Incluye Tomcat y Spring MVC (Este reemplaza a webmvc) -->
+		</dependency>
+
+		<!-- Web: Incluye Tomcat y Spring MVC -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
->>>>>>> 67093911e194976f80dbd0470f26c36a3f763b06
 		</dependency>
 
 		<!-- Persistencia de datos -->
@@ -63,13 +57,18 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
-<<<<<<< HEAD
+
+		<!-- Email -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
-=======
->>>>>>> 67093911e194976f80dbd0470f26c36a3f763b06
+
+		<!-- Seguridad -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
 
 		<!-- Bases de datos -->
 		<dependency>
@@ -104,29 +103,20 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-<<<<<<< HEAD
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-security</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-test</artifactId>
-			<scope>test</scope>
-=======
 			<artifactId>spring-boot-devtools</artifactId>
 			<scope>runtime</scope>
 			<optional>true</optional>
->>>>>>> 67093911e194976f80dbd0470f26c36a3f763b06
 		</dependency>
 
-		<!-- Tests: Este starter ya incluye JUnit, Mockito y AssertJ -->
+		<!-- Tests -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -134,22 +124,6 @@
 	<build>
 		<plugins>
 			<plugin>
-<<<<<<< HEAD
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<annotationProcessorPaths>
-						<path>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-							<version>${lombok.version}</version>
-						</path>
-					</annotationProcessorPaths>
-				</configuration>
-			</plugin>
-			<plugin>
-=======
->>>>>>> 67093911e194976f80dbd0470f26c36a3f763b06
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
