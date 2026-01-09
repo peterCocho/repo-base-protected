@@ -1,0 +1,6 @@
+age,subscription_type,last_login_days,region,device,monthly_fee,payment_method,number_of_profiles,avg_watch_time_per_day,favorite_genre
+70,Basic,55,Oceania,Desktop,8.99,Gift Card,4,0.12,Romance
+41,Basic,0,Asia,Tablet,8.99,PayPal,27.78,Romance
+65,Standard,47,Asia,Mobile,13.99,Credit Card,4,0.02,Sci-Fi
+59,Basic,51,South America,Mobile,8.99,PayPal,1,0.1,Comedy
+39,Premium,30,Africa,TV,17.99,Debit Card,5,0.4,Comedy

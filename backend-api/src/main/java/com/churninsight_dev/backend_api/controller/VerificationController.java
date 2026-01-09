@@ -20,13 +20,13 @@ import java.util.UUID;
 
 @RestController
 public class VerificationController {
-    private final UserRepository loginRepository;
+    private final UserRepository userRepository;
     private final VerificationCodeRepository verificationCodeRepository;
     private final EmailService emailService;
 
     @Autowired
-    public VerificationController(UserRepository loginRepository, VerificationCodeRepository verificationCodeRepository, EmailService emailService) {
-        this.loginRepository = loginRepository;
+    public VerificationController(UserRepository userRepository, VerificationCodeRepository verificationCodeRepository, EmailService emailService) {
+        this.userRepository = userRepository;
         this.verificationCodeRepository = verificationCodeRepository;
         this.emailService = emailService;
     }
@@ -35,25 +35,25 @@ public class VerificationController {
     public ResponseEntity<?> verifyCode(@RequestBody VerificationRequest request) {
         String email = request.getEmail();
         String code = request.getVerification();
-        Optional<User> userOpt = loginRepository.findByEmail(email);
+        Optional<User> userOpt = userRepository.findByEmail(email);
         if (userOpt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                 new ErrorResponse("Usuario no encontrado.")
             );
         }
         User user = userOpt.get();
-        VerificationCode verificationCode = verificationCodeRepository.findByLogin_Id(user.getId());
+        VerificationCode verificationCode = verificationCodeRepository.findByUser_Id(user.getId());
         if (verificationCode != null) {
             Date now = new Date();
-            if (verificationCode.getExpiryDate() != null && now.after(verificationCode.getExpiryDate())) {
+            if (verificationCode.getExpiration() != null && now.after(verificationCode.getExpiration())) {
                 verificationCodeRepository.delete(verificationCode);
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                     new ErrorResponse("El código de verificación ha expirado. Solicita uno nuevo.")
                 );
             }
             if (verificationCode.getCode().equals(code)) {
-                user.setStatus(1);
-                loginRepository.save(user);
+                user.setStatus(true);
+                userRepository.save(user);
                 verificationCodeRepository.delete(verificationCode);
                 return ResponseEntity.ok(
                     new LoginResponse("¡Tu cuenta ha sido verificada! Ahora puedes iniciar sesión.", user.getEmail(), user.getUserName(), user.getStatus())
@@ -67,7 +67,7 @@ public class VerificationController {
 
     @PostMapping("/send-verification-code")
     public ResponseEntity<?> sendVerificationCode(@RequestBody String email) {
-        Optional<User> userOpt = loginRepository.findByEmail(email);
+        Optional<User> userOpt = userRepository.findByEmail(email);
         if (userOpt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("Usuario no encontrado."));
         }

@@ -2,7 +2,6 @@ package com.churninsight_dev.backend_api.repository;
 
 import com.churninsight_dev.backend_api.model.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -21,7 +20,6 @@ public interface CustomerRepository extends JpaRepository<Customer, String> {
     boolean existsByCustomerId(String customerId);
 
     //Para que el Frontend pueda hacer el Dashboard
-    @Query("SELECT COUNT(c) FROM Customer c WHERE c.churned = true")
-    long countChurnedCustomers();
+    // El método countChurnedCustomers fue eliminado porque el campo churned ya no existe en Customer.
 
 }

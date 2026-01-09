@@ -26,11 +26,12 @@ public class VerificationCode {
 
     // Relación uno a uno con el usuario (Login)
     @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false, name = "login_id")
+    @JoinColumn(nullable = false, name = "user_id")
     private User user;
 
     // Fecha de expiración del código
-    private Date expiryDate;
+    @Column(name = "expiration")
+    private Date expiration;
 
     /**
      * Constructor que inicializa el código, usuario y fecha de expiración
@@ -38,7 +39,7 @@ public class VerificationCode {
     public VerificationCode(String code, User user) {
         this.code = code;
         this.user = user;
-        this.expiryDate = calculateExpiryDate(EXPIRATION_SECONDS);
+        this.expiration = calculateExpiryDate(EXPIRATION_SECONDS);
     }
 
     /**

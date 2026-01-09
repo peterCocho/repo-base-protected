@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+
 public class PredictionResponse {
 
     @JsonProperty("prediction")
@@ -23,4 +24,7 @@ public class PredictionResponse {
 
     @JsonProperty("main_factor")
     private String mainFactor; // Ejemplo: "Watch_hours"
+
+    @JsonProperty("custom_message")
+    private String customMessage;
 }

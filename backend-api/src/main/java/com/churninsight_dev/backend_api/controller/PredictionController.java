@@ -1,4 +1,7 @@
 package com.churninsight_dev.backend_api.controller;
+
+import org.springframework.web.multipart.MultipartFile;
+import java.util.List;
 import com.churninsight_dev.backend_api.dto.PredictionRequest;
 import com.churninsight_dev.backend_api.dto.PredictionResponse;
 import com.churninsight_dev.backend_api.repository.CustomerRepository;
@@ -40,10 +43,9 @@ public class PredictionController {
      */
 
     @PostMapping("/predict")
-    public ResponseEntity<PredictionResponse> getPrediction(@Valid @RequestBody PredictionRequest request){
-        // Delegamos la logica de negocio al servicio
-        PredictionResponse response = predictionService.processPrediction(request);
-
+    public ResponseEntity<PredictionResponse> getPrediction(@Valid @RequestBody PredictionRequest request, @RequestHeader("Authorization") String authHeader){
+        // Delegamos la logica de negocio al servicio, pasando el token
+        PredictionResponse response = predictionService.processPrediction(request, authHeader);
         // Devolvemos la respuesta con un estado HTTP 200 (ok)
         return ResponseEntity.ok(response);
     }
@@ -59,13 +61,24 @@ public class PredictionController {
     @GetMapping("/stats")
     public ResponseEntity<Map<String, Object>> getStats() {
         long total = customerRepository.count();
-        long churned = customerRepository.countChurnedCustomers();
 
         Map<String, Object> stats = new HashMap<>();
         stats.put("total_analizados", total);
-        stats.put("clientes_en_riesgo", churned);
-        stats.put("tasa_churn", total > 0 ? (double) churned / total : 0);
+        // El campo churned y el método countChurnedCustomers ya no existen
+        // Si necesitas mostrar otros datos, agrega la lógica aquí
 
         return ResponseEntity.ok(stats);
+    }
+
+
+    /**
+     * (Opcional) Endpoint para predicción masiva por archivo CSV
+     */
+    /**
+     * Endpoint para predicción masiva por archivo CSV
+     */
+    @PostMapping("/csv")
+    public ResponseEntity<List<PredictionResponse>> predictFromCsv(@RequestParam("file") MultipartFile file, @RequestHeader("Authorization") String authHeader) {
+        return ResponseEntity.ok(predictionService.processCsvPrediction(file, authHeader));
     }
 }

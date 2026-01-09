@@ -17,7 +17,7 @@ public class Prediction {
     private String resultado;
     private Double probabilidad;
     private String factorPrincipal;
-    private String otrosDatos; // Si necesitas guardar el JSON completo
+    
 
     @OneToOne
     @JoinColumn(name = "customer_id", referencedColumnName = "customer_id")

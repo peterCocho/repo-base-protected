@@ -19,6 +19,7 @@ import lombok.Data;
 
 @Data
 @Entity
+@jakarta.persistence.Table(name = "users")
 public class User {
 
     // Identificador único del usuario
@@ -32,10 +33,8 @@ public class User {
     private String email;
     // Contraseña encriptada
     private String password;
-    // Estado de verificación: 0 = No Verificado, 1 = Verificado
-    private int status = 0;
-    // 0 = No Verificado
-    // 1 = Verificado
+    // Estado de verificación: false = No Verificado, true = Verificado
+    private boolean status = false;
     // Nuevo campo: nombre de la empresa
     private String companyName;
 
@@ -44,5 +43,13 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(name = "profile", nullable = false)
     private Set<Profile> profiles = Collections.singleton(Profile.ROLE_USER);
+
+    // ...código existente...
+
+    public boolean getStatus() {
+        return status;
+    }
+
+
 
 }

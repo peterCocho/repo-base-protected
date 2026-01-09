@@ -20,7 +20,7 @@ import java.util.Date;
 
 class VerificationControllerTest {
     @Mock
-    private UserRepository loginRepository;
+    private UserRepository userRepository;
     @Mock
     private VerificationCodeRepository verificationCodeRepository;
     @Mock
@@ -35,7 +35,7 @@ class VerificationControllerTest {
     @Test
     void verifyCode_userNotFound_returnsNotFound() {
         VerificationRequest request = new VerificationRequest("no@existe.com", "123456");
-        when(loginRepository.findByEmail(anyString())).thenReturn(Optional.empty());
+        when(userRepository.findByEmail(anyString())).thenReturn(Optional.empty());
         ResponseEntity<?> response = verificationController.verifyCode(request);
         assertEquals(404, response.getStatusCode().value());
         assertTrue(response.getBody() instanceof ErrorResponse);
@@ -46,10 +46,10 @@ class VerificationControllerTest {
         User user = new User();
         user.setId(1L);
         VerificationRequest request = new VerificationRequest("test@expira.com", "ABCDEF");
-        when(loginRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
+        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
         VerificationCode code = new VerificationCode("ABCDEF", user);
-        code.setExpiryDate(new Date(System.currentTimeMillis() - 10000));
-        when(verificationCodeRepository.findByLogin_Id(1L)).thenReturn(code);
+        code.setExpiration(new Date(System.currentTimeMillis() - 10000));
+        when(verificationCodeRepository.findByUser_Id(1L)).thenReturn(code);
         ResponseEntity<?> response = verificationController.verifyCode(request);
         assertEquals(400, response.getStatusCode().value());
         assertTrue(response.getBody() instanceof ErrorResponse);
@@ -61,12 +61,12 @@ class VerificationControllerTest {
         user.setId(2L);
         user.setEmail("ok@correo.com");
         user.setUserName("okuser");
-        user.setStatus(0);
+        user.setStatus(false);
         VerificationRequest request = new VerificationRequest("ok@correo.com", "XYZ123");
-        when(loginRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
+        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
         VerificationCode code = new VerificationCode("XYZ123", user);
-        code.setExpiryDate(new Date(System.currentTimeMillis() + 10000));
-        when(verificationCodeRepository.findByLogin_Id(2L)).thenReturn(code);
+        code.setExpiration(new Date(System.currentTimeMillis() + 10000));
+        when(verificationCodeRepository.findByUser_Id(2L)).thenReturn(code);
         ResponseEntity<?> response = verificationController.verifyCode(request);
         assertEquals(200, response.getStatusCode().value());
         assertTrue(response.getBody() instanceof LoginResponse);

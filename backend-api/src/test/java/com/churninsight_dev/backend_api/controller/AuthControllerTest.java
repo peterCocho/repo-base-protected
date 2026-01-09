@@ -48,7 +48,7 @@ class AuthControllerTest {
         user.setEmail("user@example.com");
         user.setUserName("usuario");
         user.setPassword("hashed");
-        user.setStatus(1);
+        user.setStatus(true);
         when(loginRepository.findByEmail("user@example.com")).thenReturn(Optional.of(user));
         when(passwordEncoder.matches("password", "hashed")).thenReturn(true);
         when(jwtUtil.generateToken(anyString(), anyMap())).thenReturn("token123");

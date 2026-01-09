@@ -28,61 +28,61 @@ import java.util.Map;
 
 @RestController
 public class AuthController {
-    private final UserRepository loginRepository;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final VerificationCodeRepository verificationCodeRepository;
     private final EmailService emailService;
 
     @Autowired
-    public AuthController(UserRepository loginRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil,
-                         VerificationCodeRepository verificationCodeRepository, EmailService emailService) {
-        this.loginRepository = loginRepository;
+    public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil,
+                        VerificationCodeRepository verificationCodeRepository, EmailService emailService) {
+        this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
         this.verificationCodeRepository = verificationCodeRepository;
         this.emailService = emailService;
     }
 
+   // ...código existente...
     @PostMapping(value = "/login", consumes = "application/json")
     public ResponseEntity<?> loginUser(@RequestBody LoginDto loginDto) {
         String email = (loginDto.getEmail() == null) ? null : loginDto.getEmail().trim();
         String password = loginDto.getPassword();
         if (email == null || password == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                new AuthErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(),
-                    "Error de Login", "Email y contraseña requeridos.", "email/password", "CREDENTIALS_REQUIRED")
-            );
+                    new AuthErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(),
+                            "Error de Login", "Email y contraseña requeridos.", "email/password",
+                            "CREDENTIALS_REQUIRED"));
         }
-        Optional<User> userOpt = loginRepository.findByEmail(email);
+        Optional<User> userOpt = userRepository.findByEmail(email);
         String genericLoginError = "Algunos de los datos ingresados es incorrecto. Vuelve a ingresarlos y revisa que estén bien escritos. ¿Olvidaste tu contraseña?";
         if (userOpt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
-                new AuthErrorResponse(LocalDateTime.now(), HttpStatus.UNAUTHORIZED.value(),
-                    "Error de Login", genericLoginError, "email/password", "INVALID_CREDENTIALS")
-            );
+                    new AuthErrorResponse(LocalDateTime.now(), HttpStatus.UNAUTHORIZED.value(),
+                            "Error de Login", genericLoginError, "email/password", "INVALID_CREDENTIALS"));
         }
+        // ...código existente...
         User user = userOpt.get();
-        if (user.getStatus() == 0) {
+        boolean isVerified = user.getStatus();
+        if (!isVerified) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
-                new AuthErrorResponse(LocalDateTime.now(), HttpStatus.UNAUTHORIZED.value(),
-                    "Error de Login", "Debes verificar tu cuenta antes de iniciar sesión.", "status", "ACCOUNT_NOT_VERIFIED")
-            );
+                    new AuthErrorResponse(LocalDateTime.now(), HttpStatus.UNAUTHORIZED.value(),
+                            "Error de Login", "Debes verificar tu cuenta antes de iniciar sesión.", "status",
+                            "ACCOUNT_NOT_VERIFIED"));
         }
         if (!passwordEncoder.matches(password, user.getPassword())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
-                new AuthErrorResponse(LocalDateTime.now(), HttpStatus.UNAUTHORIZED.value(),
-                    "Error de Login", genericLoginError, "email/password", "INVALID_CREDENTIALS")
-            );
+                    new AuthErrorResponse(LocalDateTime.now(), HttpStatus.UNAUTHORIZED.value(),
+                            "Error de Login", genericLoginError, "email/password", "INVALID_CREDENTIALS"));
         }
         Map<String, Object> claims = new HashMap<>();
         claims.put("email", user.getEmail());
         claims.put("username", user.getUserName());
-        claims.put("status", user.getStatus());
+        claims.put("status", isVerified);
         String token = jwtUtil.generateToken(user.getEmail(), claims);
         return ResponseEntity.ok(
-            new LoginJwtResponse("¡Bienvenido!", user.getEmail(), user.getUserName(), user.getStatus(), token)
-        );
+                new LoginJwtResponse("¡Bienvenido!", user.getEmail(), user.getUserName(), isVerified, token));
     }
 
     @PostMapping(value = "/register", consumes = "application/json")
@@ -119,7 +119,7 @@ public class AuthController {
         if (!password.equals(repeatPassword)) {
             throw new PasswordMismatchException("Las contraseñas no coinciden. Asegúrate de que ambas sean iguales.");
         }
-        Optional<User> existing = loginRepository.findByEmail(email);
+        Optional<User> existing = userRepository.findByEmail(email);
         if (existing.isPresent()) {
             throw new EmailAlreadyExistsException("El email que has introducido ya está asociado a una cuenta.");
         }
@@ -128,12 +128,12 @@ public class AuthController {
         user.setEmail(email);
         user.setUserName(username);
         user.setPassword(passwordEncoder.encode(password));
-        user.setStatus(0);
+        user.setStatus(false);
         user.setCompanyName(companyName);
-        User savedUser = loginRepository.save(user);
+        User savedUser = userRepository.save(user);
 
         // Eliminar código anterior si existe
-        VerificationCode oldCode = verificationCodeRepository.findByLogin_Id(savedUser.getId());
+        VerificationCode oldCode = verificationCodeRepository.findByUser_Id(savedUser.getId());
         if (oldCode != null) {
             verificationCodeRepository.delete(oldCode);
         }
@@ -147,7 +147,7 @@ public class AuthController {
             emailService.sendVerificationCode(savedUser.getEmail(), code);
         } catch (Exception e) {
             verificationCodeRepository.delete(verificationCode);
-            loginRepository.delete(savedUser);
+            userRepository.delete(savedUser);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                 new AuthErrorResponse(LocalDateTime.now(), HttpStatus.INTERNAL_SERVER_ERROR.value(),
                     "Error de Registro", "No se pudo enviar el correo de verificación: " + e.getMessage(),

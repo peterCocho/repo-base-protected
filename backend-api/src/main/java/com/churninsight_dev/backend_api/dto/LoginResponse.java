@@ -4,9 +4,9 @@ public class LoginResponse {
     private String message;
     private String email;
     private String username;
-    private int status;
+    private boolean status;
 
-    public LoginResponse(String message, String email, String username, int status) {
+    public LoginResponse(String message, String email, String username, boolean status) {
         this.message = message;
         this.email = email;
         this.username = username;
@@ -16,5 +16,5 @@ public class LoginResponse {
     public String getMessage() { return message; }
     public String getEmail() { return email; }
     public String getUsername() { return username; }
-    public int getStatus() { return status; }
+    public boolean getStatus() { return status; }
 }

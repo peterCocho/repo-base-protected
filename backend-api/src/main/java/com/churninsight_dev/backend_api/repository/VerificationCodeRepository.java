@@ -8,9 +8,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface VerificationCodeRepository extends JpaRepository<VerificationCode, Long> {
     /**
-     * Busca el código de verificación por el ID de usuario (login).
+     * Busca el código de verificación por el ID de usuario.
      */
-    VerificationCode findByLogin_Id(Long loginId);
+    VerificationCode findByUser_Id(Long userId);
 
     /**
      * Busca el código de verificación por el valor del código.
