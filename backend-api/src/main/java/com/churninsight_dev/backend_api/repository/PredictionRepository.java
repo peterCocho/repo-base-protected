@@ -7,10 +7,18 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 public interface PredictionRepository extends CrudRepository<Prediction, Long> {
-        @Query("SELECT new com.churninsight_dev.backend_api.dto.PredictionHistoryDTO(" +
-            "u.companyName, c.customerId, c.region, p.resultado, p.probabilidad, p.factorPrincipal) " +
-            "FROM Prediction p " +
-            "LEFT JOIN p.customer c " +
-            "LEFT JOIN c.user u")
-        List<PredictionHistoryDTO> findPredictionHistory();
+    @Query("SELECT new com.churninsight_dev.backend_api.dto.PredictionHistoryDTO(" +
+    "u.companyName, c.customerId, c.region, p.resultado, p.probabilidad, p.factorPrincipal, p.monthlyFee) " +
+    "FROM Prediction p " +
+    "LEFT JOIN p.customer c " +
+    "LEFT JOIN c.user u " +
+    "WHERE u.email = :email")
+List<PredictionHistoryDTO> findPredictionHistoryByUserEmail(String email);
+
+@Query("SELECT new com.churninsight_dev.backend_api.dto.PredictionHistoryDTO(" +
+    "u.companyName, c.customerId, c.region, p.resultado, p.probabilidad, p.factorPrincipal, p.monthlyFee) " +
+    "FROM Prediction p " +
+    "LEFT JOIN p.customer c " +
+    "LEFT JOIN c.user u")
+List<PredictionHistoryDTO> findPredictionHistory();
 }

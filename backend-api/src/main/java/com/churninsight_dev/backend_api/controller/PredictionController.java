@@ -4,13 +4,19 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import com.churninsight_dev.backend_api.dto.PredictionRequest;
 import com.churninsight_dev.backend_api.dto.PredictionResponse;
+import com.churninsight_dev.backend_api.dto.PredictionHistoryDTO;
 import com.churninsight_dev.backend_api.repository.CustomerRepository;
+import com.churninsight_dev.backend_api.repository.PredictionRepository;
 import com.churninsight_dev.backend_api.service.PredictionService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,16 +28,17 @@ import java.util.Map;
 public class PredictionController {
 
     private final PredictionService predictionService;
-
     private final CustomerRepository customerRepository;
+    private final PredictionRepository predictionRepository;
 
     /**
      * Inyección de dependencias por constructor.
      * Es la forma más limpia y recomendada en Spring Boot.
      */
-    public PredictionController(PredictionService predictionService, CustomerRepository customerRepository){
+    public PredictionController(PredictionService predictionService, CustomerRepository customerRepository, PredictionRepository predictionRepository){
         this.predictionService = predictionService;
         this.customerRepository = customerRepository;
+        this.predictionRepository = predictionRepository;
     }
 
 
@@ -42,6 +49,7 @@ public class PredictionController {
      * @return ResponseEntity con el resultado de la predicción y estado 200 OK.
      */
 
+    @PreAuthorize("hasRole('USER') or hasRole('PREMIUM')")
     @PostMapping("/predict")
     public ResponseEntity<PredictionResponse> getPrediction(@Valid @RequestBody PredictionRequest request, @RequestHeader("Authorization") String authHeader){
         // Delegamos la logica de negocio al servicio, pasando el token
@@ -60,12 +68,22 @@ public class PredictionController {
 // Metodo de estadisticas
     @GetMapping("/stats")
     public ResponseEntity<Map<String, Object>> getStats() {
-        long total = customerRepository.count();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        // Obtener predicciones solo de la empresa del usuario
+        List<PredictionHistoryDTO> predictions = predictionRepository.findPredictionHistoryByUserEmail(email);
+        long total = predictions.size();
+        long churned = predictions.stream().filter(p -> p.getResultado() != null && p.getResultado().equalsIgnoreCase("churn")).count();
+        double tasaChurn = total > 0 ? (churned * 100.0) / total : 0;
+        double ingresosEnRiesgo = predictions.stream()
+            .filter(p -> p.getResultado() != null && p.getResultado().equalsIgnoreCase("churn"))
+            .mapToDouble(p -> p.getMonthlyFee() != null ? p.getMonthlyFee() : 0)
+            .sum();
 
         Map<String, Object> stats = new HashMap<>();
-        stats.put("total_analizados", total);
-        // El campo churned y el método countChurnedCustomers ya no existen
-        // Si necesitas mostrar otros datos, agrega la lógica aquí
+        stats.put("total_churned", churned);
+        stats.put("porcentaje_churned", tasaChurn);
+        stats.put("ingresos_en_riesgo", ingresosEnRiesgo);
 
         return ResponseEntity.ok(stats);
     }
@@ -77,6 +95,7 @@ public class PredictionController {
     /**
      * Endpoint para predicción masiva por archivo CSV
      */
+    @PreAuthorize("hasRole('PREMIUM')")
     @PostMapping("/csv")
     public ResponseEntity<List<PredictionResponse>> predictFromCsv(@RequestParam("file") MultipartFile file, @RequestHeader("Authorization") String authHeader) {
         return ResponseEntity.ok(predictionService.processCsvPrediction(file, authHeader));

@@ -1,5 +1,7 @@
 package com.churninsight_dev.backend_api.exception;
 
+import org.springframework.security.access.AccessDeniedException;
+
 import com.churninsight_dev.backend_api.dto.AuthErrorResponse;
 import com.churninsight_dev.backend_api.dto.ErrorResponse;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,16 @@ import java.util.Map;
  */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    /**
+     * Maneja accesos denegados por roles insuficientes (Error 403).
+     */
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<Map<String, Object>> handleAccessDeniedException(AccessDeniedException ex) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("error", "Herramienta no disponible. Actualiza a PREMIUM para tener acceso a predicciones múltiples.");
+        return new ResponseEntity<>(body, HttpStatus.FORBIDDEN);
+    }
 
     /**
      * Maneja errores de validación (ej. campos obligatorios faltantes).

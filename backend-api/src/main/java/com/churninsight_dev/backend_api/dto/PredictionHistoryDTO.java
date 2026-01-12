@@ -1,5 +1,7 @@
 package com.churninsight_dev.backend_api.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,4 +16,7 @@ public class PredictionHistoryDTO {
     private String resultado;
     private Double probabilidad;
     private String factorPrincipal;
+
+    @JsonIgnore
+    private Double monthlyFee; // Solo para uso interno
 }

@@ -24,3 +24,9 @@ except AttributeError as e:
 except Exception as e:
     print(f"Error al cargar el modelo: {e}")
 print(modelo)
+
+def sumar():
+    """ suma 2 numeros"""
+    return 2 + 2
+
+print(sumar().__doc__)

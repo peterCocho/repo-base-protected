@@ -11,6 +11,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
+@org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity(prePostEnabled = true)
 @Configuration
 public class SecurityConfiguration {
 
@@ -23,8 +24,6 @@ public class SecurityConfiguration {
         return new BCryptPasswordEncoder();
     }
 
-
-    // Eliminar método duplicado configureGloval (mal escrito y sin @Autowired)
 
     /**
      * Configura la cadena de filtros de seguridad:

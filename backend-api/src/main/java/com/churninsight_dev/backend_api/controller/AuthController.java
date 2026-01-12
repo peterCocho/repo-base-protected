@@ -80,9 +80,10 @@ public class AuthController {
         claims.put("email", user.getEmail());
         claims.put("username", user.getUserName());
         claims.put("status", isVerified);
+        claims.put("roles", user.getProfiles().stream().map(Enum::name).toList()); // Agrega los roles como lista de strings
         String token = jwtUtil.generateToken(user.getEmail(), claims);
         return ResponseEntity.ok(
-                new LoginJwtResponse("¡Bienvenido!", user.getEmail(), user.getUserName(), isVerified, token));
+            new LoginJwtResponse("¡Bienvenido!", user.getEmail(), user.getUserName(), isVerified, token));
     }
 
     @PostMapping(value = "/register", consumes = "application/json")

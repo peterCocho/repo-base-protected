@@ -17,7 +17,9 @@ public class Prediction {
     private String resultado;
     private Double probabilidad;
     private String factorPrincipal;
-    
+
+    @Column(name = "monthly_fee")
+    private Double monthlyFee;
 
     @OneToOne
     @JoinColumn(name = "customer_id", referencedColumnName = "customer_id")

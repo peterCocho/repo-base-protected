@@ -25,6 +25,9 @@ public class PredictionResponse {
     @JsonProperty("main_factor")
     private String mainFactor; // Ejemplo: "Watch_hours"
 
+    @JsonProperty("monthly_fee")
+    private Double monthlyFee; // Ejemplo: 19.99
+
     @JsonProperty("custom_message")
     private String customMessage;
 }

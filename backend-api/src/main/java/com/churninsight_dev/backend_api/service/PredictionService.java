@@ -11,6 +11,7 @@ public interface PredictionService {
     PredictionResponse processPrediction(PredictionRequest request);
     // Nueva sobrecarga para permitir pasar el token
     PredictionResponse processPrediction(PredictionRequest request, String jwtToken);
+    
     List<PredictionResponse> processCsvPrediction(MultipartFile file);
 
     // Nueva sobrecarga para permitir pasar el token

@@ -93,6 +93,7 @@ public class PredictionServiceImpl implements PredictionService {
             prediction.setResultado(response.getPrediction());
             prediction.setProbabilidad(response.getProbability());
             prediction.setFactorPrincipal(response.getMainFactor());
+            prediction.setMonthlyFee(response.getMonthlyFee());
             prediction.setCustomer(savedCustomer);
             predictionRepository.save(prediction);
         }
