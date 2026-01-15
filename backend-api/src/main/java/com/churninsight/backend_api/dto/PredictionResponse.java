@@ -15,15 +15,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PredictionResponse {
 
-    @JsonProperty("customer_id")
-    private String customerId;
+    @JsonProperty("prediction")
+    private String prediction; // Ejemplo: "Churn" o "No Churn"
 
-    @JsonProperty("prevision")
-    private String prevision; // Ejemplo: "Va a cancelar" / "Va a continuar"
+    @JsonProperty("probability")
+    private Double probability; // Ejemplo: 0.85
 
     @JsonProperty("probabilidad")
     private Double probabilidad; // Ejemplo: 0.85
 
-    /* @JsonProperty("status")
-    private String status; // Ejemplo: "Success" */
+    @JsonProperty("status")
+    private String status; // Ejemplo: "Success"
 }
