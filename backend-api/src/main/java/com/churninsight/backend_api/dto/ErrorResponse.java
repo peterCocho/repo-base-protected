@@ -12,8 +12,8 @@ import java.util.Map;
 @AllArgsConstructor
 public class ErrorResponse {
     private LocalDateTime timestamp;
-    private int status;
-    private String error;
-    private String message;
+    private int status; // El código HTTP (400, 404, 500)
+    private String error; // Nombre corto del error (ej: "Bad Request")
+    private String message; // Explicación para el humano
     private Map<String, String> validationErrors; // Aquí guardaremos qué campo falló y por qué
 }

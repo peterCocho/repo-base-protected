@@ -1,0 +1,25 @@
+services:
+  db:
+    image: postgres:17
+    container_name: churn_db_container
+    environment:
+      POSTGRES_DB: churn_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD_P}
+    ports:
+      - "5432:5432"
+
+  app:
+    # EL CAMBIO ESTÁ AQUÍ:
+    # El punto (.) significa "usa la carpeta actual", donde está el pom.xml y el Dockerfile
+    build: .
+    container_name: churn_backend_api
+    ports:
+      - "8080:8080"
+    environment:
+      # Usamos 'db' porque es el nombre del servicio de arriba
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/churn_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: ${DATABASE_PASSWORD_P}
+    depends_on:
+      - db

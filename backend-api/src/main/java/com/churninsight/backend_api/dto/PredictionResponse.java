@@ -24,6 +24,6 @@ public class PredictionResponse {
     @JsonProperty("probabilidad")
     private Double probabilidad; // Ejemplo: 0.85
 
-    @JsonProperty("status")
-    private String status; // Ejemplo: "Success"
+    /* @JsonProperty("status")
+    private String status; // Ejemplo: "Success" */
 }

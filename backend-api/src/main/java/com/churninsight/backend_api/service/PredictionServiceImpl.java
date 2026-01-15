@@ -68,7 +68,7 @@ public class PredictionServiceImpl implements PredictionService{
                 .customerId(request.getCustomerId())
                 .prevision(prevision)
                 .probabilidad(probabilidad)
-                .status("Success")
+                //.status("Success")
                 .build();
     }
 }
