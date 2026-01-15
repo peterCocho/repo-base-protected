@@ -44,7 +44,7 @@ public class AuthController {
         this.emailService = emailService;
     }
 
-   // ...código existente...
+
     @PostMapping(value = "/login", consumes = "application/json")
     public ResponseEntity<?> loginUser(@RequestBody LoginDto loginDto) {
         String email = (loginDto.getEmail() == null) ? null : loginDto.getEmail().trim();
@@ -62,7 +62,7 @@ public class AuthController {
                     new AuthErrorResponse(LocalDateTime.now(), HttpStatus.UNAUTHORIZED.value(),
                             "Error de Login", genericLoginError, "email/password", "INVALID_CREDENTIALS"));
         }
-        // ...código existente...
+        
         User user = userOpt.get();
         boolean isVerified = user.getStatus();
         if (!isVerified) {

@@ -8,15 +8,15 @@ import java.util.List;
 
 public interface PredictionRepository extends CrudRepository<Prediction, Long> {
     @Query("SELECT new com.churninsight_dev.backend_api.dto.PredictionHistoryDTO(" +
-    "u.companyName, c.customerId, c.region, p.resultado, p.probabilidad, p.factorPrincipal, p.monthlyFee) " +
+    "u.companyName, c.customerId, p.resultado, p.probabilidad, p.factorPrincipal, p.monthlyFee) " +
     "FROM Prediction p " +
     "LEFT JOIN p.customer c " +
     "LEFT JOIN c.user u " +
     "WHERE u.email = :email")
 List<PredictionHistoryDTO> findPredictionHistoryByUserEmail(String email);
 
-@Query("SELECT new com.churninsight_dev.backend_api.dto.PredictionHistoryDTO(" +
-    "u.companyName, c.customerId, c.region, p.resultado, p.probabilidad, p.factorPrincipal, p.monthlyFee) " +
+    @Query("SELECT new com.churninsight_dev.backend_api.dto.PredictionHistoryDTO(" +
+    "u.companyName, c.customerId, p.resultado, p.probabilidad, p.factorPrincipal, p.monthlyFee) " +
     "FROM Prediction p " +
     "LEFT JOIN p.customer c " +
     "LEFT JOIN c.user u")

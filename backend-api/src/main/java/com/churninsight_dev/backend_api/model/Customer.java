@@ -22,15 +22,8 @@ public class Customer {
     @Column(name = "customer_id", length = 50)
     private String customerId;
 
-    @Min(value = 0, message = "La edad no puede ser negativa")
-    @Column(nullable = false)
+    @Column(name = "age")
     private Integer age;
-
-    @Column(length = 20)
-    private String gender;
-
-    @Column(name = "subscription_type")
-    private String subscriptionType;
 
     @PositiveOrZero
     @Column(name = "watch_hours")
@@ -39,16 +32,9 @@ public class Customer {
     @Column(name = "last_login_days")
     private Integer lastLoginDays;
 
-    private String region;
-
-    private String device;
-
     @PositiveOrZero
     @Column(name = "monthly_fee")
     private Double monthlyFee;
-
-    @Column(name = "payment_method")
-    private String paymentMethod;
 
     @Min(1)
     @Column(name = "number_of_profiles")
@@ -57,8 +43,23 @@ public class Customer {
     @Column(name = "avg_watch_time_per_day")
     private Double avgWatchTimePerDay;
 
+    @Column(name = "subscription_type")
+    private String subscriptionType;
+
+    @Column(name = "region")
+    private String region;
+
+    @Column(name = "device")
+    private String device;
+
+    @Column(name = "payment_method")
+    private String paymentMethod;
+
     @Column(name = "favorite_genre")
     private String favoriteGenre;
+
+    @Column(name = "gender")
+    private String gender;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

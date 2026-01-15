@@ -22,12 +22,13 @@ public class PredictionResponse {
     @JsonProperty("probability")
     private Double probability; // Ejemplo: 0.85
 
-    @JsonProperty("main_factor")
-    private String mainFactor; // Ejemplo: "Watch_hours"
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private String mainFactor; // Solo para uso interno, no se serializa en la respuesta
 
-    @JsonProperty("monthly_fee")
-    private Double monthlyFee; // Ejemplo: 19.99
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private Double monthlyFee; // Solo para uso interno
 
     @JsonProperty("custom_message")
+    @com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
     private String customMessage;
 }

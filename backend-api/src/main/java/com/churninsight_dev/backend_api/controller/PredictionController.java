@@ -16,7 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.HashMap;
-import java.util.List;
+// import java.util.List;
 import java.util.Map;
 
 /**
@@ -28,7 +28,7 @@ import java.util.Map;
 public class PredictionController {
 
     private final PredictionService predictionService;
-    private final CustomerRepository customerRepository;
+    // private final CustomerRepository customerRepository;
     private final PredictionRepository predictionRepository;
 
     /**
@@ -37,7 +37,7 @@ public class PredictionController {
      */
     public PredictionController(PredictionService predictionService, CustomerRepository customerRepository, PredictionRepository predictionRepository){
         this.predictionService = predictionService;
-        this.customerRepository = customerRepository;
+        // this.customerRepository = customerRepository;
         this.predictionRepository = predictionRepository;
     }
 
@@ -72,16 +72,16 @@ public class PredictionController {
         String email = authentication.getName();
         // Obtener predicciones solo de la empresa del usuario
         List<PredictionHistoryDTO> predictions = predictionRepository.findPredictionHistoryByUserEmail(email);
-        long total = predictions.size();
+        long clientesAnalizados = predictions.size();
         long churned = predictions.stream().filter(p -> p.getResultado() != null && p.getResultado().equalsIgnoreCase("churn")).count();
-        double tasaChurn = total > 0 ? (churned * 100.0) / total : 0;
+        double tasaChurn = clientesAnalizados > 0 ? (churned * 100.0) / clientesAnalizados : 0;
         double ingresosEnRiesgo = predictions.stream()
             .filter(p -> p.getResultado() != null && p.getResultado().equalsIgnoreCase("churn"))
             .mapToDouble(p -> p.getMonthlyFee() != null ? p.getMonthlyFee() : 0)
             .sum();
 
         Map<String, Object> stats = new HashMap<>();
-        stats.put("total_churned", churned);
+        stats.put("clientes_analizados", clientesAnalizados);
         stats.put("porcentaje_churned", tasaChurn);
         stats.put("ingresos_en_riesgo", ingresosEnRiesgo);
 
@@ -89,9 +89,6 @@ public class PredictionController {
     }
 
 
-    /**
-     * (Opcional) Endpoint para predicción masiva por archivo CSV
-     */
     /**
      * Endpoint para predicción masiva por archivo CSV
      */

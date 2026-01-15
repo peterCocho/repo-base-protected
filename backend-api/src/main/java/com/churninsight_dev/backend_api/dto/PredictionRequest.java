@@ -19,28 +19,38 @@ public class PredictionRequest {
     private String customerId;
 
     @NotNull(message = "La edad es obligatoria")
-    @Min(value = 0, message = "La edad no puede ser negativa")
-    @Max(value = 120, message = "Por favor, ingrese una edad válida")
+    @Min(value = 0, message = "La edad debe ser un número positivo")
     @JsonProperty("age")
     private Integer age;
 
-    @NotBlank(message = "El género es obligatorio")
-    @JsonProperty("gender")
-    private String gender;
-
-    @NotBlank(message = "El tipo de suscripción es obligatorio")
-    @JsonProperty("subscription_type")
-    private String subscriptionType;
-
     @NotNull(message = "Las horas de visualización son obligatorias")
-    @Min(0)
+    @Min(value = 0, message = "Las horas de visualización deben ser un número positivo")
     @JsonProperty("watch_hours")
     private Double watchHours;
 
     @NotNull(message = "Los días desde el último login son obligatorios")
-    @Min(0)
+    @Min(value = 0, message = "Los días desde el último login deben ser un número positivo")
     @JsonProperty("last_login_days")
     private Integer lastLoginDays;
+
+    @NotNull(message = "El cargo mensual es obligatorio")
+    @Positive(message = "El cargo mensual debe ser un valor positivo")
+    @JsonProperty("monthly_fee")
+    private Double monthlyFee;
+
+    @NotNull(message = "El número de perfiles es obligatorio")
+    @Min(value = 1, message = "Debe haber al menos 1 perfil")
+    @JsonProperty("number_of_profiles")
+    private Integer numberOfProfiles;
+
+    @NotNull(message = "El promedio de horas diarias es obligatorio")
+    @Min(value = 0, message = "El promedio de horas diarias debe ser un número positivo")
+    @JsonProperty("avg_watch_time_per_day")
+    private Double avgWatchTimePerDay;
+
+    @NotBlank(message = "El tipo de suscripción es obligatorio")
+    @JsonProperty("subscription_type")
+    private String subscriptionType;
 
     @NotBlank(message = "La región es obligatoria")
     @JsonProperty("region")
@@ -50,26 +60,15 @@ public class PredictionRequest {
     @JsonProperty("device")
     private String device;
 
-    @NotNull(message = "El cargo mensual es obligatorio")
-    @Positive(message = "El cargo mensual debe ser un valor positivo")
-    @JsonProperty("monthly_fee")
-    private Double monthlyFee;
-
     @NotBlank(message = "El método de pago es obligatorio")
     @JsonProperty("payment_method")
     private String paymentMethod;
 
-    @NotNull(message = "El número de perfiles es obligatorio")
-    @Min(value = 1, message = "Debe haber al menos 1 perfil")
-    @JsonProperty("number_of_profiles")
-    private Integer numberOfProfiles;
-
-    @NotNull(message = "El promedio de tiempo diario es obligatorio")
-    @Min(0)
-    @JsonProperty("avg_watch_time_per_day")
-    private Double avgWatchTimePerDay;
-
     @NotBlank(message = "El género favorito es obligatorio")
     @JsonProperty("favorite_genre")
     private String favoriteGenre;
+
+    @NotBlank(message = "El género es obligatorio")
+    @JsonProperty("gender")
+    private String gender;
 }
