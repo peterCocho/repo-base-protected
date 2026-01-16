@@ -98,6 +98,7 @@ public class PredictionServiceImpl implements PredictionService {
             prediction.setFactorPrincipal(response.getMainFactor());
             prediction.setMonthlyFee(response.getMonthlyFee());
             prediction.setCustomer(savedCustomer);
+            prediction.setFechaPrediccion(java.time.LocalDateTime.now());
             predictionRepository.save(prediction);
         }
 

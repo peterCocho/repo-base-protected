@@ -1,19 +1,29 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState } from 'react';
+import './App.css';
+import Navbar from './components/layout/Navbar';
+import LoginScreen from './pages/Login/LoginScreen';
+import AnalyzerScreen from './pages/Analyzer/AnalyzerScreen';
+import DashboardScreen from './pages/Dashboard/DashboardScreen';
+import HistoryScreen from './pages/History/HistoryScreen';
+import PredictionTableScreen from './pages/PrecictionCsv/PredictionTableScreen';
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentScreen, setCurrentScreen] = useState('analyzer');
+
+  if (!isLoggedIn) {
+    return <LoginScreen onLogin={() => setIsLoggedIn(true)} />;
+  }
 
   return (
-    <>
-      <div>
-        <h1>Esperando predicciones</h1>
+    <div>
+      <Navbar currentScreen={currentScreen} setCurrentScreen={setCurrentScreen} onLogout={() => setIsLoggedIn(false)} />
+      <div className="main-content">
+        {currentScreen === 'analyzer' && <AnalyzerScreen />}
+        {currentScreen === 'dashboard' && <DashboardScreen />}
+        {currentScreen === 'history' && <HistoryScreen />}
+        {currentScreen === 'prediction' && <PredictionTableScreen />}
       </div>
-  
-    </>
-  )
+    </div>
+  );
 }
-
-export default App

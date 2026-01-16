@@ -85,6 +85,20 @@ public class PredictionController {
         stats.put("porcentaje_churned", tasaChurn);
         stats.put("ingresos_en_riesgo", ingresosEnRiesgo);
 
+        // Top 5 predicciones con mayor probabilidad
+        List<Map<String, Object>> top5 = predictions.stream()
+            .sorted((a, b) -> Double.compare(b.getProbabilidad() != null ? b.getProbabilidad() : 0, a.getProbabilidad() != null ? a.getProbabilidad() : 0))
+            .limit(5)
+            .map(p -> {
+                Map<String, Object> row = new HashMap<>();
+                row.put("customer_id", p.getCustomerId());
+                row.put("probabilidad", p.getProbabilidad());
+                row.put("mensaje", p.getCustomMessage());
+                return row;
+            })
+            .toList();
+        stats.put("top5_predicciones", top5);
+
         return ResponseEntity.ok(stats);
     }
 

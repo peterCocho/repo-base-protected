@@ -2,6 +2,9 @@ package com.churninsight_dev.backend_api.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import java.time.LocalDateTime;
+
+
 
 @Entity
 @Table(name = "predictions")
@@ -24,4 +27,7 @@ public class Prediction {
     @OneToOne
     @JoinColumn(name = "customer_id", referencedColumnName = "customer_id")
     private Customer customer;
+
+    @Column(name = "fecha_prediccion")
+    private LocalDateTime fechaPrediccion;
 }
