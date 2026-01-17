@@ -18,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import java.util.HashMap;
 // import java.util.List;
 import java.util.Map;
+import java.util.LinkedHashMap;
 
 /**
  * Controlador REST que expone los endpoints para la predicción de Churn.
@@ -72,6 +73,13 @@ public class PredictionController {
         String email = authentication.getName();
         // Obtener predicciones solo de la empresa del usuario
         List<PredictionHistoryDTO> predictions = predictionRepository.findPredictionHistoryByUserEmail(email);
+        
+        // Log temporal para depuración: mostrar todos los main_factor de predicciones Churn
+        System.out.println("[DEBUG] main_factor de predicciones Churn:");
+        predictions.stream()
+            .filter(p -> p.getResultado() != null && p.getResultado().equalsIgnoreCase("churn"))
+            .forEach(p -> System.out.println(" - " + p.getFactorPrincipal()));
+        
         long clientesAnalizados = predictions.size();
         long churned = predictions.stream().filter(p -> p.getResultado() != null && p.getResultado().equalsIgnoreCase("churn")).count();
         double tasaChurn = clientesAnalizados > 0 ? (churned * 100.0) / clientesAnalizados : 0;
@@ -80,12 +88,42 @@ public class PredictionController {
             .mapToDouble(p -> p.getMonthlyFee() != null ? p.getMonthlyFee() : 0)
             .sum();
 
-        Map<String, Object> stats = new HashMap<>();
-        stats.put("clientes_analizados", clientesAnalizados);
-        stats.put("porcentaje_churned", tasaChurn);
-        stats.put("ingresos_en_riesgo", ingresosEnRiesgo);
+        long cantidadNoChurn = predictions.stream().filter(p -> p.getResultado() != null && p.getResultado().equalsIgnoreCase("no churn")).count();
+        double porcentajeNoChurn = clientesAnalizados > 0 ? (cantidadNoChurn * 100.0) / clientesAnalizados : 0;
 
-        // Top 5 predicciones con mayor probabilidad
+        // Porcentaje/cantidad de veces que cada variable fue main_factor en predicciones Churn
+        Map<String, Long> cantidadSalida = new LinkedHashMap<>();
+        long churnCount = predictions.stream().filter(p -> p.getResultado() != null && p.getResultado().equalsIgnoreCase("churn")).count();
+        cantidadSalida.put("watch_hours", predictions.stream().filter(p -> {
+            if (p.getResultado() == null || !p.getResultado().equalsIgnoreCase("churn") || p.getFactorPrincipal() == null) return false;
+            String factor = p.getFactorPrincipal().toLowerCase();
+            return factor.endsWith("watch_hours");
+        }).count());
+        cantidadSalida.put("last_login_days", predictions.stream().filter(p -> {
+            if (p.getResultado() == null || !p.getResultado().equalsIgnoreCase("churn") || p.getFactorPrincipal() == null) return false;
+            String factor = p.getFactorPrincipal().toLowerCase();
+            return factor.endsWith("last_login_days");
+        }).count());
+        cantidadSalida.put("monthly_fee", predictions.stream().filter(p -> {
+            if (p.getResultado() == null || !p.getResultado().equalsIgnoreCase("churn") || p.getFactorPrincipal() == null) return false;
+            String factor = p.getFactorPrincipal().toLowerCase();
+            return factor.endsWith("monthly_fee");
+        }).count());
+        cantidadSalida.put("number_of_profiles", predictions.stream().filter(p -> {
+            if (p.getResultado() == null || !p.getResultado().equalsIgnoreCase("churn") || p.getFactorPrincipal() == null) return false;
+            String factor = p.getFactorPrincipal().toLowerCase();
+            return factor.endsWith("number_of_profiles");
+        }).count());
+
+        Map<String, Object> stats = new java.util.LinkedHashMap<>();
+        stats.put("clientes_analizados", clientesAnalizados);
+        stats.put("tasa_churn", tasaChurn);
+        stats.put("ingresos_en_riesgo", ingresosEnRiesgo);
+        stats.put("cantidad_churn", churned);
+        stats.put("cantidad_retenidos", cantidadNoChurn);
+        stats.put("porcentaje_salida_variables", cantidadSalida);
+
+        // Top 5 predicciones con mayor probabilidad (al final)
         List<Map<String, Object>> top5 = predictions.stream()
             .sorted((a, b) -> Double.compare(b.getProbabilidad() != null ? b.getProbabilidad() : 0, a.getProbabilidad() != null ? a.getProbabilidad() : 0))
             .limit(5)

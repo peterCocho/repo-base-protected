@@ -1,5 +1,6 @@
 package com.churninsight_dev.backend_api.controller;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import com.churninsight_dev.backend_api.dto.LoginDto;
 import com.churninsight_dev.backend_api.dto.RegisterDto;
 import com.churninsight_dev.backend_api.dto.AuthErrorResponse;
@@ -26,7 +27,10 @@ import java.util.Optional;
 import java.util.HashMap;
 import java.util.Map;
 
+
+
 @RestController
+@CrossOrigin(origins = "http://localhost:5173") // Cambia el puerto si tu frontend usa otro
 public class AuthController {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;

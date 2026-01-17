@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import './LoginScreen.css';
 import { User, Lock, Eye, EyeOff, Activity } from 'lucide-react';
 
@@ -8,11 +9,24 @@ export default function LoginScreen({ onLogin }) {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    if (email === 'admin@churn.com' && password === 'admin') {
-      onLogin();
-    } else {
+    setError("");
+    try {
+      // Limpia el token anterior antes de login
+      localStorage.removeItem('token');
+      const response = await axios.post(
+        'http://localhost:8080/login',
+        { email, password }
+      );
+      // Si el backend responde con éxito y trae token, guárdalo
+      if (response.status === 200 && response.data && response.data.token) {
+        localStorage.setItem('token', response.data.token);
+        onLogin();
+      } else {
+        setError('Credenciales no válidas');
+      }
+    } catch (err) {
       setError('Credenciales no válidas');
       setTimeout(() => setError(''), 3000);
     }

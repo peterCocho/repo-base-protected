@@ -48,6 +48,8 @@ public class SecurityConfiguration {
     }
 
 
+    
+
     // Eliminado configureGlobal para evitar ciclo de dependencias y seguir buenas prácticas Spring Security 6
     
 }

@@ -1,3 +1,42 @@
+/* Pantalla completa para el analizador */
+.analyzer-fullscreen {
+  width: 100vw;
+  min-width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  /* background: var(--background, #f8fafc); */
+  box-sizing: border-box;
+  padding: 0;
+  overflow-y: auto;
+}
+
+.analyzer-form-full {
+  width: 100%;
+  max-width: 900px;
+  margin: 2vw 2vw 2vw 2vw;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1.5rem;
+  box-sizing: border-box;
+  border-radius: 1.5rem;
+  padding: 2.5rem 2rem;
+  /* No tocar el glassmorfismo original, solo layout */
+}
+
+.analyzer-fields-full {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  align-items: start;
+  overflow: visible;
+}
 /* Panel de análisis padding */
 .analyzer-panel-padding {
   padding: 1rem;
@@ -250,4 +289,33 @@
     height: 120px;
     font-size: 2rem;
   }
+}
+
+/* Estilos para resultado exitoso (No Churn) */
+.analyzer-probability-circle.success {
+  background: linear-gradient(135deg, #10b981, #059669);
+  box-shadow: 0 8px 32px rgba(16, 185, 129, 0.3);
+}
+
+.analyzer-recommendation.success {
+  border: 2px solid #10b981;
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.analyzer-recommendation-message.success {
+  text-align: center;
+  font-weight: bold;
+  color: #10b981;
+  margin-top: -0.5rem; /* Subir un poco el texto */
+}
+
+/* Quitar flechas de inputs numéricos decimales */
+.input-number-no-spinner::-webkit-outer-spin-button,
+.input-number-no-spinner::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.input-number-no-spinner[type=number] {
+  -moz-appearance: textfield;
 }
