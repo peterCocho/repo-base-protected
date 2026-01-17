@@ -121,7 +121,7 @@ public class PredictionController {
         stats.put("ingresos_en_riesgo", ingresosEnRiesgo);
         stats.put("cantidad_churn", churned);
         stats.put("cantidad_retenidos", cantidadNoChurn);
-        stats.put("porcentaje_salida_variables", cantidadSalida);
+        stats.put("cantidad_salida_variables", cantidadSalida);
 
         // Top 5 predicciones con mayor probabilidad (al final)
         List<Map<String, Object>> top5 = predictions.stream()
