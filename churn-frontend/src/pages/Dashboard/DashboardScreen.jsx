@@ -1,25 +1,77 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './DashboardScreen.css';
 import { Users, Activity, AlertTriangle } from 'lucide-react';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import axios from 'axios';
 
 export default function DashboardScreen() {
+  const [stats, setStats] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/v1/predictions/stats`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setStats(response.data);
+      } catch (err) {
+        setError('Error al cargar las estadísticas');
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchStats();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="dashboard-page-container">
+        <div className="loading">Cargando estadísticas...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="dashboard-page-container">
+        <div className="error">{error}</div>
+      </div>
+    );
+  }
+
   const pieData = [
-    { name: 'Retenidos', value: 750, color: '#10b981' },
-    { name: 'En Riesgo', value: 250, color: '#ef4444' },
+    { name: 'Retenidos', value: stats.cantidad_retenidos, color: '#10b981' },
+    { name: 'En Riesgo', value: stats.cantidad_churn, color: '#ef4444' },
   ];
-  const barData = [
-    { name: 'Precio', value: 400 },
-    { name: 'Soporte', value: 300 },
-    { name: 'Cobertura', value: 200 },
-    { name: 'Competencia', value: 100 },
-  ];
+
+  const variableTranslations = {
+    watch_hours: 'HORAS DE VISUALIZACIÓN',
+    last_login_days: 'DÍAS DESDE ÚLTIMO LOGIN',
+    monthly_fee: 'TARIFA MENSUAL',
+    number_of_profiles: 'NÚMERO DE PERFILES',
+  };
+
+  const barData = Object.entries(stats.cantidad_salida_variables).map(([key, value]) => ({
+    name: variableTranslations[key] || key.replace('_', ' ').toUpperCase(),
+    value: value,
+  }));
+
+
   // Junta las 3 KPI y las 3 "tarjetas" de abajo en un solo array para el grid
   const cards = [
     // KPI cards
-    { type: 'kpi', title: 'Clientes Analizados', val: '1,240', icon: Users, color: '#3b82f6' },
-    { type: 'kpi', title: 'Tasa de Churn', val: '23%', icon: Activity, color: '#ef4444' },
-    { type: 'kpi', title: 'Ingresos en Riesgo', val: '$45M', icon: AlertTriangle, color: '#f59e0b' },
+    { type: 'kpi', title: 'Clientes Analizados', val: stats.clientes_analizados, icon: Users, color: '#3b82f6' },
+    { type: 'kpi', title: 'Tasa de Churn', val: `${stats.tasa_churn.toFixed(2)}%`, icon: Activity, color: '#ef4444' },
+    { type: 'kpi', title: 'Ingresos en Riesgo', val: `$${stats.ingresos_en_riesgo.toFixed(2)}`, icon: AlertTriangle, color: '#f59e0b' },
     // Chart/Table cards
     { type: 'pie' },
     { type: 'bar' },
@@ -63,10 +115,10 @@ export default function DashboardScreen() {
           if (card.type === 'bar') {
             return (
               <div key={idx} className="glass-panel dashboard-chart-panel">
-                <h3 className="dashboard-chart-title">Motivos de Fuga</h3>
+                <h3 className="dashboard-chart-title">Motivos de Cancelación</h3>
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={barData}>
-                    <XAxis dataKey="name" stroke="#94a3b8" />
+                    <XAxis dataKey="name" stroke="#94a3b8" angle={-45} textAnchor="end" />
                     <YAxis stroke="#94a3b8" />
                     <Tooltip cursor={{fill: 'rgba(255,255,255,0.1)'}} contentStyle={{ backgroundColor: '#1e293b', border: 'none', borderRadius: '8px' }} itemStyle={{ color: '#fff' }}/>
                     <Bar dataKey="value" fill="#3b82f6" radius={[4, 4, 0, 0]} />
@@ -84,17 +136,15 @@ export default function DashboardScreen() {
                     <tr className="dashboard-table-header">
                       <th className="dashboard-table-th">Cliente</th>
                       <th className="dashboard-table-th">Prob.</th>
-                      <th className="dashboard-table-th">Acción</th>
+                      <th className="dashboard-table-th">Mensaje</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {[1,2,3].map(i => (
+                    {stats.top5_predicciones.map((pred, i) => (
                       <tr key={i} className="dashboard-table-row">
-                        <td className="dashboard-table-td">Empresa {i}</td>
-                        <td className="dashboard-table-td dashboard-table-prob">{90 + i}%</td>
-                        <td className="dashboard-table-td">
-                          <button className="dashboard-table-contact-btn">Contactar</button>
-                        </td>
+                        <td className="dashboard-table-td">{pred.customer_id}</td>
+                        <td className="dashboard-table-td dashboard-table-prob">{(pred.probabilidad * 100).toFixed(0)}%</td>
+                        <td className="dashboard-table-td">{pred.mensaje || 'N/A'}</td>
                       </tr>
                     ))}
                   </tbody>

@@ -51,6 +51,7 @@
   -webkit-backdrop-filter: blur(14px) saturate(120%);
   backdrop-filter: blur(14px) saturate(120%);
   min-width: 220px;
+  max-height: 120px; /* Reducir altura de las tarjetas KPI */
 }
 
 /* Ícono KPI */
@@ -77,7 +78,7 @@
 
 .dashboard-chart-panel {
   padding: 1.5rem;
-  min-height: 340px;
+  min-height: 400px; /* Aumentar altura para mostrar etiquetas del eje X */
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -91,10 +92,19 @@
 
 .dashboard-chart-panel .recharts-responsive-container {
   flex: 1 1 auto;
-  min-height: 260px;
+  min-height: 300px; /* Aumentar para mejor visualización de etiquetas */
 }
 
 /* Tabla */
+.dashboard-table-panel {
+  padding: 1.5rem;
+  min-height: 400px; /* Aumentar altura para consistencia */
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
 .dashboard-table th, .dashboard-table td {
   padding: 10px;
   border-bottom: 1px solid rgba(255,255,255,0.05);
@@ -173,4 +183,16 @@
     padding-left: 4vw;
     padding-right: 2vw;
   }
+}
+
+/* Loading y Error */
+.loading, .error {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #94a3b8;
+  margin-top: 2rem;
+}
+
+.error {
+  color: #ef4444;
 }

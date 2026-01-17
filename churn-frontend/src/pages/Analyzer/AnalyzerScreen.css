@@ -316,6 +316,6 @@
   margin: 0;
 }
 
-.input-number-no-spinner[type=number] {
+/* .input-number-no-spinner[type=number] {
   -moz-appearance: textfield;
-}
+} */
