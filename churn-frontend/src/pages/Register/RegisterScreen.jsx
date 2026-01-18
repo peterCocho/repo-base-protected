@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import VerificationScreen from './VerificationScreen';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import "../../App.css";
-
+import { User, Lock, Eye, EyeOff, Mail, Building } from 'lucide-react';
+import './RegisterScreen.css';
 
 const RegisterScreen = () => {
   const navigate = useNavigate();
+  const [showPass, setShowPass] = useState(false);
+  const [showRepeatPass, setShowRepeatPass] = useState(false);
   const [form, setForm] = useState({
     email: '',
     userName: '',
@@ -13,14 +15,14 @@ const RegisterScreen = () => {
     repeatPassword: '',
     companyName: '',
   });
-  const [showVerification, setShowVerification] = useState(false);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  // Si está logueado, redirige a dashboard (no debe ver registro)
+  // Si está logueado, redirige a dashboard
   useEffect(() => {
     if (localStorage.getItem('isLoggedIn') === 'true') {
       navigate('/dashboard', { replace: true });
     }
-    // Si NO está logueado, NO redirigir automáticamente, solo mostrar el registro
   }, [navigate]);
 
   const handleChange = (e) => {
@@ -30,112 +32,166 @@ const RegisterScreen = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Aquí normalmente enviarías los datos al backend y esperarías confirmación
-    // Simulamos que el registro fue exitoso y se debe verificar el correo
-    setShowVerification(true);
+    setError('');
+    setLoading(true);
+
+    try {
+      console.log('Enviando registro:', form);
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/register`,
+        form
+      );
+      console.log('Respuesta del registro:', response);
+
+      if (response.status === 200) {
+        // Éxito: redirigir a verificación
+        console.log('Registro exitoso, navegando a /verify');
+        navigate(`/verify?email=${encodeURIComponent(form.email)}`);
+      }
+    } catch (err) {
+      console.error('Error en registro:', err);
+      if (err.response && err.response.data) {
+        const errorData = err.response.data;
+        if (errorData.message) {
+          setError(errorData.message);
+        } else if (errorData.error) {
+          setError(errorData.error);
+        } else {
+          setError('Error en el registro');
+        }
+      } else {
+        setError('Error de conexión');
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
-  if (showVerification) {
-    return <VerificationScreen onVerified={() => navigate('/login')} />;
-  }
-
   return (
-    <div className="main-content d-flex justify-content-center align-items-center min-vh-100">
-      <div className="glass-panel p-4 m-3" style={{ width: '100%', maxWidth: '700px' }}>
-        <h2 className="text-center mb-2" style={{ color: 'var(--text-primary)', fontWeight: 'bold' }}>
-          Únete al Equipo
-        </h2>
-        <p className="text-center mb-4" style={{ color: 'var(--text-secondary)' }}>
-          Crea tu cuenta para acceder al panel de control
-        </p>
-        <form onSubmit={handleSubmit}>
-          <div className="d-grid gap-2 mb-3">
-            <button type="button" className="btn-secondary" onClick={() => navigate('/login')}>
-              Volver a Login
+    <div className="register-container">
+      <div className="register-visual glass-panel">
+        <div className="register-visual__overlay"></div>
+        <div className="register-visual__content">
+          <h1 className="register-title">InsightCore</h1>
+          <img 
+            src="/src/assets/logo-cubo.png" 
+            alt="InsightCore Logo" 
+            className="register-logo-img"
+          />
+          <p className="register-slogan">Únete a la anticipación del futuro</p>
+        </div>
+      </div>
+      <div className="register-form__wrapper">
+        <div className="register-form glass-panel">
+          <div className="register-form__header">
+            <h3>Registro de Usuario</h3>
+            <p>Crea tu cuenta corporativa</p>
+          </div>
+          <form onSubmit={handleSubmit} className="register-form__form">
+             <div>
+              <label htmlFor="userName" className="register-form__label">Nombre de Usuario</label>
+              <div className="register-form__input-group">
+                <User size={18} className="register-form__icon" />
+                <input 
+                  type="text" 
+                  name="userName"
+                  id="userName"
+                  placeholder="Nombre de usuario" 
+                  className="input-glass" 
+                  value={form.userName}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            <div>
+              <label htmlFor="email" className="register-form__label">Correo Electrónico</label>
+              <div className="register-form__input-group">
+                <Mail size={18} className="register-form__icon" />
+                <input 
+                  type="email" 
+                  name="email"
+                  id="email"
+                  placeholder="usuario@empresa.com" 
+                  className="input-glass" 
+                  value={form.email}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </div>
+            </div>
+            <div>
+              <label htmlFor="companyName" className="register-form__label">Nombre de la Empresa</label>
+              <div className="register-form__input-group">
+                <Building size={18} className="register-form__icon" />
+                <input 
+                  type="text" 
+                  name="companyName"
+                  id="companyName"
+                  placeholder="Nombre de la empresa" 
+                  className="input-glass" 
+                  value={form.companyName}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </div>
+            <div>
+              <label htmlFor="password" className="register-form__label">Contraseña</label>
+              <div className="register-form__input-group">
+                <Lock size={18} className="register-form__icon" />
+                <input 
+                  type={showPass ? "text" : "password"} 
+                  name="password"
+                  id="password"
+                  placeholder="Contraseña" 
+                  className="input-glass" 
+                  value={form.password}
+                  onChange={handleChange}
+                  required
+                />
+                
+              </div>
+            </div>
+            <div>
+              <label htmlFor="repeatPassword" className="register-form__label">Repetir Contraseña</label>
+              <div className="register-form__input-group">
+                <Lock size={18} className="register-form__icon" />
+                <input 
+                  type={showRepeatPass ? "text" : "password"} 
+                  name="repeatPassword"
+                  id="repeatPassword"
+                  placeholder="Repetir contraseña" 
+                  className="input-glass" 
+                  value={form.repeatPassword}
+                  onChange={handleChange}
+                  required
+                />
+                
+              </div>
+            </div>
+            {error && <div className="register-form__error">{error}</div>}
+            <button 
+              type="submit" 
+              className="btn-primary" 
+              disabled={loading}
+            >
+              {loading ? 'Registrando...' : 'Registrarse'}
             </button>
-          </div>
-          <div className="row">
-            <div className="col-md-6 mb-3">
-              <label htmlFor="userName" className="form-label" style={{ color: 'var(--text-secondary)' }}>Nombre Completo</label>
-              <input
-                type="text"
-                className="input-glass" 
-                id="userName"
-                name="userName"
-                placeholder="Pedro Contreras"
-                value={form.userName}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="col-md-6 mb-3">
-              <label htmlFor="companyName" className="form-label" style={{ color: 'var(--text-secondary)' }}>Empresa / Organización</label>
-              <input
-                type="text"
-                className="input-glass"
-                id="companyName"
-                name="companyName"
-                placeholder="SENA / Freelance"
-                value={form.companyName}
-                onChange={handleChange}
-                required
-              />
-            </div>
-          </div>
-          <div className="mb-3">
-            <label htmlFor="email" className="form-label" style={{ color: 'var(--text-secondary)' }}>Correo Electrónico</label>
-            <input
-              type="email"
-              className="input-glass"
-              id="email"
-              name="email"
-              placeholder="peterxmen3@gmail.com"
-              value={form.email}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="row">
-            <div className="col-md-6 mb-3">
-              <label htmlFor="password" className="form-label" style={{ color: 'var(--text-secondary)' }}>Contraseña</label>
-              <input
-                type="password"
-                className="input-glass"
-                id="password"
-                name="password"
-                placeholder="••••••••"
-                value={form.password}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="col-md-6 mb-4">
-              <label htmlFor="repeatPassword" className="form-label" style={{ color: 'var(--text-secondary)' }}>Confirmar Contraseña</label>
-              <input
-                type="password"
-                className="input-glass"
-                id="repeatPassword"
-                name="repeatPassword"
-                placeholder="••••••••"
-                value={form.repeatPassword}
-                onChange={handleChange}
-                required
-              />
-            </div>
-          </div>
-          <div className="d-grid gap-2 mt-2">
-            <button type="submit" className="btn-primary">
-              Registrarse
+            <button
+              type="button"
+              className="btn-secondary register-form__login-btn"
+              onClick={() => navigate('/login')}
+            >
+              ¿Ya tienes cuenta? Inicia sesión
             </button>
+          </form>
+          <div className="register-form__footer">
+            ChurnInsight - Hackathon No Country - v1.0 ONE
           </div>
-          <div className="text-center mt-4">
-            <small style={{ color: 'var(--text-secondary)' }}>
-              ¿Ya tienes cuenta? <a href="/login" style={{ color: 'var(--accent-blue)' }}>Inicia sesión aquí</a>
-            </small>
-          </div>
-        </form>
+        </div>
       </div>
     </div>
   );

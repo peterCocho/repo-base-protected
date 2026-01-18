@@ -98,7 +98,7 @@ export default function LoginScreen({ onLogin }) {
             </button>
           </form>
           <div className="login-form__footer">
-            Powered by Team DataSena - v1.0 MVP
+            ChurnInsight - Hackathon No Country - v1.0 ONE
           </div>
         </div>
       </div>

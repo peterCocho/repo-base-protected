@@ -196,3 +196,133 @@
 .error {
   color: #ef4444;
 }
+
+/* Estilos para tarjetas KPI expandibles */
+.kpi-card {
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+}
+
+.kpi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.15);
+}
+
+.kpi-expand-icon {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+}
+
+.kpi-card:hover .kpi-expand-icon {
+  opacity: 1;
+}
+
+/* Overlay para tarjeta expandida */
+.kpi-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.kpi-expanded-card {
+  background: rgba(255,255,255,0.1);
+  border-radius: 24px;
+  border: 1.5px solid rgba(255,255,255,0.2);
+  box-shadow: 0 20px 60px 0 rgba(31, 38, 135, 0.3);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  backdrop-filter: blur(20px) saturate(150%);
+  padding: 2rem;
+  max-width: 500px;
+  width: 90%;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.kpi-expanded-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.kpi-expanded-header h2 {
+  margin: 0;
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.kpi-close-btn {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-size: 2rem;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+}
+
+.kpi-close-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.kpi-expanded-content {
+  text-align: center;
+}
+
+.kpi-expanded-icon {
+  margin: 0 auto 1.5rem;
+  padding: 1.5rem;
+  border-radius: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.kpi-expanded-value {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 1rem;
+}
+
+.kpi-expanded-description {
+  color: #94a3b8;
+  font-size: 1rem;
+  line-height: 1.5;
+}

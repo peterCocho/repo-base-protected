@@ -8,6 +8,7 @@ import DashboardScreen from './pages/Dashboard/DashboardScreen';
 import HistoryScreen from './pages/History/HistoryScreen';
 import PredictionTableScreen from './pages/PrecictionCsv/PredictionTableScreen';
 import RegisterScreen from './pages/Register/RegisterScreen';
+import VerificationScreen from './pages/Verification/VerificationScreen';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 
 function AppRoutes({ isLoggedIn, setIsLoggedIn, currentScreen, setCurrentScreen, predictionData, setPredictionData }) {
@@ -15,8 +16,8 @@ function AppRoutes({ isLoggedIn, setIsLoggedIn, currentScreen, setCurrentScreen,
   const navigate = useNavigate();
   // Si no está logueado y la ruta es /, forzar a /login
   React.useEffect(() => {
-    // Siempre forzar a /login si no hay sesión y la ruta no es /register
-    if (!isLoggedIn && location.pathname !== '/login' && location.pathname !== '/register') {
+    // Siempre forzar a /login si no hay sesión y la ruta no es /register, /verify o /login
+    if (!isLoggedIn && location.pathname !== '/login' && location.pathname !== '/register' && location.pathname !== '/verify') {
       navigate('/login', { replace: true });
     }
   }, [isLoggedIn, location.pathname, navigate]);
@@ -38,6 +39,14 @@ function AppRoutes({ isLoggedIn, setIsLoggedIn, currentScreen, setCurrentScreen,
         element={
           !isLoggedIn
             ? <RegisterScreen />
+            : <Navigate to="/dashboard" replace />
+        }
+      />
+      <Route
+        path="/verify"
+        element={
+          !isLoggedIn
+            ? <VerificationScreen />
             : <Navigate to="/dashboard" replace />
         }
       />

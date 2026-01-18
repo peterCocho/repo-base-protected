@@ -177,3 +177,27 @@
     box-sizing: border-box;
   }
 }
+
+/* Estilos para la columna de mensaje */
+.history-message {
+  max-width: 300px;
+  word-wrap: break-word;
+  white-space: normal;
+  line-height: 1.4;
+  font-size: 0.9rem;
+}
+
+/* Estados de loading y error */
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: #94a3b8;
+  font-size: 1.1rem;
+}
+
+.error {
+  text-align: center;
+  padding: 2rem;
+  color: #ef4444;
+  font-size: 1.1rem;
+}
