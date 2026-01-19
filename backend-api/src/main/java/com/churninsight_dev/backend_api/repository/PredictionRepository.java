@@ -23,4 +23,6 @@ List<PredictionHistoryDTO> findPredictionHistoryByUserEmail(String email);
     "LEFT JOIN c.user u " +
     "ORDER BY p.fechaPrediccion DESC")
 List<PredictionHistoryDTO> findPredictionHistory();
+
+    boolean existsByCustomer_CustomerId(String customerId);
 }

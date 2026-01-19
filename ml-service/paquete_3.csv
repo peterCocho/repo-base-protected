@@ -1,9 +1,9 @@
 customer_id,age,gender,subscription_type,watch_hours,last_login_days,region,device,monthly_fee,payment_method,number_of_profiles,avg_watch_time_per_day,favorite_genre
-1c4d8663-35c7-4f51-a930-5b1a7059a8b0,43,Other,Basic,4.07,19,Asia,Desktop,8.99,Debit Card,3,0.2,Horror
-1bc33d7d-2258-438c-9c77-7cfb0af09acb,21,Other,Premium,8.53,36,Europe,Laptop,17.99,Crypto,4,0.23,Romance
-13fa6e25-f271-47d9-8a29-de91bc1af0d5,38,Male,Standard,2.76,30,North America,Desktop,13.99,Gift Card,4,0.09,Drama
-1350d5a0-fef7-4281-b752-42162d72bd05,33,Female,Premium,25.15,0,North America,TV,17.99,Crypto,1,25.15,Comedy
-1a65a314-97bb-4893-b479-fe03c3e20276,36,Female,Premium,71.41,60,South America,Desktop,17.99,Debit Card,1,1.17,Action
-1b31ebd3-0df5-4c2f-a137-a81d2c18e90a,32,Female,Standard,1.7,45,Africa,Mobile,13.99,Gift Card,5,0.04,Comedy
-1b495161-ed07-4cd1-82d4-50a9e4c8c5c0,25,Female,Standard,7.36,1,North America,Mobile,13.99,PayPal,4,3.68,Comedy
-2750bbeb-a4d1-4fdd-9d4b-6da8f2110f83,24,Other,Premium,5.54,47,Africa,Tablet,17.99,PayPal,5,0.12,Documentary
+1c4d8663-35c7-4f51-a930,43,Other,Basic,4.07,19,Asia,Desktop,8.99,Debit Card,3,0.2,Horror
+1bc33d7d-2258-438c-9c77,21,Other,Premium,8.53,36,Europe,Laptop,17.99,Crypto,4,0.23,Romance
+13fa6e25-f271-47d9-8a29,38,Male,Standard,2.76,30,North America,Desktop,13.99,Gift Card,4,0.09,Drama
+1350d5a0-fef7-4281-b752,33,Female,Premium,25.15,0,North America,TV,17.99,Crypto,1,25.15,Comedy
+1a65a314-97bb-4893-b479,36,Female,Premium,71.41,60,South America,Desktop,17.99,Debit Card,1,1.17,Action
+1b31ebd3-0df5-4c2f-a137,32,Female,Standard,1.7,45,Africa,Mobile,13.99,Gift Card,5,0.04,Comedy
+1b495161-ed07-4cd1-82d4,25,Female,Standard,7.36,1,North America,Mobile,13.99,PayPal,4,3.68,Comedy
+2750bbeb-a4d1-4fdd-9d4b,24,Other,Premium,5.54,47,Africa,Tablet,17.99,PayPal,5,0.12,Documentary

@@ -2,21 +2,23 @@ package com.churninsight_dev.backend_api.controller;
 
 import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
+import java.util.Optional;
 import com.churninsight_dev.backend_api.dto.PredictionRequest;
 import com.churninsight_dev.backend_api.dto.PredictionResponse;
 import com.churninsight_dev.backend_api.dto.PredictionHistoryDTO;
-import com.churninsight_dev.backend_api.repository.CustomerRepository;
-import com.churninsight_dev.backend_api.repository.PredictionRepository;
 import com.churninsight_dev.backend_api.service.PredictionService;
+import com.churninsight_dev.backend_api.model.Profile;
+import com.churninsight_dev.backend_api.model.User;
+import com.churninsight_dev.backend_api.repository.UserRepository;
+import com.churninsight_dev.backend_api.repository.PredictionRepository;
+import com.churninsight_dev.backend_api.security.JwtUtil;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-
 import java.util.HashMap;
-// import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
 
@@ -31,15 +33,19 @@ public class PredictionController {
     private final PredictionService predictionService;
     // private final CustomerRepository customerRepository;
     private final PredictionRepository predictionRepository;
+    private final UserRepository userRepository;
+    private final JwtUtil jwtUtil;
 
     /**
      * Inyección de dependencias por constructor.
      * Es la forma más limpia y recomendada en Spring Boot.
      */
-    public PredictionController(PredictionService predictionService, CustomerRepository customerRepository, PredictionRepository predictionRepository){
+    public PredictionController(PredictionService predictionService, PredictionRepository predictionRepository, UserRepository userRepository, JwtUtil jwtUtil){
         this.predictionService = predictionService;
         // this.customerRepository = customerRepository;
         this.predictionRepository = predictionRepository;
+        this.userRepository = userRepository;
+        this.jwtUtil = jwtUtil;
     }
 
 
@@ -89,7 +95,7 @@ public class PredictionController {
             .sum();
 
         long cantidadNoChurn = predictions.stream().filter(p -> p.getResultado() != null && p.getResultado().equalsIgnoreCase("no churn")).count();
-        double porcentajeNoChurn = clientesAnalizados > 0 ? (cantidadNoChurn * 100.0) / clientesAnalizados : 0;
+        // double porcentajeNoChurn = clientesAnalizados > 0 ? (cantidadNoChurn * 100.0) / clientesAnalizados : 0;
 
         // Porcentaje/cantidad de veces que cada variable fue main_factor en predicciones Churn
         Map<String, Long> cantidadSalida = new LinkedHashMap<>();
@@ -115,7 +121,7 @@ public class PredictionController {
             return factor.endsWith("number_of_profiles");
         }).count());
 
-        Map<String, Object> stats = new java.util.LinkedHashMap<>();
+        Map<String, Object> stats = new LinkedHashMap<>();
         stats.put("clientes_analizados", clientesAnalizados);
         stats.put("tasa_churn", tasaChurn);
         stats.put("ingresos_en_riesgo", ingresosEnRiesgo);
@@ -144,9 +150,22 @@ public class PredictionController {
     /**
      * Endpoint para predicción masiva por archivo CSV
      */
-    @PreAuthorize("hasRole('PREMIUM')")
     @PostMapping("/csv")
-    public ResponseEntity<List<PredictionResponse>> predictFromCsv(@RequestParam("file") MultipartFile file, @RequestHeader("Authorization") String authHeader) {
+    public ResponseEntity<?> predictFromCsv(@RequestParam("file") MultipartFile file, @RequestHeader("Authorization") String authHeader) {
+        // Extraer email del token
+        String token = authHeader.replace("Bearer ", "");
+        String email = jwtUtil.extractUsername(token);
+
+        // Verificar si el usuario tiene rol premium
+        Optional<User> userOpt = userRepository.findByEmail(email);
+        if (userOpt.isEmpty() || !userOpt.get().getProfiles().contains(Profile.ROLE_PREMIUM)) {
+            return ResponseEntity.status(402).body(Map.of(
+                "error", "Acceso denegado",
+                "message", "Esta función requiere una suscripción premium. Actualiza tu cuenta para cargar predicciones múltiples.",
+                "upgradeUrl", "/upgrade"
+            ));
+        }
+
         return ResponseEntity.ok(predictionService.processCsvPrediction(file, authHeader));
     }
 }

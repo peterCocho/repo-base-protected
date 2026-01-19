@@ -189,7 +189,7 @@ const response = await axios.post(
 								</select>
 						</div>
 					</div>
-					<button className="btn-primary mt-4" type="submit" disabled={loading} style={{width: '100%', height: '3rem', fontSize: '1.2rem'}}>
+					<button className="btn-p mt-4" type="submit" disabled={loading} style={{width: '100%', height: '3rem', fontSize: '1.2rem'}}>
 						{loading ? 'Procesando...' : 'Analizar Riesgo de Cancelacion'}
 					</button>
 				</form>

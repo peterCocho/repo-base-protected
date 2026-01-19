@@ -77,10 +77,19 @@ mvn spring-boot:run
 
 ```json
 {
-  "tiempo_contrato_meses": 12,
-  "retrasos_pago": 2,
-  "uso_mensual": 14.5,
-  "plan": "Premium"
+  "customer_id": "O221",
+  "age": 60,
+  "gender": "M",
+  "subscription_type": "Basic",
+  "watch_hours": 12,
+  "last_login_days": 30,
+  "region": "Europe",
+  "device": "Desktop",
+  "monthly_fee": 5.99,
+  "payment_method": "Debit Card",
+  "number_of_profiles": 1,
+  "avg_watch_time_per_day": 0.4,
+  "favorite_genre": "Clásicos"
 }
 ```
 
@@ -88,8 +97,9 @@ mvn spring-boot:run
 
 ```json
 {
-  "prevision": "Va a cancelar",
-  "probabilidad": 0.81
+	"prediction": "Churn",
+	"probability": 0.77,
+	"custom_message": "Alerta: Considera ofrecer un descuento del 15% en la tarifa mensual para retener a este cliente."
 }
 ```
 
