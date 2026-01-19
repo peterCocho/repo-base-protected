@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../services/api';
 import { useNavigate } from 'react-router-dom';
 import { User, Lock, Eye, EyeOff, Mail, Building } from 'lucide-react';
 import './RegisterScreen.css';
@@ -39,8 +39,8 @@ const RegisterScreen = () => {
 
     try {
       console.log('Enviando registro:', form);
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/register`,
+      const response = await api.post(
+        '/register',
         form
       );
       console.log('Respuesta del registro:', response);

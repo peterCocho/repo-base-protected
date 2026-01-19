@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../services/api';
 import { Crown, CreditCard } from 'lucide-react';
 import './UpgradeToPremium.css';
 
@@ -8,13 +8,36 @@ const UpgradeToPremium = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const [showPaymentForm, setShowPaymentForm] = useState(false);
+  const [paymentData, setPaymentData] = useState({
+    cardNumber: '',
+    expiryDate: '',
+    cvv: '',
+    name: ''
+  });
 
-  // Obtener email del usuario logueado (asumiendo que está en localStorage o contexto)
-  const email = localStorage.getItem('userEmail'); // Ajustar según tu implementación
+  // Obtener email del usuario logueado
+  const email = localStorage.getItem('userEmail');
 
-  const handleUpgrade = async () => {
+  const handlePaymentDataChange = (e) => {
+    setPaymentData({ ...paymentData, [e.target.name]: e.target.value });
+  };
+
+  const handleUpgrade = () => {
+    setShowPaymentForm(true);
+  };
+
+  const handlePaymentSubmit = async (e) => {
+    e.preventDefault();
     if (!email) {
       setError('Usuario no autenticado');
+      return;
+    }
+
+    // Validación básica
+    if (!paymentData.cardNumber || !paymentData.expiryDate || !paymentData.cvv || !paymentData.name) {
+      setError('Por favor, completa todos los campos');
       return;
     }
 
@@ -22,21 +45,14 @@ const UpgradeToPremium = () => {
     setError('');
 
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/payment/create`,
-        { email },
-        {
-          headers: token ? { Authorization: `Bearer ${token}` } : {}
-        }
-      );
+      // Simular procesamiento de pago
+      await new Promise(resolve => setTimeout(resolve, 2000)); // Simular delay
 
-      if (response.data.approvalUrl) {
-        // Redirigir a PayPal
-        window.location.href = response.data.approvalUrl;
-      } else {
-        setError('Error al iniciar el pago');
-      }
+      // Confirmar en backend (simulado)
+      await api.post('/api/payment/confirm', { email });
+      
+      setSuccessMessage('Pago exitoso! Tu cuenta ha sido actualizada a Premium.');
+      setTimeout(() => navigate('/dashboard'), 2000); // Redirigir después de 2 segundos
     } catch (err) {
       setError('Error al procesar el pago: ' + (err.response?.data?.message || err.message));
     } finally {
@@ -80,23 +96,75 @@ const UpgradeToPremium = () => {
 
         {error && <div className="upgrade-error">{error}</div>}
 
-        <button
-          className="btn-premium"
-          onClick={handleUpgrade}
-          disabled={loading}
-        >
-          {loading ? (
-            <>
-              <CreditCard size={18} />
-              Procesando...
-            </>
-          ) : (
-            <>
-              <CreditCard size={18} />
-              Pagar con PayPal
-            </>
-          )}
-        </button>
+        {successMessage && <div className="upgrade-success">{successMessage}</div>}
+
+        {!showPaymentForm ? (
+          <button
+            className="btn-premium"
+            onClick={handleUpgrade}
+            disabled={loading}
+          >
+            <CreditCard size={18} />
+            Proceder al Pago
+          </button>
+        ) : (
+          <form onSubmit={handlePaymentSubmit} className="payment-form">
+            <h4>Información de Pago</h4>
+            <div className="form-group">
+              <label>Nombre en la Tarjeta</label>
+              <input
+                type="text"
+                name="name"
+                value={paymentData.name}
+                onChange={handlePaymentDataChange}
+                placeholder="Juan Pérez"
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label>Número de Tarjeta</label>
+              <input
+                type="text"
+                name="cardNumber"
+                value={paymentData.cardNumber}
+                onChange={handlePaymentDataChange}
+                placeholder="1234 5678 9012 3456"
+                required
+              />
+            </div>
+            <div className="form-row">
+              <div className="form-group">
+                <label>Fecha de Expiración</label>
+                <input
+                  type="text"
+                  name="expiryDate"
+                  value={paymentData.expiryDate}
+                  onChange={handlePaymentDataChange}
+                  placeholder="MM/YY"
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>CVV</label>
+                <input
+                  type="text"
+                  name="cvv"
+                  value={paymentData.cvv}
+                  onChange={handlePaymentDataChange}
+                  placeholder="123"
+                  required
+                />
+              </div>
+            </div>
+            <button
+              type="submit"
+              className="btn-premium"
+              disabled={loading}
+            >
+              {loading ? 'Procesando...' : 'Pagar $9.99'}
+            </button>
+          </form>
+        )}
 
         <button
           className="btn-secondary"

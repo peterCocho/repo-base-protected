@@ -34,7 +34,7 @@ function AppRoutes({ isLoggedIn, setIsLoggedIn, currentScreen, setCurrentScreen,
         element={
           isLoggedIn
             ? <Navigate to="/dashboard" replace />
-            : <LoginScreen onLogin={() => setIsLoggedIn(true)} />
+            : <LoginScreen onLogin={() => { setIsLoggedIn(true); setCurrentScreen('analyzer'); setPredictionData([]); }} />
         }
       />
       <Route
@@ -86,6 +86,7 @@ function AppRoutes({ isLoggedIn, setIsLoggedIn, currentScreen, setCurrentScreen,
                 localStorage.removeItem('userEmail');
                 localStorage.removeItem('isLoggedIn');
                 setIsLoggedIn(false);
+                setPredictionData([]); // Limpiar datos de predicciones al cerrar sesión
               }} />
               <div className="main-content">
                 {currentScreen === 'analyzer' && <AnalyzerScreen />}
@@ -113,16 +114,49 @@ function AppRoutes({ isLoggedIn, setIsLoggedIn, currentScreen, setCurrentScreen,
 }
 
 export default function App() {
+  // Función para verificar si el token es válido
+  const isTokenValid = () => {
+    const token = localStorage.getItem('token');
+    if (!token) return false;
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      const currentTime = Date.now() / 1000;
+      return payload.exp > currentTime;
+    } catch (error) {
+      return false;
+    }
+  };
+
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
-    // Lee el estado de login desde localStorage al iniciar
-    return localStorage.getItem('isLoggedIn') === 'true';
+    // Verificar si hay token válido y isLoggedIn es true
+    return localStorage.getItem('isLoggedIn') === 'true' && isTokenValid();
   });
-  const [currentScreen, setCurrentScreen] = useState('analyzer');
+  const [currentScreen, setCurrentScreen] = useState(() => isLoggedIn ? 'analyzer' : 'analyzer');
   const [predictionData, setPredictionData] = useState([]);
+
+  // Limpiar sesión si el token ha expirado
+  useEffect(() => {
+    if (!isTokenValid() && localStorage.getItem('isLoggedIn') === 'true') {
+      localStorage.removeItem('token');
+      localStorage.removeItem('userEmail');
+      localStorage.removeItem('isLoggedIn');
+      setIsLoggedIn(false);
+    }
+  }, []);
 
   // Actualiza localStorage cuando cambia el estado de login
   useEffect(() => {
     localStorage.setItem('isLoggedIn', isLoggedIn);
+  }, [isLoggedIn]);
+
+  // Resetear currentScreen a 'analyzer' y limpiar predictionData cuando el usuario inicia sesión
+  useEffect(() => {
+    if (isLoggedIn) {
+      setCurrentScreen('analyzer');
+      setPredictionData([]); // Limpiar datos de predicciones anteriores
+    } else {
+      setCurrentScreen('analyzer'); // También resetear cuando no está logueado
+    }
   }, [isLoggedIn]);
 
   return (

@@ -42,6 +42,101 @@
 .prediction-table tr:hover {
   background: rgba(255, 255, 255, 0.1);
 }
+
+.upgrade-features h6 {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.upgrade-features ul {
+  list-style: none;
+  padding: 0;
+}
+
+.upgrade-features li {
+  margin-bottom: 5px;
+}
+
+.upgrade-price {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #007bff;
+  margin-top: 10px;
+}
+
+.upgrade-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.upgrade-modal {
+  background: rgb(51, 40, 146);
+  border-radius: 10px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.upgrade-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.upgrade-modal-header h3 {
+  margin: 0;
+  color: #333;
+}
+
+.upgrade-modal-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
+}
+
+.upgrade-modal-body {
+  padding: 20px;
+}
+
+.upgrade-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 20px;
+  border-top: 1px solid #eee;
+}
+
+.upgrade-modal-footer .btn-primary {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.upgrade-modal-footer .btn-secondary {
+  background: #6c757d;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
 .prediction-table-container {
   max-width: 700px;
   margin: 3rem auto;

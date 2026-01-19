@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../services/api';
 import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { Mail, CheckCircle } from 'lucide-react';
 import './VerificationScreen.css';
@@ -26,15 +26,15 @@ const VerificationScreen = () => {
   const handleVerify = async (e) => {
 
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/verification`,
+      const response = await api.post(
+        '/verification',
         { email, verification: code }
       );
 
       if (response.status === 200) {
         setSuccessMessage(response.data.message);
         setSuccess(true);
-        setTimeout(() => navigate('/login'), 3000);
+        navigate('/login');
       }
     } catch (err) {
       if (err.response && err.response.data) {
@@ -60,7 +60,6 @@ const VerificationScreen = () => {
               <CheckCircle size={64} color="#10b981" />
               <h3>Verificación Exitosa</h3>
               <p>{successMessage}</p>
-              <p>Redirigiendo al login...</p>
             </div>
           </div>
       </div>

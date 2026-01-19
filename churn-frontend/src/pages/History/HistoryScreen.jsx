@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Download } from 'lucide-react';
 import './HistoryScreen.css';
-import axios from 'axios';
+import api from '../../services/api';
 
 export default function HistoryScreen() {
   const [history, setHistory] = useState([]);
@@ -12,14 +12,8 @@ export default function HistoryScreen() {
   useEffect(() => {
     const fetchHistory = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/predictions/history`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
+        const response = await api.get(
+          '/api/predictions/history'
         );
         setHistory(response.data);
         console.log('Datos del historial:', response.data);
@@ -56,7 +50,7 @@ export default function HistoryScreen() {
   // Función para exportar a CSV
   const exportToCSV = () => {
     if (filteredHistory.length === 0) {
-      alert('No hay datos para exportar');
+      setError('No hay datos para exportar');
       return;
     }
 
@@ -125,6 +119,8 @@ export default function HistoryScreen() {
             </button>
           </div>
         </div>
+
+        {error && <div className="history-error">{error}</div>}
         <table className="history-table">
           <thead>
             <tr className="history-table-header">

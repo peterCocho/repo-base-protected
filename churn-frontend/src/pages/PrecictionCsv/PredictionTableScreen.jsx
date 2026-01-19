@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../services/api';
 import './PredictionTableScreen.css';
 
 const PredictionTableScreen = ({ data = [], onCsvLoaded }) => {
@@ -9,6 +9,7 @@ const PredictionTableScreen = ({ data = [], onCsvLoaded }) => {
   const [csvSelected, setCsvSelected] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -31,13 +32,11 @@ const PredictionTableScreen = ({ data = [], onCsvLoaded }) => {
     formData.append('file', file);
 
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/v1/predictions/csv`,
+      const response = await api.post(
+        '/api/v1/predictions/csv',
         formData,
         {
           headers: {
-            'Authorization': `Bearer ${token}`,
             'Content-Type': 'multipart/form-data'
           }
         }
@@ -53,10 +52,9 @@ const PredictionTableScreen = ({ data = [], onCsvLoaded }) => {
       if (onCsvLoaded) onCsvLoaded(predictions);
     } catch (err) {
       console.log('Error response:', err.response); // Debug
-      if (err.response && err.response.status === 402) {
-        // Redirigir a upgrade
-        alert('Esta función requiere una suscripción premium. Redirigiendo a la página de upgrade...');
-        navigate('/upgrade');
+      if (err.response && (err.response.status === 403 || err.response.status === 402)) {
+        // Mostrar modal de upgrade
+        setShowUpgradeModal(true);
       } else {
         setError('Error al procesar el CSV: ' + (err.response?.data?.message || err.message));
       }
@@ -123,6 +121,35 @@ const PredictionTableScreen = ({ data = [], onCsvLoaded }) => {
           )}
         </tbody>
       </table>
+
+      {/* Modal de Upgrade */}
+      {showUpgradeModal && (
+        <div className="upgrade-modal-overlay" onClick={() => setShowUpgradeModal(false)}>
+          <div className="upgrade-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="upgrade-modal-header">
+              <h3>Actualiza a Premium</h3>
+              <button className="upgrade-modal-close" onClick={() => setShowUpgradeModal(false)}>×</button>
+            </div>
+            <div className="upgrade-modal-body">
+              <p>Esta función requiere una suscripción premium.</p>
+              <div className="upgrade-features">
+                <h4>Beneficios del Plan Premium:</h4>
+                <ul>
+                  <li>✅ Carga masiva de clientes via CSV</li>
+                  <li>✅ Estadísticas avanzadas</li>
+                  <li>✅ Soporte prioritario</li>
+                  <li>✅ Sin límites de predicciones</li>
+                </ul>
+                <p className="upgrade-price"><strong>$9.99 USD</strong> (pago único)</p>
+              </div>
+            </div>
+            <div className="upgrade-modal-footer">
+              <button className="btn-secondary" onClick={() => setShowUpgradeModal(false)}>Cancelar</button>
+              <button className="btn-primary" onClick={() => navigate('/upgrade')}>Actualizar a Premium</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
