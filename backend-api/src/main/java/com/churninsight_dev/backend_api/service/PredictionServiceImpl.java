@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.churninsight_dev.backend_api.dto.PredictionRequest;
 import com.churninsight_dev.backend_api.dto.PredictionResponse;
@@ -176,6 +178,22 @@ public class PredictionServiceImpl implements PredictionService {
         } catch (Exception e) {
             throw new RuntimeException("Error procesando el archivo CSV", e);
         }
+
+        // Validar duplicados en el CSV
+        Set<String> customerIds = new HashSet<>();
+        for (PredictionRequest req : requests) {
+            if (!customerIds.add(req.getCustomerId())) {
+                throw new RuntimeException("El CSV contiene IDs de clientes duplicados. Verifica que no haya repetidos.");
+            }
+        }
+
+        // Validar si ya existen predicciones para estos customer_ids
+        for (PredictionRequest req : requests) {
+            if (predictionRepository.existsByCustomer_CustomerId(req.getCustomerId())) {
+                throw new RuntimeException("Algunos IDs de clientes en el CSV ya tienen predicciones realizadas. Verifica que no estén duplicados o ya procesados.");
+            }
+        }
+
         return processBatchPrediction(requests, jwtToken);
     }
 

@@ -9,6 +9,9 @@ import HistoryScreen from './pages/History/HistoryScreen';
 import PredictionTableScreen from './pages/PrecictionCsv/PredictionTableScreen';
 import RegisterScreen from './pages/Register/RegisterScreen';
 import VerificationScreen from './pages/Verification/VerificationScreen';
+import UpgradeToPremium from './pages/UpgradeToPremium';
+import PaymentSuccess from './pages/PaymentSuccess';
+import PaymentCancel from './pages/PaymentCancel';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 
 function AppRoutes({ isLoggedIn, setIsLoggedIn, currentScreen, setCurrentScreen, predictionData, setPredictionData }) {
@@ -50,6 +53,28 @@ function AppRoutes({ isLoggedIn, setIsLoggedIn, currentScreen, setCurrentScreen,
             : <Navigate to="/dashboard" replace />
         }
       />
+      <Route
+        path="/upgrade"
+        element={
+          isLoggedIn ? <UpgradeToPremium /> : <Navigate to="/login" replace />
+        }
+      />
+      <Route
+        path="/payment/success"
+        element={
+          isLoggedIn ? <PaymentSuccess /> : <Navigate to="/login" replace />
+        }
+      />
+      <Route
+        path="/payment/cancel"
+        element={
+          isLoggedIn ? <PaymentCancel /> : <Navigate to="/login" replace />
+        }
+      />
+      <Route
+        path="/payment/cancel"
+        element={<PaymentCancel />}
+      />
       {/* Rutas protegidas solo si está logueado */}
       <Route
         path="/dashboard"
@@ -58,6 +83,8 @@ function AppRoutes({ isLoggedIn, setIsLoggedIn, currentScreen, setCurrentScreen,
             <div>
               <Navbar currentScreen={currentScreen} setCurrentScreen={setCurrentScreen} onLogout={() => {
                 localStorage.removeItem('token');
+                localStorage.removeItem('userEmail');
+                localStorage.removeItem('isLoggedIn');
                 setIsLoggedIn(false);
               }} />
               <div className="main-content">
@@ -67,14 +94,8 @@ function AppRoutes({ isLoggedIn, setIsLoggedIn, currentScreen, setCurrentScreen,
                 {currentScreen === 'prediction' && (
                   <PredictionTableScreen
                     data={predictionData}
-                    onCsvLoaded={(csvText) => {
-                      // Aquí deberías procesar el CSV y convertirlo a datos para la tabla
-                      // Por ahora, solo simula una predicción de ejemplo
-                      // TODO: Reemplazar por lógica real de parseo y petición a modelo
-                      setPredictionData([
-                        { prediccion: 'Sí', probabilidad: '85%', mensaje: 'Alerta: riesgo alto' },
-                        { prediccion: 'No', probabilidad: '20%', mensaje: 'Sin riesgo' }
-                      ]);
+                    onCsvLoaded={(predictions) => {
+                      setPredictionData(predictions);
                     }}
                   />
                 )}

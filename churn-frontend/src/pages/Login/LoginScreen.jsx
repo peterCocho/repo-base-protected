@@ -22,6 +22,8 @@ export default function LoginScreen({ onLogin }) {
       // Si el backend responde con éxito y trae token, guárdalo
       if (response.status === 200 && response.data && response.data.token) {
         localStorage.setItem('token', response.data.token);
+        localStorage.setItem('userEmail', email);
+        localStorage.setItem('isLoggedIn', 'true');
         onLogin();
       } else {
         setError('Credenciales no válidas');
