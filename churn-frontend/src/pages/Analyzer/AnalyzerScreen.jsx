@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Activity, PlayCircle } from 'lucide-react';
 import './AnalyzerScreen.css';
-import axios from 'axios';
+import api from '../../services/api';
 
 export default function AnalyzerScreen() {
 	const [result, setResult] = useState(null);
@@ -44,10 +44,8 @@ export default function AnalyzerScreen() {
 		}
 		setLoading(true);
 		try {
-			const token = localStorage.getItem('token');
-
-const response = await axios.post(
-  `${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/v1/predictions/predict`,
+			const response = await api.post(
+  `/api/v1/predictions/predict`,
   {
     ...form,
     age: Number(form.age),
@@ -56,9 +54,6 @@ const response = await axios.post(
     monthly_fee: Number(form.monthly_fee),
     number_of_profiles: Number(form.number_of_profiles),
     avg_watch_time_per_day: Number(form.avg_watch_time_per_day)
-  },
-  {
-    headers: token ? { Authorization: `Bearer ${token}` } : {}
   }
 );
 

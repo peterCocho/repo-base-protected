@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../../services/api';
 import './LoginScreen.css';
 import { User, Lock, Eye, EyeOff, Activity } from 'lucide-react';
 
@@ -15,8 +15,8 @@ export default function LoginScreen({ onLogin }) {
     try {
       // Limpia el token anterior antes de login
       localStorage.removeItem('token');
-      const response = await axios.post(
-        'http://localhost:8080/login',
+      const response = await api.post(
+        '/login',
         { email, password }
       );
       // Si el backend responde con éxito y trae token, guárdalo
