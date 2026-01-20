@@ -194,7 +194,7 @@ export default function AnalyzerScreen() {
 						<h1 className="analyzer-probability-value">{result.probability}%</h1>
 					</div>
 					<h2 className="analyzer-prob-title">Probabilidad de Cancelación</h2>
-					<div className={`glass-panel analyzer-recommendation${result.status === 'success' ? ' success' : ''}`} style={{ maxWidth: '500px', maxHeight: '120px', padding: '1rem' }}>
+					<div className={`glass-panel analyzer-recommendation${result.status === 'success' ? ' success' : ''}`} style={{ maxWidth: '500px', maxHeight: '500px', padding: '1rem' }}>
 						{result.status === 'danger' && <strong>ACCIÓN RECOMENDADA:</strong>}
 						<p className={`analyzer-recommendation-message${result.status === 'success' ? ' success' : ''}`}>{result.message}</p>
 					</div>

@@ -44,6 +44,7 @@ const PredictionTableScreen = ({ data = [], onCsvLoaded }) => {
 
       // Procesar la respuesta
       const predictions = response.data.map(pred => ({
+        customerId: pred.customer_id,
         prediccion: pred.prediction,
         probabilidad: `${Math.round(pred.probability * 100)}%`,
         mensaje: pred.custom_message
@@ -98,6 +99,7 @@ const PredictionTableScreen = ({ data = [], onCsvLoaded }) => {
       <table className="prediction-table">
         <thead>        
           <tr>
+            <th>ID Cliente</th>
             <th>Predicción</th>
             <th>Probabilidad</th>
             <th>Mensaje</th>
@@ -106,13 +108,14 @@ const PredictionTableScreen = ({ data = [], onCsvLoaded }) => {
         <tbody>
           {data.length === 0 ? (
             <tr>
-              <td colSpan="3" style={{ textAlign: 'center', color: '#888' }}>
+              <td colSpan="4" style={{ textAlign: 'center', color: '#888' }}>
                 No hay datos para mostrar
               </td>
             </tr>
           ) : (
             data.map((row, idx) => (
               <tr key={idx}>
+                <td>{row.customerId}</td>
                 <td>{row.prediccion}</td>
                 <td>{row.probabilidad}</td>
                 <td>{row.mensaje}</td>
