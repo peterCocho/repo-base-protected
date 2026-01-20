@@ -55,6 +55,11 @@ public class PredictionServiceImpl implements PredictionService {
         }
         PredictionResponse response = restTemplate.postForObject(dsServiceUrl, request, PredictionResponse.class);
 
+        // Set customerId in response
+        if (response != null) {
+            response.setCustomerId(request.getCustomerId());
+        }
+
         // 2. CREAR Y GUARDAR EL CLIENTE EN LA BASE DE DATOS (Persistencia)
         Customer customer = new Customer();
         customer.setCustomerId(request.getCustomerId());
