@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import './Navbar.css';
 import { Activity, LogOut } from 'lucide-react';
 
-
 export default function Navbar({ currentScreen, setCurrentScreen, onLogout }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const screens = [
