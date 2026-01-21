@@ -1,0 +1,8 @@
+scikit-learn==1.6.1
+fastapi
+pydantic
+joblib
+numpy
+pandas
+python-multipart
+uvicorn

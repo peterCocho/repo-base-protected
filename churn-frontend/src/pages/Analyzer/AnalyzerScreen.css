@@ -1,0 +1,309 @@
+/* Pantalla completa para el analizador */
+.analyzer-fullscreen {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centra el contenido horizontalmente */
+  justify-content: flex-start;
+  padding: 40px 20px;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.analyzer-container {
+  width: 98%; /* Ocupa casi todo el ancho */
+  max-width: 1600px; /* Límite para que no se deforme en pantallas gigantes */
+  margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* --- 2. ENCABEZADO --- */
+.analyzer-header {
+  text-align: center;
+  /* margin-bottom: 10px; */
+}
+
+.analyzer-title-flex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-size: 1.8rem;
+  color: #fff;
+}
+
+.analyzer-subtitle {
+  color: #94a3b8;
+  font-size: 1rem;
+}
+
+/* --- 3. LAS 3 COLUMNAS (EL CAMBIO CLAVE) --- */
+.analyzer-cards-grid {
+  display: flex;             /* Forza disposición horizontal */
+  flex-direction: row;      /* Uno al lado del otro */
+  gap: 20px;                /* Espacio entre las tarjetas */
+  width: 100%;
+  align-items: stretch;     /* Hace que todas tengan el mismo alto */
+}
+
+.analyzer-card {
+  flex: 1;                  /* Obliga a las 3 a ocupar el mismo ancho exacto */
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  min-width: 0;             /* Importante para que Flexbox no se rompa */
+}
+
+.analyzer-card h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.1rem;
+  color: #3b82f6;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+
+/* --- 4. FORMULARIOS DENTRO DE CARDS --- */
+.card-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.analyzer-label {
+  display: block; 
+  width: 100%;
+  font-size: 0.85rem;
+  color: #94a3b8;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.input-glass {
+  width: 100%;
+  display: block;
+  box-sizing: border-box; /* Fundamental para que el padding no sume al ancho */
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: white;
+}
+
+.input-glass option {
+    background-color: #ffffff; /* Fondo blanco para las opciones al abrir */
+    color: #000000;            /* Letras negras SIEMPRE */
+}
+
+select.input-glass {
+    color: #ffffff;            /* Texto del select cerrado (en tu fondo oscuro) */
+    cursor: pointer;
+}
+
+select.input-glass:focus {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.error-container-fade {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    animation: fadeIn 0.4s ease-out;
+}
+
+.error-banner-modern {
+    background: rgba(206, 72, 72, 0.9); /* Rojo sólido pero algo traslúcido */
+    color: white;
+    padding: 12px 24px;
+    border-radius: 50px; /* Estilo píldora */
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* --- 5. BOTÓN DE ACCIÓN --- */
+.analyzer-actions {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.btn-analyze-large {
+  width: 100%;
+  max-width: 500px;
+  height: 3.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+}
+
+.btn-analyze-large:hover:not(:disabled) {
+  background: #2563eb;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3);
+}
+
+.btn-analyze-large:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* --- 6. RESULTADOS (Círculo y Mensajes) --- */
+.analyzer-result-panel {
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.analyzer-probability-circle {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  border: 6px solid #10b981;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.analyzer-probability-circle.danger {
+  border-color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.analyzer-probability-value {
+  font-size: 3rem;
+  font-weight: bold;
+  color: white;
+}
+
+.analyzer-recommendation {
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #ef4444;
+  background: rgba(239, 68, 68, 0.05);
+}
+
+.analyzer-recommendation.success {
+  border-color: #10b981;
+  background: rgba(16, 185, 129, 0.05);
+}
+
+
+
+/* Punto intermedio: pasar de 2 columnas a 1 antes de móvil */
+@media (max-width: 1100px) {
+  .analyzer-grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+  
+.analyzer-probability-circle.danger {
+  border-color: var(--accent-red);
+  box-shadow: 0 0 30px 0 rgba(239,68,68,0.18);
+}
+
+.analyzer-prob-title {
+  margin-top: 2rem;
+  font-size: 1.2rem;
+  color: var(--accent-red);
+}
+
+.analyzer-recommendation {
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid var(--accent-red);
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 12px;
+  color: var(--accent-red);
+  font-weight: 500;
+}
+
+.analyzer-waiting {
+  color: var(--text-secondary);
+  opacity: 0.7;
+  text-align: center;
+  
+}
+
+/* Responsividad para pantallas pequeñas */
+@media (max-width: 900px) {
+  .analyzer-page {
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    padding: 0.5rem;
+    align-items: center;
+  }
+  .analyzer-page.grid-2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+  .glass-panel {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+  .analyzer-result {
+    width: 100%;
+  }
+  .analyzer-probability-circle {
+    width: 120px;
+    height: 120px;
+    font-size: 2rem;
+  }
+}
+
+/* Estilos para resultado exitoso (No Churn) */
+.analyzer-probability-circle.success {
+  background: linear-gradient(135deg, #10b981, #059669);
+  box-shadow: 0 8px 32px rgba(16, 185, 129, 0.3);
+}
+
+.analyzer-recommendation.success {
+  border: 2px solid #10b981;
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.analyzer-recommendation-message.success {
+  text-align: center;
+  font-weight: bold;
+  color: #10b981;
+  margin-top: -0.5rem; /* Subir un poco el texto */
+}
+
+/* Quitar flechas de inputs numéricos decimales */
+.input-number-no-spinner::-webkit-outer-spin-button,
+.input-number-no-spinner::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* .input-number-no-spinner[type=number] {
+  -moz-appearance: textfield;
+} */

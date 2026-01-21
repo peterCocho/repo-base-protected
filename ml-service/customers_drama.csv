@@ -1,0 +1,6 @@
+customer_id,age,gender,subscription_type,watch_hours,last_login_days,region,device,monthly_fee,payment_method,number_of_profiles,avg_watch_time_per_day,favorite_genre
+Z1022,28,F,Standard,5,85,Colombia,Mobile,7.99,Credit Card,2,1.5,Sci-Fi
+Z1023,35,M,Premium,120,1,Mexico,Smart TV,14.99,PayPal,4,3.2,Sci-Fi
+Z1024,22,F,Basic,15,20,Peru,Laptop,6.49,Debit Card,1,0.6,Sci-Fi
+Z1025,47,M,Standard,60,3,Argentina,Tablet,10.99,Credit Card,3,2.0,Sci-Fi
+Z1026,31,F,Premium,95,0,Chile,Console,15.49,Bank Transfer,5,2.8,Sci-Fi

@@ -1,0 +1,4 @@
+customer_id,age,gender,subscription_type,watch_hours,last_login_days,region,device,monthly_fee,payment_method,number_of_profiles,avg_watch_time_per_day,favorite_genre
+03fb462c-015a-4412-ab1e-61798120a503,61,Female,Premium,0.78,33,North America,TV,17.99,PayPal,5,0.02,Sci-Fi
+034a89e9-0793-4c4b-8855-8afaf76b3bc7,19,Female,Premium,1.73,22,Oceania,Laptop,17.99,Credit Card,3,0.08,Sci-Fi
+0bcde048-341c-45ac-98f5-4d14cb9833fb,53,Female,Premium,10.75,48,South America,Mobile,17.99,PayPal,4,0.22,Sci-Fi

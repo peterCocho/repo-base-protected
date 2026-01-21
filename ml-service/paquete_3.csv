@@ -1,0 +1,9 @@
+customer_id,age,gender,subscription_type,watch_hours,last_login_days,region,device,monthly_fee,payment_method,number_of_profiles,avg_watch_time_per_day,favorite_genre
+41f51-a930,43,Other,Basic,4.07,19,Asia,Desktop,8.99,Debit Card,3,0.2,Horror
+4138c-9c77,21,Other,Premium,8.53,36,Europe,Laptop,17.99,Crypto,4,0.23,Romance
+417d9-8a29,38,Male,Standard,2.76,30,North America,Desktop,13.99,Gift Card,4,0.09,Drama
+41281-b752,33,Female,Premium,25.15,0,North America,TV,17.99,Crypto,1,25.15,Comedy
+41893-b479,36,Female,Premium,71.41,60,South America,Desktop,17.99,Debit Card,1,1.17,Action
+41c2f-a137,32,Female,Standard,1.7,45,Africa,Mobile,13.99,Gift Card,5,0.04,Comedy
+41cd1-82d4,25,Female,Standard,7.36,1,North America,Mobile,13.99,PayPal,4,3.68,Comedy
+41fdd-9d4b,24,Other,Premium,5.54,47,Africa,Tablet,17.99,PayPal,5,0.12,Documentary

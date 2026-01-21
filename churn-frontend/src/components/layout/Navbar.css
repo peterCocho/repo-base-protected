@@ -1,0 +1,141 @@
+/* Menú móvil */
+.navbar__mobile-menu {
+  position: absolute;
+  top: 60px;
+  right: 10px;
+  background: rgba(15,23,42,0.98);
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+  padding: 1rem;
+  z-index: 999;
+}
+.navbar {
+  height: 72px; 
+  display: flex;
+  align-items: center;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  width: 100%;
+}
+
+.navbar__container {
+  width: 100%;
+  max-width: 1400px; 
+  margin: 0 auto;
+  padding: 0 2.5rem 0 2rem; /* Margen a los lados (estándar de la industria) */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar__brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.login-logo-img{
+  margin: 0 !important;
+}
+.navbar__right-section {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.navbar__links {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Ocultar hamburguesa por defecto */
+.navbar__hamburger {
+  display: none;
+}
+
+.navbar__link {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 8px;
+}
+
+.navbar__link:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.navbar__link.active {
+ color: #3b82f6;
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.navbar__divider {
+  width: 1px;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.navbar__logout {
+ background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #cbd5e1;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s;
+}
+.navbar__logout:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.navbar__logout:active {
+  transform: translateY(0);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+@media (max-width: 900px) {
+  .navbar {
+    padding: 0.75rem 0.5rem;
+  }
+
+  .navbar__container {
+    padding: 0 1rem;
+  }   
+
+  
+  .navbar__links {
+    display: none;
+  }
+  .navbar__hamburger {
+    display: flex;
+    align-items: center;
+    background: none;
+    border: none;
+    color: #94a3b8;
+    font-size: 2rem;
+    cursor: pointer;
+    margin-left: 1rem;
+  }
+  .navbar__logout {
+    display: none;
+  }
+}
