@@ -24,6 +24,8 @@ const VerificationScreen = () => {
   }, [searchParams, navigate]);
 
   const handleVerify = async (e) => {
+    e.preventDefault();
+    setLoading(true);
 
     try {
       const response = await api.post(

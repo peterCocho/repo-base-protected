@@ -31,4 +31,7 @@ public class PredictionResponse {
     @JsonProperty("custom_message")
     @com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
     private String customMessage;
+
+    @JsonProperty("customer_id")
+    private String customerId;
 }

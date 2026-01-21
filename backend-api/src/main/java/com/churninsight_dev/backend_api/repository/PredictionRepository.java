@@ -25,4 +25,8 @@ List<PredictionHistoryDTO> findPredictionHistoryByUserEmail(String email);
 List<PredictionHistoryDTO> findPredictionHistory();
 
     boolean existsByCustomer_CustomerId(String customerId);
+
+    boolean existsByCustomer_User_IdAndCustomer_CustomerId(Long userId, String customerId);
+
+    boolean existsByCustomer_User_CompanyNameAndCustomer_CustomerId(String companyName, String customerId);
 }

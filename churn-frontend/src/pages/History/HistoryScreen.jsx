@@ -121,57 +121,110 @@ export default function HistoryScreen() {
         </div>
 
         {error && <div className="history-error">{error}</div>}
-        <table className="history-table">
-          <thead>
-            <tr className="history-table-header">
-              <th className="history-table-th">ID Cliente</th>
-              <th className="history-table-th">Fecha</th>
-              <th className="history-table-th">Resultado</th>
-              <th className="history-table-th">Probabilidad</th>
-              <th className="history-table-th">Mensaje</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredHistory.map((row, index) => {
-              console.log('Procesando fila:', row);
+        
+        {/* Vista de tabla para desktop */}
+        <div className="history-table-container desktop-only">
+          <table className="history-table">
+            <thead>
+              <tr className="history-table-header">
+                <th className="history-table-th">ID Cliente</th>
+                <th className="history-table-th">Fecha</th>
+                <th className="history-table-th">Resultado</th>
+                <th className="history-table-th">Probabilidad</th>
+                <th className="history-table-th">Mensaje</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredHistory.map((row, index) => {
+                console.log('Procesando fila:', row);
 
-              // Mejor manejo de fechas
-              let fechaFormateada = 'Fecha inválida';
-              if (row.fecha_prediccion) {
-                try {
-                  const fecha = new Date(row.fecha_prediccion);
-                  if (!isNaN(fecha.getTime())) {
-                    fechaFormateada = fecha.toLocaleDateString('es-ES');
+                // Mejor manejo de fechas
+                let fechaFormateada = 'Fecha inválida';
+                if (row.fecha_prediccion) {
+                  try {
+                    const fecha = new Date(row.fecha_prediccion);
+                    if (!isNaN(fecha.getTime())) {
+                      fechaFormateada = fecha.toLocaleDateString('es-ES');
+                    }
+                  } catch (e) {
+                    console.error('Error parseando fecha:', row.fecha_prediccion, e);
                   }
-                } catch (e) {
-                  console.error('Error parseando fecha:', row.fecha_prediccion, e);
                 }
+
+                // Determinar si es churn
+                const resultado = (row.resultado || '').toLowerCase().trim();
+                const esChurn = resultado === 'churn' || resultado === '1';
+
+                return (
+                  <tr key={index} className="history-table-row">
+                    <td className="history-table-td">#{row.customerId}</td>
+                    <td className="history-table-td">{fechaFormateada}</td>
+                    <td className="history-table-td">
+                      <span className={`history-result${esChurn ? ' churn' : ' nochurn'}`}>
+                        {esChurn ? 'Churn' : 'No Churn'}
+                      </span>
+                    </td>
+                    <td className="history-table-td">
+                      {row.probabilidad !== undefined ? (row.probabilidad * 100).toFixed(1) + '%' : 'N/A'}
+                    </td>
+                    <td className="history-table-td history-message">
+                      {row.custom_message || 'N/A'}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Vista de tarjetas para móvil */}
+        <div className="history-cards mobile-only">
+          {filteredHistory.map((row, index) => {
+            console.log('Procesando fila:', row);
+
+            // Mejor manejo de fechas
+            let fechaFormateada = 'Fecha inválida';
+            if (row.fecha_prediccion) {
+              try {
+                const fecha = new Date(row.fecha_prediccion);
+                if (!isNaN(fecha.getTime())) {
+                  fechaFormateada = fecha.toLocaleDateString('es-ES');
+                }
+              } catch (e) {
+                console.error('Error parseando fecha:', row.fecha_prediccion, e);
               }
+            }
 
-              // Determinar si es churn
-              const resultado = (row.resultado || '').toLowerCase().trim();
-              const esChurn = resultado === 'churn' || resultado === '1';
+            // Determinar si es churn
+            const resultado = (row.resultado || '').toLowerCase().trim();
+            const esChurn = resultado === 'churn' || resultado === '1';
 
-              return (
-                <tr key={index} className="history-table-row">
-                  <td className="history-table-td">#{row.customerId}</td>
-                  <td className="history-table-td">{fechaFormateada}</td>
-                  <td className="history-table-td">
+            return (
+              <div key={index} className="history-card">
+                <div className="history-card-header">
+                  <span className="history-card-id">#{row.customerId}</span>
+                  <span className="history-card-date">{fechaFormateada}</span>
+                </div>
+                <div className="history-card-body">
+                  <div className="history-card-item">
+                    <strong>Resultado:</strong>
                     <span className={`history-result${esChurn ? ' churn' : ' nochurn'}`}>
                       {esChurn ? 'Churn' : 'No Churn'}
                     </span>
-                  </td>
-                  <td className="history-table-td">
+                  </div>
+                  <div className="history-card-item">
+                    <strong>Probabilidad:</strong>
                     {row.probabilidad !== undefined ? (row.probabilidad * 100).toFixed(1) + '%' : 'N/A'}
-                  </td>
-                  <td className="history-table-td history-message">
-                    {row.custom_message || 'N/A'}
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+                  </div>
+                  <div className="history-card-item">
+                    <strong>Mensaje:</strong>
+                    <span className="history-message">{row.custom_message || 'N/A'}</span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

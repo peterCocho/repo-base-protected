@@ -25,7 +25,7 @@ public class Prediction {
     private Double monthlyFee;
 
     @OneToOne
-    @JoinColumn(name = "customer_id", referencedColumnName = "customer_id")
+    @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Customer customer;
 
     @Column(name = "fecha_prediccion")
