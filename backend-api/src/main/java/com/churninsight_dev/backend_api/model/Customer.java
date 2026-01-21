@@ -18,8 +18,10 @@ import lombok.*;
 public class Customer {
 
     @Id
-    @NotBlank(message = "El ID del cliente no puede estar vacio")
-    @Column(name = "customer_id", length = 50)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "customer_id")
     private String customerId;
 
     @Column(name = "age")

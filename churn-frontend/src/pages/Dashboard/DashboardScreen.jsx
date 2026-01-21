@@ -4,6 +4,10 @@ import { Users, Activity, AlertTriangle } from 'lucide-react';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import axios from 'axios';
 
+const tooltipContentStyle = { backgroundColor: '#1e293b', border: 'none', borderRadius: '8px' };
+const tooltipItemStyle = { color: '#fff' };
+const tooltipCursor = { fill: 'rgba(255,255,255,0.1)' };
+
 export default function DashboardScreen() {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -106,7 +110,7 @@ export default function DashboardScreen() {
                         <Cell key={`cell-${index}`} fill={entry.color} />
                       ))}
                     </Pie>
-                    <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: 'none', borderRadius: '8px' }} itemStyle={{ color: '#fff' }}/>
+                    <Tooltip contentStyle={tooltipContentStyle} itemStyle={tooltipItemStyle}/>
                   </PieChart>
                 </ResponsiveContainer>
               </div>
@@ -120,7 +124,7 @@ export default function DashboardScreen() {
                   <BarChart data={barData}>
                     <XAxis dataKey="name" stroke="#94a3b8" angle={-45} textAnchor="end" />
                     <YAxis stroke="#94a3b8" />
-                    <Tooltip cursor={{fill: 'rgba(255,255,255,0.1)'}} contentStyle={{ backgroundColor: '#1e293b', border: 'none', borderRadius: '8px' }} itemStyle={{ color: '#fff' }}/>
+                    <Tooltip cursor={tooltipCursor} contentStyle={tooltipContentStyle} itemStyle={tooltipItemStyle}/>
                     <Bar dataKey="value" fill="#3b82f6" radius={[4, 4, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>

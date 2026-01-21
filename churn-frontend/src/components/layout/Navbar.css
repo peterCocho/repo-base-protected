@@ -107,3 +107,15 @@
 .navbar__logout:hover {
   background: rgba(59,130,246,0.10);
 }
+
+/* Nuevas clases para estilos en línea */
+.navbar__mobile-link {
+  display: block;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.navbar__mobile-logout {
+  display: block;
+  width: 100%;
+}

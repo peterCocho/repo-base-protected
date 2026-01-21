@@ -14,6 +14,7 @@ import java.util.Set;
 import com.churninsight_dev.backend_api.dto.PredictionRequest;
 import com.churninsight_dev.backend_api.dto.PredictionResponse;
 import com.churninsight_dev.backend_api.model.Customer;
+import com.churninsight_dev.backend_api.model.User;
 import com.churninsight_dev.backend_api.model.Prediction;
 import com.churninsight_dev.backend_api.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Value;
@@ -152,6 +153,15 @@ public class PredictionServiceImpl implements PredictionService {
     // Procesar predicción masiva desde archivo CSV
 
     public List<PredictionResponse> processCsvPrediction(MultipartFile file, String jwtToken) {
+        User user = null;
+        if (jwtToken != null && jwtToken.startsWith("Bearer ")) {
+            String token = jwtToken.substring(7);
+            String email = jwtUtil.extractUsername(token);
+            if (email != null) {
+                user = userRepository.findByEmail(email).orElse(null);
+            }
+        }
+
         List<PredictionRequest> requests = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
             String line = reader.readLine();
@@ -192,9 +202,9 @@ public class PredictionServiceImpl implements PredictionService {
             }
         }
 
-        // Validar si ya existen predicciones para estos customer_ids
+        // Validar si ya existen predicciones para estos customer_ids en la misma empresa
         for (PredictionRequest req : requests) {
-            if (predictionRepository.existsByCustomer_CustomerId(req.getCustomerId())) {
+            if (user != null && predictionRepository.existsByCustomer_User_CompanyNameAndCustomer_CustomerId(user.getCompanyName(), req.getCustomerId())) {
                 throw new RuntimeException("Algunos IDs de clientes en el CSV ya tienen predicciones realizadas. Verifica que no estén duplicados o ya procesados.");
             }
         }
