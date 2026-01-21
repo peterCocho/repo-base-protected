@@ -34,7 +34,7 @@ public class VerificationController {
     @PostMapping(value = "/verification", consumes = "application/json")
     public ResponseEntity<?> verifyCode(@RequestBody VerificationRequest request) {
         String email = request.getEmail();
-        String code = request.getVerification();
+        String code = request.getVerification().toUpperCase();
         Optional<User> userOpt = userRepository.findByEmail(email);
         if (userOpt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(

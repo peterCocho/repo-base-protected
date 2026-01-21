@@ -1,10 +1,14 @@
 from typing import Optional
 import os
+import warnings
 from fastapi import FastAPI, UploadFile, File
 from pydantic import BaseModel
 import joblib
 import numpy as np
 import pandas as pd
+
+# Suprimir warnings de Pydantic sobre métodos obsoletos
+warnings.filterwarnings("ignore", category=DeprecationWarning, module="pydantic")
 
 
 # Inicializa la aplicación FastAPI
@@ -60,9 +64,7 @@ def predict(request: PredictionRequest):
     data = pd.DataFrame([data_row])
     print(data)
     # Predecir probabilidad de churn
-    # proba = pipeline.predict_proba(data)[0][1]
     proba = np.round(pipeline.predict_proba(data)[0][1], 2)
-    # proba = np.round(pipeline.predict_proba(data.values)[0][1], 2)
     pred = int(proba >= 0.5)
     # Calcular el main_factor (feature más influyente)
     try:
@@ -96,47 +98,53 @@ def predict(request: PredictionRequest):
 # Recibe un archivo CSV con múltiples registros y retorna una lista de predicciones
 @app.post("/predict-csv")
 async def predict_csv(file: UploadFile = File(...)):
-    # Leer el archivo CSV subido
-    df = pd.read_csv(file.file)
-    print("[DEBUG] Columnas recibidas en CSV:", list(df.columns))
-    # Validar que las columnas requeridas estén presentes
-    missing_cols = [col for col in feature_names if col not in df.columns]
-    if missing_cols:
-        print(f"[ERROR] Faltan columnas requeridas: {missing_cols}")
-        return {"error": f"Faltan columnas requeridas: {missing_cols}"}
-    # Validar tipos y valores nulos
-    for col in feature_names:
-        if df[col].isnull().any():
-            print(f"[ERROR] Columna '{col}' contiene valores nulos en el CSV")
+    try:
+        # Leer el archivo CSV subido
+        df = pd.read_csv(file.file)
+        print("[DEBUG] Columnas recibidas en CSV:", list(df.columns))
+        # Validar que las columnas requeridas estén presentes
+        missing_cols = [col for col in feature_names if col not in df.columns]
+        if missing_cols:
+            print(f"[ERROR] Faltan columnas requeridas: {missing_cols}")
+            return {"error": f"Faltan columnas requeridas: {missing_cols}"}
+        # Reordenar columnas según feature_names
+        df = df[feature_names]
+        # Validar tipos y valores nulos
+        for col in feature_names:
+            if df[col].isnull().any():
+                print(f"[ERROR] Columna '{col}' contiene valores nulos en el CSV")
 
-    # Predecir probabilidades y clases para todos los registros
-    probas = pipeline.predict_proba(df)[:, 1]
-    preds = (probas >= 0.5).astype(int)
+        # Predecir probabilidades y clases para todos los registros
+        probas = pipeline.predict_proba(df)[:, 1]
+        preds = (probas >= 0.5).astype(int)
 
-    # Calcular main_factor para cada fila
-    results = []
-    for i, row in df.iterrows():
-        try:
-            classifier = pipeline.named_steps['classifier']
-            preprocessor = pipeline.named_steps['preprocessor']
-            X_trans = preprocessor.transform([row.values])
-            importancias = np.abs(classifier.coef_[0] * X_trans[0])
-            idx_max = np.argmax(importancias)
-            # Obtener nombres de las columnas transformadas
+        # Calcular main_factor para cada fila
+        results = []
+        for i, row in df.iterrows():
             try:
-                feature_names_out = preprocessor.get_feature_names_out()
-            except Exception:
-                feature_names_out = [str(j) for j in range(X_trans.shape[1])]
-            main_factor = feature_names_out[idx_max]
-        except Exception as e:
-            main_factor = f"No disponible: {e}"
-        # Agregar el campo monthly_fee a la respuesta
-        monthly_fee = float(
-            row["monthly_fee"]) if "monthly_fee" in row else None
-        results.append({
-            "prediction": int(preds[i]),
-            "probability": float(probas[i]),
-            "main_factor": main_factor,
-            "monthly_fee": monthly_fee
-        })
-    return {"results": results}
+                classifier = pipeline.named_steps['classifier']
+                preprocessor = pipeline.named_steps['preprocessor']
+                X_trans = preprocessor.transform([row.values])
+                importancias = np.abs(classifier.coef_[0] * X_trans[0])
+                idx_max = np.argmax(importancias)
+                # Obtener nombres de las columnas transformadas
+                try:
+                    feature_names_out = preprocessor.get_feature_names_out()
+                except Exception:
+                    feature_names_out = [str(j) for j in range(X_trans.shape[1])]
+                main_factor = feature_names_out[idx_max]
+            except Exception as e:
+                main_factor = f"No disponible: {e}"
+            # Agregar el campo monthly_fee a la respuesta
+            monthly_fee = float(
+                row["monthly_fee"]) if "monthly_fee" in row else None
+            results.append({
+                "prediction": int(preds[i]),
+                "probability": float(probas[i]),
+                "main_factor": main_factor,
+                "monthly_fee": monthly_fee
+            })
+        return {"results": results}
+    except Exception as e:
+        print(f"[ERROR] Error procesando el archivo CSV: {str(e)}")
+        return {"error": f"Error procesando el archivo CSV: {str(e)}"}

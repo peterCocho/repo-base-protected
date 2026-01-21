@@ -38,14 +38,13 @@ export default function Navbar({ currentScreen, setCurrentScreen, onLogout }) {
           {screens.map(screen => (
             <button 
               key={screen.key}
-              className={`navbar__link${currentScreen === screen.key ? ' active' : ''}`}
-              style={{ display: 'block', width: '100%', marginBottom: '1rem' }}
+              className={`navbar__link navbar__mobile-link${currentScreen === screen.key ? ' active' : ''}`}
               onClick={() => { setCurrentScreen(screen.key); setMenuOpen(false); }}
             >
               {screen.label}
             </button>
           ))}
-          <button className="navbar__logout" style={{ display: 'block', width: '100%' }} onClick={onLogout}>
+          <button className="navbar__logout navbar__mobile-logout" onClick={onLogout}>
             <LogOut size={20} /> Cerrar sesión
           </button>
         </div>

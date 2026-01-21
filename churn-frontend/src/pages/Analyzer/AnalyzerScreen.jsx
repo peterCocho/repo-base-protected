@@ -85,10 +85,10 @@ export default function AnalyzerScreen() {
 	return (
 		<div className="analyzer-fullscreen">
 			{!result ? (
-				<form className="glass-panel analyzer-form-full" style={{height: '100%', width: '100%'}} onSubmit={handleAnalyze}>
+				<form className="glass-panel analyzer-form-full analyzer-form-full-inline" onSubmit={handleAnalyze}>
 					<h2 className="analyzer-title-flex"><Activity size={20}/> Parámetros del Cliente</h2>
 					{formError && (
-						<div style={{ color: 'red', marginBottom: '1rem', textAlign: 'center' }}>{formError}</div>
+						<div className="analyzer-error">{formError}</div>
 					)}
 					<div className="analyzer-fields-full">
             <div>
@@ -184,21 +184,21 @@ export default function AnalyzerScreen() {
 								</select>
 						</div>
 					</div>
-					<button className="btn-p mt-4" type="submit" disabled={loading} style={{width: '100%', height: '3rem', fontSize: '1.2rem'}}>
+					<button className="btn-p mt-4 analyzer-submit-btn" type="submit" disabled={loading}>
 						{loading ? 'Procesando...' : 'Analizar Riesgo de Cancelacion'}
 					</button>
 				</form>
 			) : (
-				<div className="glass-panel analyzer-result-panel" style={{height: '80vh', width: '70vw', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-					<div className={`analyzer-probability-circle${result.status === 'danger' ? ' danger' : result.status === 'success' ? ' success' : ''}`} style={{display: 'flex'}}>
+				<div className="glass-panel analyzer-result-panel analyzer-result-panel-inline">
+					<div className={`analyzer-probability-circle${result.status === 'danger' ? ' danger' : result.status === 'success' ? ' success' : ''}`}>
 						<h1 className="analyzer-probability-value">{result.probability}%</h1>
 					</div>
 					<h2 className="analyzer-prob-title">Probabilidad de Cancelación</h2>
-					<div className={`glass-panel analyzer-recommendation${result.status === 'success' ? ' success' : ''}`} style={{ maxWidth: '500px', maxHeight: '500px', padding: '1rem' }}>
+					<div className={`glass-panel analyzer-recommendation analyzer-recommendation-inline${result.status === 'success' ? ' success' : ''}`}>
 						{result.status === 'danger' && <strong>ACCIÓN RECOMENDADA:</strong>}
 						<p className={`analyzer-recommendation-message${result.status === 'success' ? ' success' : ''}`}>{result.message}</p>
 					</div>
-					<button className="btn-primary mt-4" style={{width: '100%', height: '3rem', fontSize: '1.1rem', marginTop: '2rem'}} onClick={() => setResult(null)}>
+					<button className="btn-primary mt-4 analyzer-back-btn" onClick={() => setResult(null)}>
 						Volver a analizar otro cliente
 					</button>
 				</div>

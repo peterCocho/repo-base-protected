@@ -1,6 +1,21 @@
-age,subscription_type,last_login_days,region,device,monthly_fee,payment_method,number_of_profiles,avg_watch_time_per_day,favorite_genre
-70,Basic,55,Oceania,Desktop,8.99,Gift Card,4,0.12,Romance
-41,Basic,0,Asia,Tablet,8.99,PayPal,27.78,Romance
-65,Standard,47,Asia,Mobile,13.99,Credit Card,4,0.02,Sci-Fi
-59,Basic,51,South America,Mobile,8.99,PayPal,1,0.1,Comedy
-39,Premium,30,Africa,TV,17.99,Debit Card,5,0.4,Comedy
+customer_id,age,watch_hours,last_login_days,number_of_profiles,monthly_fee,avg_watch_time_per_day,subscription_type,region,device,payment_method,favorite_genre,gender
+G001,70,100,55,4,8.99,0.12,Basic,Oceania,Desktop,Gift Card,Romance,F
+G002,41,200,0,27,8.99,0.78,Basic,Asia,Tablet,PayPal,Romance,M
+G003,65,150,47,4,13.99,0.02,Standard,Asia,Mobile,Credit Card,Sci-Fi,F
+G004,59,80,51,1,8.99,0.1,Basic,South America,Mobile,PayPal,Comedy,M
+G005,39,300,30,5,17.99,0.4,Premium,Africa,TV,Debit Card,Comedy,F
+G006,55,50,90,2,8.99,0.05,Basic,Europe,Laptop,Crypto,Horror,M
+G007,45,120,10,3,13.99,0.3,Standard,North America,Desktop,Debit Card,Action,F
+G008,68,30,120,1,8.99,0.02,Basic,Asia,Mobile,Gift Card,Documentary,M
+G009,32,400,5,6,17.99,1.2,Premium,Europe,TV,Credit Card,Drama,F
+G010,50,80,70,2,13.99,0.15,Standard,South America,Tablet,PayPal,Sci-Fi,M
+G011,60,60,100,1,8.99,0.08,Basic,Africa,Desktop,Gift Card,Romance,F
+G012,35,250,15,4,17.99,0.6,Premium,North America,Mobile,Debit Card,Comedy,M
+G013,72,20,150,1,8.99,0.01,Basic,Oceania,Laptop,Crypto,Horror,F
+G014,28,350,2,5,17.99,0.8,Premium,Asia,TV,Credit Card,Action,M
+G015,48,90,60,3,13.99,0.2,Standard,Europe,Desktop,PayPal,Documentary,F
+G016,62,40,110,2,8.99,0.04,Basic,South America,Mobile,Gift Card,Sci-Fi,M
+G017,40,180,20,4,17.99,0.5,Premium,Africa,Tablet,Debit Card,Drama,F
+G018,53,70,80,2,13.99,0.12,Standard,North America,Laptop,Crypto,Romance,M
+G019,75,10,180,1,8.99,0.005,Basic,Oceania,Desktop,Gift Card,Horror,F
+G020,25,500,1,7,17.99,1.5,Premium,Europe,TV,Credit Card,Comedy,M

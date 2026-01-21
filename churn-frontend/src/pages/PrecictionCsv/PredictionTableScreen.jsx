@@ -72,58 +72,83 @@ const PredictionTableScreen = ({ data = [], onCsvLoaded }) => {
           type="file"
           accept=".csv"
           ref={fileInputRef}
-          style={{ marginBottom: '1.5rem' }}
+          className="file-input"
           onChange={handleFileChange}
         />
         <input
-          className='csv'
-          style={{
-            display: csvSelected ? 'inline-block' : 'none',
-            marginBottom: '1.5rem',
-            padding: '0.7rem 2.2rem',
-            borderRadius: '1.2rem',
-            fontWeight: 600,
-            fontSize: '1.08rem',
-            background: '#0c3d8d',
-            color: 'white',
-            border: 'none',
-            boxShadow: '0 2px 12px 0 rgba(31, 38, 135, 0.10)',
-            cursor: loading ? 'not-allowed' : 'pointer'
-          }}
+          className='csv submit-btn'
+          style={{ display: csvSelected ? 'inline-block' : 'none' }}
           type="submit"
           value={loading ? "Procesando..." : "Enviar CSV"}
           disabled={loading}
         />
       </form>
-      {error && <div style={{ color: 'red', marginBottom: '1rem' }}>{error}</div>}
-      <table className="prediction-table">
-        <thead>        
-          <tr>
-            <th>ID Cliente</th>
-            <th>Predicción</th>
-            <th>Probabilidad</th>
-            <th>Mensaje</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.length === 0 ? (
+      {error && <div className="error-msg">{error}</div>}
+      
+      {/* Vista de tabla para desktop */}
+      <div className="prediction-table-container desktop-only">
+        <table className="prediction-table">
+          <thead>        
             <tr>
-              <td colSpan="4" style={{ textAlign: 'center', color: '#888' }}>
-                No hay datos para mostrar
-              </td>
+              <th>ID Cliente</th>
+              <th>Predicción</th>
+              <th>Probabilidad</th>
+              <th>Mensaje</th>
             </tr>
-          ) : (
-            data.map((row, idx) => (
-              <tr key={idx}>
-                <td>{row.customerId}</td>
-                <td>{row.prediccion}</td>
-                <td>{row.probabilidad}</td>
-                <td>{row.mensaje}</td>
+          </thead>
+          <tbody>
+            {data.length === 0 ? (
+              <tr>
+                <td colSpan="4" className="no-data">
+                  No hay datos para mostrar
+                </td>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+            ) : (
+              data.map((row, idx) => (
+                <tr key={idx}>
+                  <td>{row.customerId}</td>
+                  <td>{row.prediccion}</td>
+                  <td>{row.probabilidad}</td>
+                  <td>{row.mensaje}</td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Vista de tarjetas para móvil */}
+      <div className="prediction-cards mobile-only">
+        {data.length === 0 ? (
+          <div className="no-data-card">
+            No hay datos para mostrar
+          </div>
+        ) : (
+          data.map((row, idx) => (
+            <div key={idx} className="prediction-card">
+              <div className="prediction-card-header">
+                <span className="prediction-card-id">#{row.customerId}</span>
+              </div>
+              <div className="prediction-card-body">
+                <div className="prediction-card-item">
+                  <strong>Predicción:</strong>
+                  <span className={`prediction-result ${row.prediccion === 'Churn' ? 'churn' : 'nochurn'}`}>
+                    {row.prediccion}
+                  </span>
+                </div>
+                <div className="prediction-card-item">
+                  <strong>Probabilidad:</strong>
+                  {row.probabilidad}
+                </div>
+                <div className="prediction-card-item">
+                  <strong>Mensaje:</strong>
+                  <span className="prediction-message">{row.mensaje}</span>
+                </div>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
 
       {/* Modal de Upgrade */}
       {showUpgradeModal && (
