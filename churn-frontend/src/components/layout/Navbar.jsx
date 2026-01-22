@@ -6,7 +6,7 @@ export default function Navbar({ currentScreen, setCurrentScreen, onLogout }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const screens = [
     { key: 'analyzer', label: 'Analizador' },
-    { key: 'dashboard', label: 'Estadisticas' },
+    { key: 'dashboard', label: 'Estadísticas' },
     { key: 'history', label: 'Historial' },
     { key: 'prediction', label: 'Predicciones múltiples' }
   ];

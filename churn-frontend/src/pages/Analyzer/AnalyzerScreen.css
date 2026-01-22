@@ -12,8 +12,8 @@
 }
 
 .analyzer-container {
-  width: 98%; /* Ocupa casi todo el ancho */
-  max-width: 1600px; /* Límite para que no se deforme en pantallas gigantes */
+  width: 98%; 
+  max-width: 1600px; 
   margin: 0 auto;
     display: flex;
     flex-direction: column;
@@ -23,7 +23,11 @@
 /* --- 2. ENCABEZADO --- */
 .analyzer-header {
   text-align: center;
-  /* margin-bottom: 10px; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
 }
 
 .analyzer-title-flex {
@@ -36,6 +40,7 @@
 }
 
 .analyzer-subtitle {
+   width: 70%;
   color: #94a3b8;
   font-size: 1rem;
 }
@@ -175,22 +180,37 @@ select.input-glass:focus {
   text-align: center;
 }
 
+.analyzer-result-panel .btn-primary {
+  width: 100% !important;
+  max-width: 600px !important; 
+  height: 4rem !important;
+  font-size: 1.2rem !important;
+  font-weight: 700;
+  border-radius: 12px;
+  margin-top: 1.5rem;
+  transition: transform 0.2s;
+}
+
+
+
+
+.analyzer-result-panel .btn-primary:hover {
+  transform: translateY(-2px);
+}
+
 .analyzer-probability-circle {
   width: 160px;
   height: 160px;
   border-radius: 50%;
-  border: 6px solid #10b981;
+  border: 10px solid #10b981;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 20px;
   background: rgba(16, 185, 129, 0.1);
+  flex-shrink: 0;
 }
 
-.analyzer-probability-circle.danger {
-  border-color: #ef4444;
-  background: rgba(239, 68, 68, 0.1);
-}
 
 .analyzer-probability-value {
   font-size: 3rem;
@@ -199,17 +219,24 @@ select.input-glass:focus {
 }
 
 .analyzer-recommendation {
+  width: 100%;
+  max-width: 600px !important;
   margin-top: 20px;
   padding: 20px;
   border-radius: 12px;
   border: 1px solid #ef4444;
   background: rgba(239, 68, 68, 0.05);
+  padding: 3rem;
+  max-width: 500px;
+
 }
+
 
 .analyzer-recommendation.success {
   border-color: #10b981;
   background: rgba(16, 185, 129, 0.05);
 }
+
 
 
 
@@ -221,25 +248,20 @@ select.input-glass:focus {
 }
   
 .analyzer-probability-circle.danger {
-  border-color: var(--accent-red);
-  box-shadow: 0 0 30px 0 rgba(239,68,68,0.18);
+  border-color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
 }
+
 
 .analyzer-prob-title {
-  margin-top: 2rem;
-  font-size: 1.2rem;
+  /* margin-top: 0; */
+  font-size: 2.5rem;
+  font-weight: 700;
   color: var(--accent-red);
+
 }
 
-.analyzer-recommendation {
-  background: rgba(239, 68, 68, 0.08);
-  border: 1px solid var(--accent-red);
-  margin-top: 1rem;
-  padding: 1rem;
-  border-radius: 12px;
-  color: var(--accent-red);
-  font-weight: 500;
-}
+
 
 .analyzer-waiting {
   color: var(--text-secondary);
@@ -247,6 +269,7 @@ select.input-glass:focus {
   text-align: center;
   
 }
+
 
 /* Responsividad para pantallas pequeñas */
 @media (max-width: 900px) {
@@ -277,6 +300,24 @@ select.input-glass:focus {
     height: 120px;
     font-size: 2rem;
   }
+  .analyzer-cards-grid {
+    flex-direction: column !important; /* Cambia de horizontal a vertical */
+    gap: 15px;
+    width: 100%;
+    padding: 0 5px; /* Pequeño respiro lateral */
+  }
+
+  .analyzer-card {
+    width: 100% !important; /* Ocupa todo el ancho disponible */
+    flex: none !important;  /* Desactiva el flex: 1 del escritorio */
+    box-sizing: border-box;
+  }
+  .analyzer-prob-title {
+    font-size: 1.2rem; /* Tamaño más moderado para móviles */
+    margin-top: 1rem;
+  }
+  
+  
 }
 
 /* Estilos para resultado exitoso (No Churn) */
@@ -294,7 +335,7 @@ select.input-glass:focus {
   text-align: center;
   font-weight: bold;
   color: #10b981;
-  margin-top: -0.5rem; /* Subir un poco el texto */
+ 
 }
 
 /* Quitar flechas de inputs numéricos decimales */
