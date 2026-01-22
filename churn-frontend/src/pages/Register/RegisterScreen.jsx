@@ -68,12 +68,7 @@ const RegisterScreen = () => {
 
   return (
     <div className="register-container">
-      <div className="register-visual ">
-        <div className="register-visual__content">
-          
-        </div>
-      </div>
-      <div className="register-form__wrapper">
+            <div className="register-form__wrapper">
         <div className="register-form glass-panel">
           <img
             src="/src/assets/Logo-InsightCore-2.png"
