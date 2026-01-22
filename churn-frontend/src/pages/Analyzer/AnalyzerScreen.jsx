@@ -299,12 +299,15 @@ export default function AnalyzerScreen() {
                   value={form.device}
                   onChange={handleChange}
                 >
-                  <option value="">Selecciona</option>
-                  <option value="Laptop">Laptop</option>
-                  <option value="Mobile">Móvil</option>
-                  <option value="TV">TV</option>
-                  <option value="Tablet">Tablet</option>
-                  <option value="Desktop">Desktop</option>
+              <option value="Tablet">Tableta</option>
+
+							<option value="Laptop">Computadora personal</option>
+
+							<option value="Mobile">Telefono Móvil</option>
+
+							<option value="TV">Televisión</option>
+							
+							<option value="Desktop">Computadora</option>
                 </select>
               </div>
             </div>

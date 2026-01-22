@@ -1,16 +1,20 @@
 package com.churninsight_dev.backend_api.controller;
 
 import com.churninsight_dev.backend_api.dto.PredictionHistoryDTO;
+import com.churninsight_dev.backend_api.dto.StatisticsDTO;
 import com.churninsight_dev.backend_api.repository.PredictionRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/predictions/history")
+@CrossOrigin(origins = "http://localhost:5173")
 public class PredictionHistoryController {
     private final PredictionRepository predictionRepository;
 
@@ -68,5 +72,30 @@ public class PredictionHistoryController {
             }
         }
         return history;
+    }
+
+    @GetMapping("/statistics")
+    public StatisticsDTO getStatistics(
+            @RequestParam(required = false) Integer age,
+            @RequestParam(required = false) String subscriptionType,
+            @RequestParam(required = false) String region,
+            @RequestParam(required = false) String device,
+            @RequestParam(required = false) String gender) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        System.out.println("=== Advanced Statistics Request ===");
+        System.out.println("User: " + email);
+        System.out.println("Filters - Age: " + age + ", SubscriptionType: " + subscriptionType +
+                          ", Region: " + region + ", Device: " + device + ", Gender: " + gender);
+
+        Long total = predictionRepository.countTotalByFilters(email, age, subscriptionType, region, device, gender);
+        Long churn = predictionRepository.countChurnByFilters(email, age, subscriptionType, region, device, gender);
+        Long noChurn = total - churn;
+        Double churnRate = total > 0 ? (double) churn / total * 100 : 0.0;
+
+        System.out.println("Results - Total: " + total + ", Churn: " + churn + ", NoChurn: " + noChurn + ", Rate: " + churnRate);
+
+        return new StatisticsDTO(total, churn, noChurn, churnRate);
     }
 }

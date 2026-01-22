@@ -74,11 +74,26 @@ public class PredictionController {
     }
 // Metodo de estadisticas
     @GetMapping("/stats")
-    public ResponseEntity<Map<String, Object>> getStats() {
+    public ResponseEntity<Map<String, Object>> getStats(
+            @RequestParam(required = false) Integer age,
+            @RequestParam(required = false) String subscriptionType,
+            @RequestParam(required = false) String region,
+            @RequestParam(required = false) String device,
+            @RequestParam(required = false) String gender) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        // Obtener predicciones solo de la empresa del usuario
-        List<PredictionHistoryDTO> predictions = predictionRepository.findPredictionHistoryByUserEmail(email);
+
+        System.out.println("=== Dashboard Stats Request ===");
+        System.out.println("User: " + email);
+        System.out.println("Filters - Age: " + age + ", SubscriptionType: " + subscriptionType +
+                          ", Region: " + region + ", Device: " + device + ", Gender: " + gender);
+
+        // Debug: Ver qué valores únicos hay en gender para este usuario
+        List<String> uniqueGenders = predictionRepository.findUniqueGendersByUserEmail(email);
+        System.out.println("Unique gender values for user: " + uniqueGenders);
+
+        // Obtener predicciones filtradas del usuario
+        List<PredictionHistoryDTO> predictions = predictionRepository.findFilteredPredictionHistoryByUserEmail(email, age, subscriptionType, region, device, gender);
         
         // Generar mensajes personalizados para las predicciones
         for (PredictionHistoryDTO dto : predictions) {
@@ -183,6 +198,15 @@ public class PredictionController {
         stats.put("top5_predicciones", top5);
 
         return ResponseEntity.ok(stats);
+    }
+
+    // Endpoint temporal para debug
+    @GetMapping("/debug/genders")
+    public ResponseEntity<List<String>> getUniqueGenders() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        List<String> uniqueGenders = predictionRepository.findUniqueGendersByUserEmail(email);
+        return ResponseEntity.ok(uniqueGenders);
     }
 
 
