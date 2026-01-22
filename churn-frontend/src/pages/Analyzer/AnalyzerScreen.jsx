@@ -19,7 +19,7 @@ export default function AnalyzerScreen() {
     device: "",
     monthly_fee: "",
     payment_method: "",
-    number_of_profiles: "", // Este campo faltaba en el HTML
+    number_of_profiles: "",
     avg_watch_time_per_day: "",
     favorite_genre: "",
   });
@@ -300,11 +300,15 @@ export default function AnalyzerScreen() {
                   onChange={handleChange}
                 >
                   <option value="">Selecciona</option>
-                  <option value="Laptop">Laptop</option>
-                  <option value="Mobile">Móvil</option>
-                  <option value="TV">TV</option>
-                  <option value="Tablet">Tablet</option>
-                  <option value="Desktop">Desktop</option>
+                   <option value="Tablet">Tableta</option>
+
+							<option value="Laptop">Computadora personal</option>
+
+							<option value="Mobile">Telefono Móvil</option>
+
+							<option value="TV">Televisión</option>
+							
+							<option value="Desktop">Computadora</option>
                 </select>
               </div>
             </div>
@@ -341,7 +345,7 @@ export default function AnalyzerScreen() {
           <h2 className="analyzer-prob-title">Probabilidad de Cancelación</h2>
           <div
             className={`glass-panel analyzer-recommendation ${result.status}`}
-            style={{ maxWidth: "500px", padding: "1.5rem" }}
+            
           >
             {result.status === "danger" && <strong>ACCIÓN RECOMENDADA:</strong>}
             <p className="analyzer-recommendation-message">{result.message}</p>
