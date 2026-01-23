@@ -1,21 +1,35 @@
 {
-    // Use IntelliSense para saber los atributos posibles.
-    // Mantenga el puntero para ver las descripciones de los existentes atributos.
-    // Para más información, visite: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
         {
             "type": "java",
-            "name": "Current File",
+            "name": "Launch BackendApiApplication",
             "request": "launch",
-            "mainClass": "${file}"
+            "mainClass": "com.churninsight_dev.backend_api.BackendApiApplication",
+            "projectName": "backend-api",
+            "cwd": "${workspaceFolder}/backend-api",
+            "preLaunchTask": "build",
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "openOnSessionStart",
+            "vmArgs": "-Dspring.profiles.active=dev"
         },
         {
             "type": "java",
-            "name": "BackendApiApplication",
+            "name": "Debug BackendApiApplication",
             "request": "launch",
             "mainClass": "com.churninsight_dev.backend_api.BackendApiApplication",
-            "projectName": "backend-api"
+            "projectName": "backend-api",
+            "cwd": "${workspaceFolder}/backend-api",
+            "preLaunchTask": "build",
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "openOnSessionStart",
+            "vmArgs": "-Dspring.profiles.active=dev -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005"
+        },
+        {
+            "type": "java",
+            "name": "Launch Current File",
+            "request": "launch",
+            "mainClass": "${file}"
         }
     ]
 }
