@@ -1,4 +1,4 @@
-scikit-learn==1.6.1
+scikit-learn==1.8.0
 fastapi
 pydantic
 joblib
