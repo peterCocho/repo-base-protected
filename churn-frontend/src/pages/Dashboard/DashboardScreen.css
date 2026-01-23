@@ -42,6 +42,7 @@
   background: rgba(255, 255, 255, 0.08);
   border-radius: 24px;
   border: 1.5px solid rgba(255, 255, 255, 0.18);
+  -webkit-backdrop-filter: blur(14px) saturate(120%);
   backdrop-filter: blur(14px) saturate(120%);
   min-height: 100px;
   width: 100%;
@@ -471,11 +472,13 @@
 }
 /* Sección Premium */
 .premium-stats-section {
-  margin-top: 2rem;
+  margin-top: 0.5rem;
   padding: 2rem;
   background: rgba(255,255,255,0.05);
   border-radius: 18px;
   border: 1.5px solid rgba(255,255,255,0.18);
+  width: 100%;
+
 }
 
 .premium-title {
@@ -489,9 +492,12 @@
 .filters-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
-  margin-bottom: 2rem;
-  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 0.5rem;
+  margin-top: 0.1rem;
+  justify-content: space-between;
+  align-items: flex-start;
+  max-height: 40px;
 }
 
 .filter-group {
@@ -650,3 +656,45 @@
   }
 }
 
+/* Indicadores de carga para actualizaciones de filtros */
+.updating-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  border-radius: 24px;
+}
+
+.updating-indicator {
+  background: rgba(255, 255, 255, 0.9);
+  color: #1e293b;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Posicionamiento relativo para los overlays */
+.dashboard-kpi-row,
+.dashboard-chart-row {
+  position: relative;
+}

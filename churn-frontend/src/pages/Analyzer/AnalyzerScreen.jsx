@@ -151,8 +151,8 @@ export default function AnalyzerScreen() {
                   onChange={handleChange}
                 >
                   <option value="">Selecciona</option>
-                  <option value="M">Masculino</option>
-                  <option value="F">Femenino</option>
+                  <option value="Male">Masculino</option>
+                  <option value="Female">Femenino</option>
                 </select>
 
                 <label className="analyzer-label">Región</label>
