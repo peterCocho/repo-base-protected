@@ -154,8 +154,8 @@
   .navbar__brand {
     display: flex;
     align-items: center;
-       height: 100%; 
-    min-width: fit-content;
+    height: 100%; 
+    min-width: -webkit-fill-available;
   }
   .login-logo-img {
         display: block;

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './DashboardScreen.css';
-import { Users, Activity, AlertTriangle, Filter, X } from 'lucide-react';
+import { Users, Activity, AlertTriangle, X } from 'lucide-react';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, Text, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import axios from 'axios';
 
@@ -15,6 +15,7 @@ const tooltipCursor = { fill: "rgba(255,255,255,0.1)" };
 export default function DashboardScreen() {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [updatingFilters, setUpdatingFilters] = useState(false);
   const [error, setError] = useState(null);
 
   // Estadísticas avanzadas para premium
@@ -110,26 +111,35 @@ export default function DashboardScreen() {
     }
   }, [isPremium]); // Se ejecuta cuando se determina si el usuario es premium
 
+  // useEffect para actualizar estadísticas cuando cambian los filtros
+  useEffect(() => {
+    const updateStatsWithFilters = async () => {
+      // Solo actualizar si no estamos en la carga inicial y si isPremium ya está determinado
+      if (isPremium !== null && !loading) {
+        setUpdatingFilters(true);
+        setError(null);
+        try {
+          await fetchStats();
+          if (isPremium) {
+            await fetchAdvancedStats();
+          }
+        } catch (err) {
+          console.error('Error al actualizar estadísticas con filtros:', err);
+          setError('Error al aplicar filtros');
+        } finally {
+          setUpdatingFilters(false);
+        }
+      }
+    };
+
+    updateStatsWithFilters();
+  }, [filters]); // Se ejecuta cuando cambian los filtros
+
   const handleFilterChange = (filterName, value) => {
     setFilters(prev => ({ ...prev, [filterName]: value }));
   };
 
-  const applyFilters = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      await fetchStats(); // Actualizar estadísticas básicas
-      if (isPremium) {
-        await fetchAdvancedStats(); // Actualizar estadísticas avanzadas si es premium
-      }
-    } catch (err) {
-      console.error('Error al aplicar filtros:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const clearFilters = async () => {
+  const clearFilters = () => {
     setFilters({
       age: '',
       subscriptionType: '',
@@ -137,18 +147,6 @@ export default function DashboardScreen() {
       device: '',
       gender: ''
     });
-    setLoading(true);
-    setError(null);
-    try {
-      await fetchStats(); // Actualizar estadísticas básicas
-      if (isPremium) {
-        await fetchAdvancedStats(); // Actualizar estadísticas avanzadas si es premium
-      }
-    } catch (err) {
-      console.error('Error al limpiar filtros:', err);
-    } finally {
-      setLoading(false);
-    }
   };
 
   if (loading) {
@@ -159,7 +157,7 @@ export default function DashboardScreen() {
     );
   }
 
-  if (error) {
+  if (error && !stats) {
     return (
       <div className="dashboard-page-container">
         <div className="error">{error}</div>
@@ -220,6 +218,11 @@ export default function DashboardScreen() {
     <div className="dashboard-page-container">
       {/* Primera fila: KPIs */}
       <div className="dashboard-kpi-row">
+        {updatingFilters && (
+          <div className="updating-overlay">
+            <div className="updating-indicator">Actualizando...</div>
+          </div>
+        )}
         {cards.slice(0, 3).map((card, idx) => (
           <div key={idx} className="glass-panel kpi-card">
             <div className="kpi-icon" style={{ background: card.color }}>
@@ -233,8 +236,96 @@ export default function DashboardScreen() {
         ))}
       </div>
 
+            {isPremium && (
+        <div className="premium-stats-section">
+          <h2 className="premium-title">Estadísticas Avanzadas</h2>
+          
+          <div className="filters-container">
+            <div className="filter-group">
+              <label>Edad:</label>
+              <input
+                type="number"
+                value={filters.age}
+                onChange={(e) => handleFilterChange('age', e.target.value)}
+                placeholder="Ej: 25"
+                min="1"
+                max="120"
+              />
+            </div>
+            
+            <div className="filter-group">
+              <label>Tipo de Suscripción:</label>
+              <select 
+                value={filters.subscriptionType} 
+                onChange={(e) => handleFilterChange('subscriptionType', e.target.value)}
+              >
+                <option value="">Todos</option>
+                <option value="Basic">Básica</option>
+                <option value="Standard">Standard</option>
+                <option value="Premium">Premium</option>
+              </select>
+            </div>
+            
+            <div className="filter-group">
+              <label>Región:</label>
+              <select 
+                value={filters.region} 
+                onChange={(e) => handleFilterChange('region', e.target.value)}
+              >
+                <option value="">Todas</option>
+                <option value="South America">América del Sur</option>
+                <option value="Europe">Europa</option>
+                <option value="North America">América del Norte</option>
+                <option value="Asia">Asia</option>
+                <option value="Africa">África</option>
+                <option value="Oceania">Oceanía</option>
+              </select>
+            </div>
+            
+            <div className="filter-group">
+              <label>Dispositivo:</label>
+              <select 
+                value={filters.device} 
+                onChange={(e) => handleFilterChange('device', e.target.value)}
+              >
+                <option value="">Todos</option>
+                <option value="Tablet">Tableta</option>
+                <option value="Laptop">Computadora personal</option>
+                <option value="Mobile">Telefono Móvil</option>
+                <option value="TV">Televisión</option>
+                <option value="Desktop">Computadora</option>
+              </select>
+            </div>
+            
+            <div className="filter-group">
+              <label>Género:</label>
+              <select 
+                value={filters.gender} 
+                onChange={(e) => handleFilterChange('gender', e.target.value)}
+              >
+                <option value="">Todos</option>
+                <option value="Male">Masculino</option>
+                <option value="Female">Femenino</option>
+              </select>
+            </div>
+            
+            <div className="filter-buttons">
+              <button className="clear-filters-btn" onClick={clearFilters}>
+                <X size={16} />
+                Limpiar Filtros
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Segunda fila: gráficos */}
       <div className="dashboard-chart-row">
+        {updatingFilters && (
+          <div className="updating-overlay">
+            <div className="updating-indicator">Actualizando...</div>
+          </div>
+        )}
         {/* Estado de la cartera */}
         <div className="glass-panel dashboard-chart-panel">
           <h3 className="dashboard-chart-title">Estado de la Cartera</h3>
@@ -366,137 +457,6 @@ export default function DashboardScreen() {
         </div>
       </div>
 
-      {isPremium && (
-        <div className="premium-stats-section">
-          <h2 className="premium-title">Estadísticas Avanzadas (Premium)</h2>
-          
-          <div className="filters-container">
-            <div className="filter-group">
-              <label>Edad:</label>
-              <input
-                type="number"
-                value={filters.age}
-                onChange={(e) => handleFilterChange('age', e.target.value)}
-                placeholder="Ej: 25"
-                min="1"
-                max="120"
-              />
-            </div>
-            
-            <div className="filter-group">
-              <label>Tipo de Suscripción:</label>
-              <select 
-                value={filters.subscriptionType} 
-                onChange={(e) => handleFilterChange('subscriptionType', e.target.value)}
-              >
-                <option value="">Todos</option>
-                <option value="Basic">Básica</option>
-                <option value="Standard">Standard</option>
-                <option value="Premium">Premium</option>
-              </select>
-            </div>
-            
-            <div className="filter-group">
-              <label>Región:</label>
-              <select 
-                value={filters.region} 
-                onChange={(e) => handleFilterChange('region', e.target.value)}
-              >
-                <option value="">Todas</option>
-                <option value="South America">América del Sur</option>
-                <option value="Europe">Europa</option>
-                <option value="North America">América del Norte</option>
-                <option value="Asia">Asia</option>
-                <option value="Africa">África</option>
-                <option value="Oceania">Oceanía</option>
-              </select>
-            </div>
-            
-            <div className="filter-group">
-              <label>Dispositivo:</label>
-              <select 
-                value={filters.device} 
-                onChange={(e) => handleFilterChange('device', e.target.value)}
-              >
-                <option value="">Todos</option>
-                <option value="Tablet">Tableta</option>
-                <option value="Laptop">Computadora personal</option>
-                <option value="Mobile">Telefono Móvil</option>
-                <option value="TV">Televisión</option>
-                <option value="Desktop">Computadora</option>
-              </select>
-            </div>
-            
-            <div className="filter-group">
-              <label>Género:</label>
-              <select 
-                value={filters.gender} 
-                onChange={(e) => handleFilterChange('gender', e.target.value)}
-              >
-                <option value="">Todos</option>
-                <option value="M">Masculino</option>
-                <option value="F">Femenino</option>
-              </select>
-            </div>
-            
-            <div className="filter-buttons">
-              <button className="apply-filters-btn" onClick={applyFilters}>
-                <Filter size={16} />
-                Aplicar Filtros
-              </button>
-              
-              <button className="clear-filters-btn" onClick={clearFilters}>
-                <X size={16} />
-                Limpiar Filtros
-              </button>
-            </div>
-          </div>
-          
-          {advancedStats && advancedStats.total !== undefined && (
-            <div className="advanced-stats-grid">
-              <div className="glass-panel advanced-stat-card">
-                <div className="stat-icon">
-                  <Users size={24} color="#3b82f6" />
-                </div>
-                <div>
-                  <div className="stat-title">Total Predicciones</div>
-                  <div className="stat-value">{advancedStats.total || 0}</div>
-                </div>
-              </div>
-              
-              <div className="glass-panel advanced-stat-card">
-                <div className="stat-icon">
-                  <AlertTriangle size={24} color="#ef4444" />
-                </div>
-                <div>
-                  <div className="stat-title">En Riesgo</div>
-                  <div className="stat-value">{advancedStats.churn || 0}</div>
-                </div>
-              </div>
-              
-              <div className="glass-panel advanced-stat-card">
-                <div className="stat-icon">
-                  <Activity size={24} color="#10b981" />
-                </div>
-                <div>
-                  <div className="stat-title">Retenidos</div>
-                  <div className="stat-value">{advancedStats.noChurn || 0}</div>
-                </div>
-              </div>
-              
-              <div className="glass-panel advanced-stat-card">
-                <div className="stat-icon">
-                  <Filter size={24} color="#f59e0b" />
-                </div>
-                <div>
-                  <div className="stat-title">Tasa de Churn Filtrada</div>
-                  <div className="stat-value">{advancedStats.rate ? advancedStats.rate.toFixed(2) : '0.00'}%</div>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      )}
     </div>
   );
 }
