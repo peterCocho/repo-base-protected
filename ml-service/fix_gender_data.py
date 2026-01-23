@@ -60,7 +60,7 @@ if null_gender_count > 0:
     null_gender_ids = [row[0] for row in cursor.fetchall()]
 
     # Asignar géneros aleatorios (aproximadamente 50/50)
-    genders = ['M', 'F'] * (len(null_gender_ids) // 2 + 1)
+    genders = ['Male', 'Female'] * (len(null_gender_ids) // 2 + 1)
     genders = genders[:len(null_gender_ids)]
     np.random.shuffle(genders)
 
