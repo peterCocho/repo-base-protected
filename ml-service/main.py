@@ -23,6 +23,22 @@ print(f"[DEBUG] Tipo de pipeline cargado: {type(pipeline)}")
 if hasattr(pipeline, "best_estimator_"):
     pipeline = pipeline.best_estimator_
 
+# Si es un wrapper (GridSearchCV, etc.) desempaquetar el pipeline final
+try:
+    if hasattr(pipeline, "best_estimator_"):
+        pipeline = pipeline.best_estimator_
+except Exception:
+    pass
+
+# Asegurar compatibilidad: si el clasificador falta atributos nuevos, inicializarlos
+try:
+    if hasattr(pipeline, "named_steps") and "classifier" in pipeline.named_steps:
+        classifier = pipeline.named_steps["classifier"]
+        if not hasattr(classifier, "multi_class"):
+            setattr(classifier, "multi_class", "ovr")
+except Exception:
+    pass
+
 
 # Lista de features en el mismo orden que usó el equipo de Data Science
 feature_names = [

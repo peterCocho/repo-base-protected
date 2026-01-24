@@ -1,12 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Activity, User, CreditCard, MonitorPlay } from "lucide-react";
 import "./AnalyzerScreen.css";
+import successSound from "../../assets/success.mp3";
+import errorSound from "../../assets/error.mp3";
+import errorSound2 from "../../assets/advertence.mp3";
 import api from "../../services/api";
 
 export default function AnalyzerScreen() {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [formError, setFormError] = useState("");
+
+  const successAudioRef = useRef(null);
+  const errorAudioRef = useRef(null);
+  const advertenceAudioRef = useRef(null);
+
+  useEffect(() => {
+    try {
+      successAudioRef.current = new Audio(successSound);
+      successAudioRef.current.preload = "auto";
+      errorAudioRef.current = new Audio(errorSound);
+      errorAudioRef.current.preload = "auto";
+      advertenceAudioRef.current = new Audio(errorSound2);
+      advertenceAudioRef.current.preload = "auto";
+    } catch (e) {
+      // ignore audio init errors
+    }
+  }, []);
 
   const [form, setForm] = useState({
     customer_id: "",
@@ -80,13 +100,25 @@ export default function AnalyzerScreen() {
         status = "success";
         message = "Buena Noticia, tu cliente seguirá activo en la plataforma.";
       }
-
+      // Reproducir sonido según resultado (preloadado)
+      try {
+        if (status === "success") {
+          successAudioRef.current && successAudioRef.current.play();
+        } else {
+          errorAudioRef.current && errorAudioRef.current.play();
+        }
+      } catch (e) {
+        // silencioso en fallos de reproducción
+      }
       setResult({
         probability: Math.round((data.probability || 0) * 100),
         status,
         message,
       });
     } catch (err) {
+      try {
+        advertenceAudioRef.current && advertenceAudioRef.current.play();
+      } catch (e) {}
       setResult({
         probability: 0,
         status: "danger",
@@ -299,6 +331,7 @@ export default function AnalyzerScreen() {
                   value={form.device}
                   onChange={handleChange}
                 >
+              <option value="">Selecciona</option>
               <option value="Tablet">Tableta</option>
 
 							<option value="Laptop">Computadora personal</option>
