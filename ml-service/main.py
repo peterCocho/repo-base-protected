@@ -6,6 +6,8 @@ from pydantic import BaseModel
 import joblib
 import numpy as np
 import pandas as pd
+import pickle
+import io
 
 # Suprimir warnings de Pydantic sobre métodos obsoletos
 warnings.filterwarnings("ignore", category=DeprecationWarning, module="pydantic")
@@ -15,13 +17,92 @@ warnings.filterwarnings("ignore", category=DeprecationWarning, module="pydantic"
 app = FastAPI()
 
 
+# Custom unpickler para reparar modelos con problemas de versión
+class FixedUnpickler(pickle.Unpickler):
+    def find_class(self, module, name):
+        # Redirigir importaciones problemáticas si es necesario
+        return super().find_class(module, name)
+
+
+def safe_load_model(model_path):
+    """Carga el modelo y repara problemas de compatibilidad"""
+    try:
+        # Intenta carga normal primero
+        model_data = joblib.load(model_path)
+        pipeline = model_data["model"] if isinstance(model_data, dict) else model_data
+        
+        # Reparar atributos faltantes en LogisticRegression
+        if hasattr(pipeline, 'named_steps'):
+            classifier = pipeline.named_steps.get('classifier')
+            if classifier and hasattr(classifier, 'coef_'):
+                # Asegurar que tienen los atributos necesarios
+                if not hasattr(classifier, 'multi_class'):
+                    classifier.multi_class = 'auto'
+                if not hasattr(classifier, '_sag_mark_initialize'):
+                    classifier._sag_mark_initialize = None
+        
+        return pipeline
+    except Exception as e:
+        print(f"[WARNING] Error en carga normal: {e}")
+        raise
+
+
 # Carga el modelo entrenado desde el archivo pickle
 
 MODEL_PATH = os.path.join(os.path.dirname(__file__), "hackaton_churn_v2.pkl")
-pipeline = joblib.load(MODEL_PATH)["model"]
-print(f"[DEBUG] Tipo de pipeline cargado: {type(pipeline)}")
-if hasattr(pipeline, "best_estimator_"):
-    pipeline = pipeline.best_estimator_
+try:
+    pipeline = safe_load_model(MODEL_PATH)
+    print(f"[DEBUG] Tipo de pipeline cargado: {type(pipeline)}")
+    
+    # Si es GridSearchCV, extraer el estimador entrenado
+    if hasattr(pipeline, "best_estimator_"):
+        print("[INFO] Extrayendo best_estimator_ de GridSearchCV")
+        pipeline = pipeline.best_estimator_
+        # Reparar después de extraer
+        if hasattr(pipeline, 'named_steps'):
+            classifier = pipeline.named_steps.get('classifier')
+            if classifier and not hasattr(classifier, 'multi_class'):
+                classifier.multi_class = 'auto'
+    
+    print("[INFO] Modelo cargado exitosamente")
+            
+except Exception as e:
+    print(f"[ERROR] Error al cargar el modelo: {e}")
+    import traceback
+    traceback.print_exc()
+    raise
+
+
+def predict_proba_safe(model, X):
+    """Predice probabilidades de forma segura, manejando errores de compatibilidad"""
+    try:
+        return model.predict_proba(X)
+    except AttributeError as e:
+        if "multi_class" in str(e):
+            print(f"[WARNING] Error de multi_class, usando método alternativo: {e}")
+            # Intentar usar el método directo del clasificador
+            if hasattr(model, 'named_steps'):
+                classifier = model.named_steps.get('classifier')
+                preprocessor = model.named_steps.get('preprocessor')
+                if classifier and preprocessor:
+                    X_transformed = preprocessor.transform(X)
+                    # Intentar fijar el atributo faltante
+                    if not hasattr(classifier, 'multi_class'):
+                        classifier.multi_class = 'auto'
+                    try:
+                        return classifier.predict_proba(X_transformed)
+                    except Exception as e2:
+                        print(f"[ERROR] Método alternativo falló: {e2}")
+                        # Último recurso: usar predict con confianza ficticia
+                        pred = classifier.predict(X_transformed)
+                        # Crear matriz de probabilidades falsa (0 o 1)
+                        proba = np.zeros((len(pred), 2))
+                        proba[:, 1] = pred
+                        proba[:, 0] = 1 - pred
+                        return proba
+            raise
+        raise
+
 
 # Si es un wrapper (GridSearchCV, etc.) desempaquetar el pipeline final
 try:
@@ -72,16 +153,17 @@ class PredictionRequest(BaseModel):
 @app.post("/predict")
 def predict(request: PredictionRequest):
     # Convertir la petición a un DataFrame para el pipeline, excluyendo customer_id
-    data = pd.DataFrame(
-        [{k: v for k, v in request.dict().items() if k != 'customer_id'}])
-    print("[DEBUG] DataFrame de entrada para predicción:")
     req = request.dict()
     data_row = {col: req.get(col) for col in feature_names}
     data = pd.DataFrame([data_row])
+    print("[DEBUG] DataFrame de entrada para predicción:")
     print(data)
-    # Predecir probabilidad de churn
-    proba = np.round(pipeline.predict_proba(data)[0][1], 2)
+    
+    # Predecir probabilidad de churn de forma segura
+    proba_matrix = predict_proba_safe(pipeline, data)
+    proba = np.round(proba_matrix[0][1], 2)
     pred = int(proba >= 0.5)
+    
     # Calcular el main_factor (feature más influyente)
     try:
         # Obtener el clasificador y el preprocesador

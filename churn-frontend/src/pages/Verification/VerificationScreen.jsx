@@ -106,7 +106,7 @@ const VerificationScreen = () => {
           </button>
         </form>
         <div className="verification-form__footer">
-          ChurnInsight - Hackathon No Country - v1.0 ONE
+          InsightCore - Hackathon No Country - v1.0 ONE
         </div>
       </div>
     </div>

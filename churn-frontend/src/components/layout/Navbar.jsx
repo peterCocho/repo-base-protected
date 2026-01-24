@@ -13,7 +13,11 @@ export default function Navbar({ currentScreen, setCurrentScreen, onLogout }) {
   return (
     <nav className="navbar">
       <div className="navbar__container">
-      <div className="navbar__brand">
+      <div 
+          className="navbar__brand" 
+          onClick={() => setCurrentScreen('analyzer')}
+          style={{ cursor: 'pointer' }}
+        >
        <img 
             src="/src/assets/Logo-InsightCore-2.png" 
             alt="InsightCore Logo" 

@@ -150,6 +150,13 @@ const RegisterScreen = () => {
                   onChange={handleChange}
                   required
                 />
+                <button 
+                type="button"
+                className="register-form__showpass"
+                onClick={() => setShowPass(!showPass)}
+              >
+                {showPass ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
               </div>
             </div>
             <div>
@@ -168,6 +175,13 @@ const RegisterScreen = () => {
                   onChange={handleChange}
                   required
                 />
+                <button 
+                type="button"
+                className="register-form__showpass"
+                onClick={() => setShowRepeatPass(!showRepeatPass)}
+              >
+                {showRepeatPass ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
               </div>
             </div>
             {error && <div className="register-form__error">{error}</div>}
