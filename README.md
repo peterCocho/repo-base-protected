@@ -43,7 +43,7 @@ El sistema combina **Data Science (Python, scikit-learn)** y **Back-End (Java + 
 
 ### Machine Learning
 
-- **Python 3.11+** con FastAPI
+- **Python 3.13+** con FastAPI
 - **scikit-learn 1.6.1** para modelos ML
 - **Pandas, NumPy** para procesamiento de datos
 - **Joblib** para serialización de modelos
@@ -52,7 +52,7 @@ El sistema combina **Data Science (Python, scikit-learn)** y **Back-End (Java + 
 
 ### DevOps
 
-- **Docker** (opcional)
+- **Docker**
 - **Git** para control de versiones
 
 ---
