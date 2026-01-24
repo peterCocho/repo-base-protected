@@ -17,12 +17,36 @@ export default function AnalyzerScreen() {
 
   useEffect(() => {
     try {
+      console.log("[Analyzer] audio URLs:", { successSound, errorSound, errorSound2 });
       successAudioRef.current = new Audio(successSound);
       successAudioRef.current.preload = "auto";
+      successAudioRef.current.load();
+      successAudioRef.current.addEventListener("canplaythrough", () => {
+        console.log("[Analyzer] success audio canplaythrough");
+      });
+      successAudioRef.current.addEventListener("error", (ev) => {
+        console.error("[Analyzer] success audio error:", ev);
+      });
+
       errorAudioRef.current = new Audio(errorSound);
       errorAudioRef.current.preload = "auto";
+      errorAudioRef.current.load();
+      errorAudioRef.current.addEventListener("canplaythrough", () => {
+        console.log("[Analyzer] error audio canplaythrough");
+      });
+      errorAudioRef.current.addEventListener("error", (ev) => {
+        console.error("[Analyzer] error audio error:", ev);
+      });
+
       advertenceAudioRef.current = new Audio(errorSound2);
       advertenceAudioRef.current.preload = "auto";
+      advertenceAudioRef.current.load();
+      advertenceAudioRef.current.addEventListener("canplaythrough", () => {
+        console.log("[Analyzer] advertence audio canplaythrough");
+      });
+      advertenceAudioRef.current.addEventListener("error", (ev) => {
+        console.error("[Analyzer] advertence audio error:", ev);
+      });
     } catch (e) {
       // ignore audio init errors
     }
@@ -52,6 +76,25 @@ export default function AnalyzerScreen() {
     e.preventDefault();
     setFormError("");
     setResult(null);
+
+    // Intento de "unlock" de audio: algunos navegadores bloquean play() cuando
+    // se invoca desde callbacks asíncronos (p. ej. respuesta de la API).
+    // Reproducimos brevemente y pausamos para obtener permiso del usuario.
+    try {
+      [successAudioRef, errorAudioRef, advertenceAudioRef].forEach((r) => {
+        try {
+          if (r.current) {
+            const p = r.current.play();
+            if (p && typeof p.then === "function") {
+              p.then(() => {
+                r.current.pause();
+                r.current.currentTime = 0;
+              }).catch(() => {});
+            }
+          }
+        } catch (e) {}
+      });
+    } catch (e) {}
 
     const requiredFields = [
       "customer_id",
@@ -102,10 +145,15 @@ export default function AnalyzerScreen() {
       }
       // Reproducir sonido según resultado (preloadado)
       try {
+        const playSafe = (r) => {
+          if (!r || !r.current) return;
+          const p = r.current.play();
+          if (p && typeof p.then === "function") p.catch(() => {});
+        };
         if (status === "success") {
-          successAudioRef.current && successAudioRef.current.play();
+          playSafe(successAudioRef);
         } else {
-          errorAudioRef.current && errorAudioRef.current.play();
+          playSafe(errorAudioRef);
         }
       } catch (e) {
         // silencioso en fallos de reproducción
