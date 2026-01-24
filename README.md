@@ -38,7 +38,6 @@ El sistema combina **Data Science (Python, scikit-learn)** y **Back-End (Java + 
 - **Spring Mail** para envío de emails
 - **Flyway** para migraciones de base de datos
 - **Lombok** para reducción de código boilerplate
-- **PayPal SDK** para integración de pagos
 - **Swagger/OpenAPI** para documentación de APIs
 
 ### Machine Learning
