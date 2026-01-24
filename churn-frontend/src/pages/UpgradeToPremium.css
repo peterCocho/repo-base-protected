@@ -1,3 +1,6 @@
+.upgrade-modal {
+  /* overflow-y: hidden; */
+}
 .upgrade-container {
   display: flex;
   justify-content: center;
@@ -13,7 +16,7 @@
   backdrop-filter: blur(10px);
   border-radius: 20px;
   padding: 40px;
-  max-width: 500px;
+  max-width: 440px;
   width: 100%;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
@@ -24,11 +27,7 @@
   margin-bottom: 30px;
 }
 
-.upgrade-header h3 {
-  color: white;
-  font-size: 2rem;
-  margin: 10px 0;
-}
+
 
 .upgrade-header p {
   color: rgba(255, 255, 255, 0.8);
@@ -171,4 +170,15 @@
 
 .form-row .form-group {
   flex: 1;
+}
+
+.upgrade-header h3 {
+  color: white !important;
+  font-size: 2rem;
+  margin: 10px 0;
+}
+
+.upgrade-modal-close{
+  color: white !important;
+
 }
