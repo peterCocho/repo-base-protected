@@ -232,8 +232,11 @@ form-control-csv {
 
 @media (max-width: 768px) {
   .prediction-table-container{
-    margin: 2rem;
+width: 90vw;
+    padding: 2rem;
+    /* margin: 3rem; */
   }
+
   .desktop-only {
     display: none;
   }
@@ -243,8 +246,12 @@ form-control-csv {
  
   .file-input {
   padding-bottom: 20px;
+  width: 300px;
 }
 .prediction-card:first-child {
+  margin-top: 2rem ;
+}
+.no-data-card{
   margin-top: 2rem ;
 }
 }

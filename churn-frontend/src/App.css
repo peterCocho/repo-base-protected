@@ -150,6 +150,8 @@ body {
   gap: 2rem;
 }
 
+
+
 @media (max-width: 768px) {
   .grid-2 { grid-template-columns: 1fr; }
   .page-container {

@@ -110,6 +110,7 @@ function AppRoutes({ isLoggedIn, setIsLoggedIn, currentScreen, setCurrentScreen,
       {/* Cualquier otra ruta redirige a login */}
       <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
+    
   );
 }
 

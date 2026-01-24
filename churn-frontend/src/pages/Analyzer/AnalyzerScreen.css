@@ -294,6 +294,12 @@ select.input-glass:focus {
     height: 120px;
     font-size: 2rem;
   }
+  .analyzer-probability-value {
+  font-size: 2rem;
+  font-weight: bold;
+  color: white;
+}
+
   .analyzer-cards-grid {
     flex-direction: column !important; /* Cambia de horizontal a vertical */
     gap: 15px;

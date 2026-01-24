@@ -78,11 +78,6 @@
   background: rgba(255, 255, 255, 0.05);
 }
 
-.navbar__link.active {
-color: #60a5fa;
-  background: rgba(30, 58, 138, 0.4); 
-  border: 1px solid rgba(59, 130, 246, 0.3); 
-}
 
 .navbar__divider {
   width: 1px;
@@ -109,6 +104,8 @@ background: transparent;
   transform: translateY(-1px);
 }
 
+
+
 .navbar__logout:active {
   transform: translateY(0);
   background: rgba(255, 255, 255, 0.05);
@@ -116,12 +113,7 @@ background: transparent;
 
 @media (max-width: 900px) {
 
-  .navbar *, 
-  .navbar *::before, 
-  .navbar *::after {
-    box-sizing: content-box !important;
-  }
-  .navbar {
+   .navbar {
     height: 72px;
     padding: 0;
     display: flex;
@@ -131,7 +123,8 @@ background: transparent;
   .navbar__container {
     padding: 0 1.5rem; 
     display: flex;
-    justify-content: space-between;
+    flex-direction: row;
+    /* justify-content: space-between; */
     align-items: center;
   }   
 
@@ -157,13 +150,30 @@ background: transparent;
     display: flex;
     align-items: center;
     height: 100%; 
-    min-width: -webkit-fill-available;
+    
   }
-  .login-logo-img {
-        display: block;
+  
+  
+
+  .navbar__mobile-menu .navbar__logout{
+    display: block !important; 
+    width: 100%;
+    background: transparent;
+    border: 1px solid transparent;
+    color: #94a3b8;
+    padding: 0.5rem 1.2rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    text-align: center; 
+    border-radius: 10px;
+    margin-left: 0;
+    transition: all 0.2s ease;
   }
-  .navbar__logout {
-    display: none;
+
+  
+  .navbar__mobile-menu .navbar__logout svg {
+    display: none !important;
   }
 }
 
@@ -174,20 +184,7 @@ background: transparent;
   background: rgba(59,130,246,0.08);
 }
 
-.navbar__logout {
-  background: none;
-  border: none;
-  color: #cbd5e1;
-  cursor: pointer;
-  margin-left: 1.5rem;
-  font-size: 1rem;
-  padding: 0.3rem 0.7rem;
-  border-radius: 6px;
-  transition: background 0.18s;
-}
-.navbar__logout:hover {
-  background: rgba(59,130,246,0.10);
-}
+
 
 /* Nuevas clases para estilos en línea */
 .navbar__mobile-link {
