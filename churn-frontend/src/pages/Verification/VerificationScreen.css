@@ -36,16 +36,23 @@
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
+  width: 100%; 
+  align-items: stretch;
 }
-
+.input-with-icon {
+  padding-left: 3rem !important; 
+}
 .verification-form__input-group {
   position: relative;
   display: flex;
   align-items: center;
+  width: 100%;
 }
 
-.verification-form__input-group input {
-  padding-left: 45px;
+.verification-form__input-group input.input-glass {
+  padding-left: 3rem !important; 
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .verification-form__icon {
@@ -54,6 +61,9 @@
   top: 50%;
   transform: translateY(-50%);
   color: var(--text-secondary);
+  z-index: 5;
+  pointer-events: none;
+  
 }
 
 .verification-form__error {
@@ -95,4 +105,13 @@
   font-size: 0.8rem;
   color: var(--text-secondary);
   opacity: 0.8;
+}
+
+/* Responsividad para pantallas pequeñas */
+@media (max-width: 900px) {
+  
+  .verification-form{
+    margin: 1rem;
+  }
+
 }

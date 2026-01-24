@@ -67,7 +67,7 @@ const PredictionTableScreen = ({ data = [], onCsvLoaded }) => {
   return (
     <div className="prediction-table-container">
       <h2>Predicciones Múltiples por CSV</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className='form-control-csv'>
         <input
           type="file"
           accept=".csv"

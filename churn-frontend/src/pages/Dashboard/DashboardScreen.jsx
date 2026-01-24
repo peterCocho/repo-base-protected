@@ -388,18 +388,18 @@ export default function DashboardScreen() {
                           x={0}
                           y={0}
                           dy={14}
-                          textAnchor="end" // Importante: el texto "cuelga" hacia la izquierda desde la barra
+                          textAnchor="end" 
                           fill="#94a3b8"
                           fontSize="9px"
                           fontWeight="500"
-                          transform="rotate(-45)" // Rotación exacta solicitada
+                          transform="rotate(-45)" 
                         >
                           {payload.value}
                         </text>
                       </g>
                     );
                   }
-                  // Versión Escritorio (Normal)
+                  // Versión Escritorio
                   return (
                     <Text
                       x={x}
@@ -430,7 +430,7 @@ export default function DashboardScreen() {
       {/* Tercera fila: tabla Top Riesgo */}
       <div className="dashboard-table-wrapper">
         <div className="glass-panel dashboard-table-panel">
-          <h3 className="dashboard-table-title">⚠️ Top Riesgo</h3>
+          <h3 className="dashboard-table-title">⚠️ Top 5 Clientes En Riesgo</h3>
           <table className="dashboard-table">
             <thead>
               <tr className="dashboard-table-header">
