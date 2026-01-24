@@ -4,9 +4,9 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center; /* Centra el contenido horizontalmente */
+  align-items: center; 
   justify-content: flex-start;
-  padding: 40px 20px;
+  padding: 30px 20px;
   box-sizing: border-box;
   overflow-x: hidden;
 }
@@ -47,20 +47,20 @@
 
 /* --- 3. LAS 3 COLUMNAS (EL CAMBIO CLAVE) --- */
 .analyzer-cards-grid {
-  display: flex;             /* Forza disposición horizontal */
-  flex-direction: row;      /* Uno al lado del otro */
-  gap: 20px;                /* Espacio entre las tarjetas */
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
   width: 100%;
-  align-items: stretch;     /* Hace que todas tengan el mismo alto */
+  align-items: stretch;
 }
 
 .analyzer-card {
-  flex: 1;                  /* Obliga a las 3 a ocupar el mismo ancho exacto */
+  flex: 1;    
   padding: 25px;
   display: flex;
   flex-direction: column;
   gap: 15px;
-  min-width: 0;             /* Importante para que Flexbox no se rompa */
+  min-width: 0; 
 }
 
 .analyzer-card h3 {
@@ -94,7 +94,7 @@
 .input-glass {
   width: 100%;
   display: block;
-  box-sizing: border-box; /* Fundamental para que el padding no sume al ancho */
+  box-sizing: border-box; 
   padding: 10px;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -103,12 +103,12 @@
 }
 
 .input-glass option {
-    background-color: #ffffff; /* Fondo blanco para las opciones al abrir */
-    color: #000000;            /* Letras negras SIEMPRE */
+    background-color: #ffffff;
+    color: #000000;           
 }
 
 select.input-glass {
-    color: #ffffff;            /* Texto del select cerrado (en tu fondo oscuro) */
+    color: #ffffff;            
     cursor: pointer;
 }
 
@@ -125,10 +125,10 @@ select.input-glass:focus {
 }
 
 .error-banner-modern {
-    background: rgba(206, 72, 72, 0.9); /* Rojo sólido pero algo traslúcido */
+    background: rgba(206, 72, 72, 0.9); 
     color: white;
     padding: 12px 24px;
-    border-radius: 50px; /* Estilo píldora */
+    border-radius: 50px; 
     display: flex;
     align-items: center;
     gap: 12px;
@@ -173,12 +173,11 @@ select.input-glass:focus {
 
 /* --- 6. RESULTADOS (Círculo y Mensajes) --- */
 .analyzer-result-panel {
-  padding: 40px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: center;
-}
+  text-align: center;}
 
 .analyzer-result-panel .btn-primary {
   width: 100% !important;
@@ -187,7 +186,6 @@ select.input-glass:focus {
   font-size: 1.2rem !important;
   font-weight: 700;
   border-radius: 12px;
-  margin-top: 1.5rem;
   transition: transform 0.2s;
 }
 
@@ -221,13 +219,11 @@ select.input-glass:focus {
 .analyzer-recommendation {
   width: 100%;
   max-width: 600px !important;
-  margin-top: 20px;
-  padding: 20px;
   border-radius: 12px;
   border: 1px solid #ef4444;
   background: rgba(239, 68, 68, 0.05);
-  padding: 3rem;
-  max-width: 500px;
+  padding: 4rem;
+
 
 }
 
@@ -254,11 +250,9 @@ select.input-glass:focus {
 
 
 .analyzer-prob-title {
-  /* margin-top: 0; */
   font-size: 2.5rem;
   font-weight: 700;
   color: var(--accent-red);
-
 }
 
 
@@ -344,7 +338,3 @@ select.input-glass:focus {
   -webkit-appearance: none;
   margin: 0;
 }
-
-/* .input-number-no-spinner[type=number] {
-  -moz-appearance: textfield;
-} */

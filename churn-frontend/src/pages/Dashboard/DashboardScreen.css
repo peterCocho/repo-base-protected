@@ -492,44 +492,37 @@
 .filters-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 2rem;
+  gap: 1.5rem;
   margin-bottom: 0.5rem;
   margin-top: 0.1rem;
-  justify-content: space-between;
-  align-items: flex-start;
-  max-height: 40px;
-}
+  justify-content: flex-end;
+  align-items: flex-end;
+  }
 
 .filter-group {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  flex: 1; 
+  min-width: 180px; 
 }
 
 .filter-group label {
-  color: #94a3b8;
+  color: #ffffff;
   font-size: 0.9rem;
   font-weight: 500;
 }
 
-.filter-group select {
-  padding: 0.5rem;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.18);
-  border-radius: 8px;
-  color: #fff;
-  font-size: 0.9rem;
-  min-width: 120px;
-}
-
+.filter-group select,
 .filter-group input {
-  padding: 0.5rem;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.18);
+  padding: 0.6rem;
+  background: rgba(255, 255, 255, 0.1); /* Un poco más de contraste */
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 8px;
   color: #fff;
   font-size: 0.9rem;
-  min-width: 120px;
+  width: 100%; /* Ocupa el contenedor del grupo */
+  cursor: pointer;
 }
 
 .filter-group input:focus {
@@ -546,6 +539,12 @@
   display: flex;
   gap: 1rem;
   align-self: flex-end;
+}
+
+.filter-group select option {
+  background-color: #ffffff; 
+  color: #000000;
+  padding: 10px;
 }
 
 @media (max-width: 768px) {
@@ -585,7 +584,7 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 1rem;
-  background: rgba(239, 68, 68, 0.8);
+  background: rgb(255, 0, 0);
   border: none;
   border-radius: 8px;
   color: #fff;

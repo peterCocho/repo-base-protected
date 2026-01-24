@@ -39,8 +39,7 @@ export default function LoginScreen({ onLogin }) {
       <div className="login-visual glass-panel">
         <div className="login-visual__overlay"></div>
         <div className="login-visual__content">
-          {/* <Activity size={80} color="#3b82f6" className="login-logo-icon" /> */}
-          <h1 className="login-title">InsightCore</h1>
+                  <h1 className="login-title">InsightCore</h1>
           <img 
             src="/src/assets/isologo-insight-core.png" 
             alt="InsightCore Logo" 
