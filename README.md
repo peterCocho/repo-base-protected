@@ -7,9 +7,9 @@ El modelo entrenado entregará un Dashboard con las variables de mayor peso, par
 
 ## 🚀 Descripción
 
-ChurnInsight es un MVP desarrollado en un hackathon para predecir la probabilidad de cancelación de clientes en servicios de suscripción (telecomunicaciones, fintech, streaming, e-commerce).
+InsightCore es un MVP desarrollado en un hackathon para predecir la probabilidad de cancelación de clientes en servicios de suscripción (telecomunicaciones, fintech, streaming, e-commerce).
 
-El sistema combina **Data Science (Python, scikit-learn)** y **Back-End (Java + Spring Boot)** para ofrecer predicciones vía API REST.
+El sistema combina **Data Science (Python, Scikit-learn)** y **Back-End (Java + Spring Boot)** para ofrecer predicciones vía API REST.
 
 ---
 
@@ -43,8 +43,9 @@ El sistema combina **Data Science (Python, scikit-learn)** y **Back-End (Java + 
 ### Machine Learning
 
 - **Python 3.13+** con FastAPI
-- **scikit-learn 1.6.1** para modelos ML
+- **Scikit-learn 1.6.1** para modelos ML
 - **Pandas, NumPy** para procesamiento de datos
+- **Matplotlib, Seaborn** para visualización de datos
 - **Joblib** para serialización de modelos
 - **Uvicorn** como servidor ASGI
 - **Python-multipart** para manejo de archivos
