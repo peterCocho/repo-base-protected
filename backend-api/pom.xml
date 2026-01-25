@@ -28,9 +28,10 @@
 	</scm>
 	<properties>
 		<java.version>17</java.version>
+		<lombok.version>1.18.30</lombok.version>
 	</properties>
 	<dependencies>
-				<!-- Nota: solo se agregan comentarios explicativos aquí; no se modifican coords/versiones -->
+				
 				<!-- JWT: librerías para generar y validar JSON Web Tokens (autenticación) -->
 				<dependency>
 					<groupId>io.jsonwebtoken</groupId>
@@ -49,77 +50,65 @@
 					<version>0.11.5</version>
 					<scope>runtime</scope>
 				</dependency>
-		<!-- Spring Data JPA: abstracción para repositorios y acceso a datos JPA -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
-		<!-- Validation: soporte para anotaciones de validación en DTOs (@Valid, @NotNull, ...) -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
-		<!-- Jackson Annotations: control de serialización/deserialización JSON -->
+		<!-- Jackson annotations: anotaciones para control de serialización/deserialización JSON -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-annotations</artifactId>
 		</dependency>
-		<!-- Mail: envío de correos (verificaciones, notificaciones) -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
 
-		<!-- DevTools: reinicio automático en desarrollo (no incluir en producción) -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
-		<!-- H2 (runtime): base de datos en memoria/embebida para pruebas y desarrollo local -->
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-		<!-- PostgreSQL driver: driver JDBC para conexión con PostgreSQL en producción -->
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
 		</dependency>
 		<!-- Lombok: generación de getters/setters/constructores en tiempo de compilación (scope provided) -->
-		<!-- Lombok: genera código (getters/setters/constructores) en tiempo de compilación; scope provided -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		<!-- Web: dependencias para controladores REST y servidor embebido (Tomcat/Netty) -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-		<!-- Security: Spring Security para autenticación y autorización -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
 
-		<!-- Security Test: utilidades para pruebas con Spring Security (scope test) -->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<!-- Starter Test: JUnit, Mockito y utilidades de testing (scope test) -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<!-- Flyway: migraciones/versionado del esquema de base de datos -->
 		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>
