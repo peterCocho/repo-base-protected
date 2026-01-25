@@ -1,4 +1,4 @@
-# 📊 ChurnInsight
+# 📊 InsightCore
 
 Objetivo:
 
