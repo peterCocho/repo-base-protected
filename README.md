@@ -369,7 +369,7 @@ npm run dev
 
 - **Predicciones individuales** vía formulario web
 - **Predicciones masivas** desde archivos CSV
-- **Modelo ML entrenado** con scikit-learn (Random Forest)
+- **Modelo ML entrenado** con scikit-learn (Logistic Regression)
 - **Probabilidades de churn** con mensajes personalizados
 
 ### 📧 Verificación de email
@@ -398,7 +398,7 @@ npm run dev
 1. **Usuario** interactúa con el dashboard en React
 2. **Frontend** envía requests al backend Java
 3. **Backend** consulta estadísticas o envía datos al microservicio de ML
-4. **FastAPI** procesa la predicción usando el modelo scikit-learn
+4. **FastAPI** procesa la predicción usando el modelo Scikit-learn
 5. **Resultados** fluyen de vuelta al usuario a través del backend
 
 ---
