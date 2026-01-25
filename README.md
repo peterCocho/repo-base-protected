@@ -1,5 +1,5 @@
 
-# 📊 ChurnInsight
+# 📊 InsightCore
 Objetivo: 
 
 Crear un modelo de análisis predictivo que muestre el comportamiento de los usuarios en la plataforma de streaming por medio de patrones de comportamiento, con ello se busca detectar las posibles causas que provocan la cancelación de suscripciones (churn). Los resultados se visualizarán en un dashboard que destacará las variables de mayor impacto, proporcionando insights estratégicos que fundamentaran la toma de decisiones corporativas para optimizar la retención y fidelización de los suscriptores. 
@@ -7,7 +7,7 @@ Crear un modelo de análisis predictivo que muestre el comportamiento de los usu
 
 ## 🚀 Descripción
 
-ChurnInsight es un MVP desarrollado en un hackathon para predecir la probabilidad de cancelación de clientes en servicios de suscripción (telecomunicaciones, fintech, streaming, e-commerce).
+InsightCore es un MVP desarrollado en un hackathon para predecir la probabilidad de cancelación de clientes en servicios de suscripción (telecomunicaciones, fintech, streaming, e-commerce).
 
 El sistema combina **Data Science (Python, scikit-learn)** y **Back-End (Java + Spring Boot)** para ofrecer predicciones vía API REST.
 
