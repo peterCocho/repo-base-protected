@@ -409,7 +409,8 @@ export default function AnalyzerScreen() {
         <div
           className="glass-panel analyzer-result-panel"
           style={{
-            height: "80vh",
+            marginTop: "0.1rem",
+            height: "85vh",
             width: "70vw",
             display: "flex",
             flexDirection: "column",
