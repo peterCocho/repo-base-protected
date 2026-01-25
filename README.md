@@ -1,13 +1,13 @@
 
-# 📊 ChurnInsight
+# 📊 InsightCore
 Objetivo: 
 
-Crear un análisis predictivo que muestre el comportamiento de los usuarios en la plataforma de streaming, con ello se busca detectar las posibles causas que provocan la cancelación de suscripciones.
-El modelo entrenado entregará un Dashboard con las variables de mayor peso, para el caso de negocio estas insights ayudarán a tomar las mejores decisiones para retener suscriptores. 
+Crear un modelo de análisis predictivo que muestre el comportamiento de los usuarios en la plataforma de streaming por medio de patrones de comportamiento, con ello se busca detectar las posibles causas que provocan la cancelación de suscripciones (churn). Los resultados se visualizarán en un dashboard que destacará las variables de mayor impacto, proporcionando insights estratégicos que fundamentaran la toma de decisiones corporativas para optimizar la retención y fidelización de los suscriptores. 
+
 
 ## 🚀 Descripción
 
-ChurnInsight es un MVP desarrollado en un hackathon para predecir la probabilidad de cancelación de clientes en servicios de suscripción (telecomunicaciones, fintech, streaming, e-commerce).
+InsightCore es un MVP desarrollado en un hackathon para predecir la probabilidad de cancelación de clientes en servicios de suscripción (telecomunicaciones, fintech, streaming, e-commerce).
 
 El sistema combina **Data Science (Python, scikit-learn)** y **Back-End (Java + Spring Boot)** para ofrecer predicciones vía API REST.
 
@@ -29,6 +29,9 @@ El sistema combina **Data Science (Python, scikit-learn)** y **Back-End (Java + 
   3. Limpieza de dataframe con las variables de peso.
   4. Entrenamiento de modelos predictivos (SVM, Logistic Regression, KNN y RandomForestClassifier).
   5. Selección del mejor modelo predictivo.
+  6. Evaluación y predicción (Métricas de desempeño: Accuracy, Precision, Recall, F1-score)
+  7. Serialización y persistencia del modelo mediante pickle.
+
 data-science/
 ├── notebook.ipynb        # EDA, features, entrenamiento y métricas
 ├── model.pkl             # Modelo serializado
