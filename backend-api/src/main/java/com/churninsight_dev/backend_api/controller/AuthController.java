@@ -27,17 +27,29 @@ import java.util.Optional;
 import java.util.HashMap;
 import java.util.Map;
 
-
-
+/**
+ * Controlador REST para manejar la autenticación de usuarios.
+ * Proporciona endpoints para login y registro, incluyendo verificación de email.
+ * Utiliza JWT para la autenticación y maneja errores de forma estructurada.
+ */
 @RestController
 @CrossOrigin(origins = "http://localhost:5173") // Cambia el puerto si tu frontend usa otro
 public class AuthController {
+    
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final VerificationCodeRepository verificationCodeRepository;
     private final EmailService emailService;
 
+    /**
+     * Constructor para inyección de dependencias.
+     * @param userRepository Repositorio para acceder a los datos de usuarios.
+     * @param passwordEncoder Codificador de contraseñas para seguridad.
+     * @param jwtUtil Utilidad para generar y validar tokens JWT.
+     * @param verificationCodeRepository Repositorio para códigos de verificación.
+     * @param emailService Servicio para envío de emails.
+     */
     @Autowired
     public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil,
                         VerificationCodeRepository verificationCodeRepository, EmailService emailService) {
@@ -48,7 +60,12 @@ public class AuthController {
         this.emailService = emailService;
     }
 
-
+    /**
+     * Endpoint para iniciar sesión de un usuario.
+     * Valida las credenciales, verifica el estado de la cuenta y genera un token JWT si es exitoso.
+     * @param loginDto DTO con los datos de login (email y contraseña).
+     * @return ResponseEntity con el token JWT o un error estructurado.
+     */
     @PostMapping(value = "/login", consumes = "application/json")
     public ResponseEntity<?> loginUser(@RequestBody LoginDto loginDto) {
         String email = (loginDto.getEmail() == null) ? null : loginDto.getEmail().trim();
@@ -90,6 +107,12 @@ public class AuthController {
             new LoginJwtResponse("¡Bienvenido!", user.getEmail(), user.getUserName(), isVerified, token));
     }
 
+    /**
+     * Endpoint para registrar un nuevo usuario.
+     * Valida los datos, crea el usuario, genera un código de verificación y envía un email.
+     * @param registerDto DTO con los datos de registro.
+     * @return ResponseEntity con mensaje de éxito o error estructurado.
+     */
     @PostMapping(value = "/register", consumes = "application/json")
     public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterDto registerDto) {
         String email = (registerDto.getEmail() == null) ? null : registerDto.getEmail().trim();

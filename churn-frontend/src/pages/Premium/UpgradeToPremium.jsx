@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../services/api';
+import api from '../../services/api';
 import { Crown, CreditCard } from 'lucide-react';
 import './UpgradeToPremium.css';
 

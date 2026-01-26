@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 public class LoginController {
     @GetMapping("/protected-test")
     public ResponseEntity<?> protectedTest() {
+        // Retornar mensaje de confirmación si el JWT es válido
         return ResponseEntity.ok("Acceso permitido: JWT válido");
     }
 }

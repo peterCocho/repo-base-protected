@@ -149,9 +149,7 @@ public class PredictionController {
             .sum();
 
         long cantidadNoChurn = predictions.stream().filter(p -> p.getResultado() != null && p.getResultado().equalsIgnoreCase("no churn")).count();
-        // double porcentajeNoChurn = clientesAnalizados > 0 ? (cantidadNoChurn * 100.0) / clientesAnalizados : 0;
-
-        // Porcentaje/cantidad de veces que cada variable fue main_factor en predicciones Churn
+        
         Map<String, Long> cantidadSalida = new LinkedHashMap<>();
         long churnCount = predictions.stream().filter(p -> p.getResultado() != null && p.getResultado().equalsIgnoreCase("churn")).count();
         cantidadSalida.put("watch_hours", predictions.stream().filter(p -> {
