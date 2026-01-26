@@ -1,4 +1,4 @@
-# 📊 ChurnInsight
+# 📊 InsightCore
 
 Objetivo:
 
@@ -7,9 +7,9 @@ El modelo entrenado entregará un Dashboard con las variables de mayor peso, par
 
 ## 🚀 Descripción
 
-ChurnInsight es un MVP desarrollado en un hackathon para predecir la probabilidad de cancelación de clientes en servicios de suscripción (telecomunicaciones, fintech, streaming, e-commerce).
+InsightCore es un MVP desarrollado en un hackathon para predecir la probabilidad de cancelación de clientes en servicios de suscripción (telecomunicaciones, fintech, streaming, e-commerce).
 
-El sistema combina **Data Science (Python, scikit-learn)** y **Back-End (Java + Spring Boot)** para ofrecer predicciones vía API REST.
+El sistema combina **Data Science (Python, Scikit-learn)** y **Back-End (Java + Spring Boot)** para ofrecer predicciones vía API REST.
 
 ---
 
@@ -38,21 +38,21 @@ El sistema combina **Data Science (Python, scikit-learn)** y **Back-End (Java + 
 - **Spring Mail** para envío de emails
 - **Flyway** para migraciones de base de datos
 - **Lombok** para reducción de código boilerplate
-- **PayPal SDK** para integración de pagos
 - **Swagger/OpenAPI** para documentación de APIs
 
 ### Machine Learning
 
-- **Python 3.11+** con FastAPI
-- **scikit-learn 1.6.1** para modelos ML
+- **Python 3.13+** con FastAPI
+- **Scikit-learn 1.6.1** para modelos ML
 - **Pandas, NumPy** para procesamiento de datos
+- **Matplotlib, Seaborn** para visualización de datos
 - **Joblib** para serialización de modelos
 - **Uvicorn** como servidor ASGI
 - **Python-multipart** para manejo de archivos
 
 ### DevOps
 
-- **Docker** (opcional)
+- **Docker**
 - **Git** para control de versiones
 
 ---
@@ -60,63 +60,44 @@ El sistema combina **Data Science (Python, scikit-learn)** y **Back-End (Java + 
 ## 📂 Estructura del proyecto
 
 ```
-churn-frontend/          # Frontend React + Vite
-├── src/
-│   ├── components/
-│   ├── pages/
-│   │   ├── Dashboard/
-│   │   ├── Analyzer/
-│   │   ├── Login/
-│   │   ├── Register/
-│   │   ├── PaymentSuccess/
-│   │   ├── PaymentCancel/
-│   │   ├── History/
-│   │   ├── Premium/
-│   │   └── Verification/
-│   ├── services/
-│   ├── context/
-│   ├── theme/
-│   └── assets/
-├── package.json
-├── vite.config.js
-└── eslint.config.js
-
 backend-api/             # Backend Java Spring Boot
-├── src/main/java/com/churninsight_dev/backend_api/
-│   ├── controller/
-│   │   ├── AuthController.java          # Autenticación y registro
-│   │   ├── LoginController.java         # Login adicional
-│   │   ├── UserController.java          # Gestión de usuarios
-│   │   ├── PredictionController.java    # Predicciones individuales
-│   │   ├── PredictionHistoryController.java # Historial y estadísticas
-│   │   ├── PaymentController.java       # Integración PayPal
-│   │   └── VerificationController.java  # Verificación de email
-│   ├── model/
-│   ├── repository/
-│   ├── service/
-│   ├── security/
-│   ├── dto/
-│   ├── exception/
-│   ├── config/
-│   └── .env                           # Variables de entorno (vacío)
-├── src/main/resources/
-│   ├── application.properties         # Configuración principal
-│   └── db/migration/                  # Migraciones Flyway
-├── pom.xml
-└── mvnw
-
-ml-service/              # Microservicio de ML con FastAPI
-├── main.py              # API FastAPI principal
-├── hackaton_churn_v2.pkl # Modelo entrenado (actualizado)
-├── requirements.txt     # Dependencias Python
-├── customers_drama.csv  # Datos de ejemplo
-├── update_csv_genders.py # Script para actualizar CSVs
-├── migrate_gender_data.py # Script para migrar BD
-├── fix_gender_data.py   # Script para corregir datos
-└── modelo_InsightCore   # Modelo anterior (deprecated)
-
-feature/                 # Documentación y recursos adicionales
-└── bootstrap            # Archivos estáticos
+├── HELP.md              # Documentación de ayuda de Spring Boot
+├── mvnw                 # Wrapper de Maven para Unix
+├── mvnw.cmd             # Wrapper de Maven para Windows
+├── pom.xml              # Configuración de Maven
+├── src/
+│   ├── main/
+│   │   ├── java/com/churninsight_dev/backend_api/
+│   │   │   ├── BackendApiApplication.java      # Clase principal de Spring Boot
+│   │   │   ├── controller/
+│   │   │   │   ├── AuthController.java          # Autenticación y registro
+│   │   │   │   ├── LoginController.java         # Login adicional
+│   │   │   │   ├── UserController.java          # Gestión de usuarios
+│   │   │   │   ├── PredictionController.java    # Predicciones individuales
+│   │   │   │   ├── PredictionHistoryController.java # Historial y estadísticas
+│   │   │   │   ├── PaymentController.java       # Integración PayPal
+│   │   │   │   └── VerificationController.java  # Verificación de email
+│   │   │   ├── model/                           # Entidades JPA
+│   │   │   ├── repository/                      # Repositorios de datos
+│   │   │   ├── service/                         # Lógica de negocio
+│   │   │   ├── security/                        # Configuración de seguridad
+│   │   │   ├── dto/                             # Objetos de transferencia de datos
+│   │   │   ├── exception/                       # Manejo de excepciones
+│   │   │   └── config/                          # Configuraciones adicionales
+│   │   └── resources/
+│   │       ├── application.properties           # Configuración principal
+│   │       ├── db/migration/                    # Migraciones Flyway
+│   │       ├── static/                          # Archivos estáticos
+│   │       └── templates/                       # Plantillas (si se usan)
+│   └── test/
+│       └── java/com/
+│           ├── churninsight/                    # Tests de la versión anterior
+│           └── churninsight_dev/                # Tests actuales
+└── target/                                      # Archivos compilados (generado por Maven)
+    ├── classes/
+    ├── generated-sources/
+    ├── generated-test-sources/
+    └── test-classes/
 ```
 
 ---
@@ -369,7 +350,7 @@ npm run dev
 
 - **Predicciones individuales** vía formulario web
 - **Predicciones masivas** desde archivos CSV
-- **Modelo ML entrenado** con scikit-learn (Random Forest)
+- **Modelo ML entrenado** con scikit-learn (Logistic Regression)
 - **Probabilidades de churn** con mensajes personalizados
 
 ### 📧 Verificación de email
@@ -398,7 +379,7 @@ npm run dev
 1. **Usuario** interactúa con el dashboard en React
 2. **Frontend** envía requests al backend Java
 3. **Backend** consulta estadísticas o envía datos al microservicio de ML
-4. **FastAPI** procesa la predicción usando el modelo scikit-learn
+4. **FastAPI** procesa la predicción usando el modelo Scikit-learn
 5. **Resultados** fluyen de vuelta al usuario a través del backend
 
 ---
