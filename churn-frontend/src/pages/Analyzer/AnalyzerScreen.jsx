@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Activity, User, CreditCard, MonitorPlay } from "lucide-react";
 import "./AnalyzerScreen.css";
-import successSound from "../../assets/success.mp3";
-import errorSound from "../../assets/error.mp3";
-import errorSound2 from "../../assets/advertence.mp3";
+import successSound from "../../audio/success.mp3";
+import errorSound from "../../audio/error.mp3";
+import errorSound2 from "../../audio/advertence.mp3";
 import api from "../../services/api";
 
 export default function AnalyzerScreen() {
