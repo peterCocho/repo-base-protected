@@ -24,18 +24,25 @@ public class PredictionHistoryController {
 
     @GetMapping
     public List<PredictionHistoryDTO> getPredictionHistory() {
-        // Obtener el usuario autenticado
+        // Obtener el usuario autenticado desde el contexto de seguridad
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
+        
+        // Recuperar el historial de predicciones del usuario desde la base de datos
         List<PredictionHistoryDTO> history = predictionRepository.findPredictionHistoryByUserEmail(email);
+        
+        // Procesar cada predicción para agregar mensajes personalizados si es churn
         for (PredictionHistoryDTO dto : history) {
             // Solo mostrar mensaje si resultado es Churn
             if (dto.getResultado() != null && dto.getResultado().equalsIgnoreCase("churn")) {
                 // Generar mensaje personalizado según el factor principal
                 String factor = dto.getFactorPrincipal();
                 if (factor != null) {
+                    // Limpiar el factor para comparación
                     String cleanFactor = factor.replace("_", "").replace("-", "").toLowerCase();
                     String rawFactor = factor.toLowerCase();
+                    
+                    // Usar switch para determinar el mensaje basado en el factor
                     String msg = switch (cleanFactor) {
                         case "monthlyfee", "monthly_fee" -> "Alerta: Considera ofrecer un descuento del 15% en la tarifa mensual para retener a este cliente.";
                         case "lastlogindays", "last_login_days" -> "Alerta: El cliente lleva varios días sin iniciar sesión. Envía una campaña de reactivación o recordatorio.";
@@ -50,6 +57,7 @@ public class PredictionHistoryController {
                         case "age" -> "Alerta: Personaliza la comunicación y las recomendaciones según el perfil demográfico del cliente.";
                         case "gender" -> "Alerta: Personaliza la comunicación y las recomendaciones según el perfil demográfico del cliente.";
                         default -> {
+                            // Manejar casos con prefijos num__ o cat__
                             yield switch (rawFactor) {
                                 case "num__monthly_fee" -> "Alerta: Considera ofrecer un descuento del 15% en la tarifa mensual para retener a este cliente.";
                                 case "num__last_login_days" -> "Alerta: El cliente lleva varios días sin iniciar sesión. Envía una campaña de reactivación o recordatorio.";
@@ -81,21 +89,29 @@ public class PredictionHistoryController {
             @RequestParam(required = false) String region,
             @RequestParam(required = false) String device,
             @RequestParam(required = false) String gender) {
+        // Obtener el usuario autenticado
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
 
+        // Imprimir información de depuración sobre la solicitud
         System.out.println("=== Advanced Statistics Request ===");
         System.out.println("User: " + email);
         System.out.println("Filters - Age: " + age + ", SubscriptionType: " + subscriptionType +
                           ", Region: " + region + ", Device: " + device + ", Gender: " + gender);
 
+        // Contar el total de predicciones con los filtros aplicados
         Long total = predictionRepository.countTotalByFilters(email, age, subscriptionType, region, device, gender);
+        // Contar las predicciones de churn con los filtros aplicados
         Long churn = predictionRepository.countChurnByFilters(email, age, subscriptionType, region, device, gender);
+        // Calcular no churn como total menos churn
         Long noChurn = total - churn;
+        // Calcular la tasa de churn como porcentaje
         Double churnRate = total > 0 ? (double) churn / total * 100 : 0.0;
 
+        // Imprimir resultados de depuración
         System.out.println("Results - Total: " + total + ", Churn: " + churn + ", NoChurn: " + noChurn + ", Rate: " + churnRate);
 
+        // Retornar el objeto DTO con las estadísticas calculadas
         return new StatisticsDTO(total, churn, noChurn, churnRate);
     }
 }

@@ -25,15 +25,20 @@ public class UserController {
     // Endpoint para obtener información del usuario actual
     @GetMapping("/me")
     public ResponseEntity<UserInfoDTO> getCurrentUser() {
+        // Obtener el usuario autenticado desde el contexto de seguridad
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         
+        // Buscar el usuario en la base de datos por email
         Optional<User> userOpt = userRepository.findByEmail(email);
         if (userOpt.isEmpty()) {
+            // Retornar 404 si el usuario no se encuentra
             return ResponseEntity.notFound().build();
         }
         
+        // Obtener el usuario encontrado
         User user = userOpt.get();
+        // Crear el DTO con la información del usuario
         UserInfoDTO userInfo = new UserInfoDTO(
             user.getId(),
             user.getUserName(),
@@ -42,6 +47,7 @@ public class UserController {
             user.getProfiles()
         );
         
+        // Retornar la información del usuario con código 200
         return ResponseEntity.ok(userInfo);
     }
 
@@ -49,8 +55,11 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/admin")
     public ResponseEntity<User> createAdmin(@RequestBody User user) {
+        // Asignar el perfil de ADMIN al nuevo usuario
         user.setProfiles(Set.of(Profile.ROLE_ADMIN));
+        // Guardar el usuario en la base de datos
         User saved = userRepository.save(user);
+        // Retornar el usuario creado con código 201
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 }
