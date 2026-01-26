@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+<<<<<<< HEAD
       <module fileurl="file://$PROJECT_DIR$/.idea/ChurnInsight.iml" filepath="$PROJECT_DIR$/.idea/ChurnInsight.iml" />
+=======
+      <module fileurl="file://$PROJECT_DIR$/.idea/ChurnInsight_dev.iml" filepath="$PROJECT_DIR$/.idea/ChurnInsight_dev.iml" />
+>>>>>>> develop
     </modules>
   </component>
 </project>
