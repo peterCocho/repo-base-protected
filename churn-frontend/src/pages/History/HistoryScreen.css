@@ -1,0 +1,335 @@
+.glass-panel.history-panel-padding {
+  width: 95vw !important;
+  max-width: 1200px !important;
+}
+
+
+/* Padding para el panel principal */
+.history-panel-padding {
+  padding: 2rem;
+}
+
+.page-container {
+  padding: 1rem;
+  margin: 0 auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+/* Header y acciones */
+.history-header {
+ display: flex;
+  flex-direction: column; 
+  width: 100%;
+  align-items: center;
+}
+
+.history-title {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #ffffff;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  font-size: 1.8rem;
+}
+.history-actions {
+display: flex;
+flex-direction: row;
+  align-items: center; 
+  justify-content: center;
+  gap: 15px;
+}
+
+.history-filter-btn {
+  background: rgba(255, 255, 255, 0.05) !important;
+  color: #cbd5e1;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0 1.5rem !important; 
+  height: 42px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+  white-space: nowrap;    
+  min-width: 180px;          
+  display: flex;             
+  align-items: center;
+  justify-content: center;
+}
+.history-export-btn {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1.5rem !important;          
+  height: 42px;              
+  border-radius: 50px;       
+  border: none;
+  font-weight: 600;
+  white-space: nowrap;
+  margin: 0 !important;
+}
+
+.history-error {
+  background: rgba(255, 0, 0, 0.2);
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Tabla */
+.history-table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+.history-table {
+ width: 100%;
+  border-spacing: 0;
+  margin-top: 1rem;
+  border-collapse: collapse;
+}
+.history-table-header {
+  background: rgba(255, 255, 255, 0.05);
+  text-align: left;
+}
+.history-table-th,
+.history-table-td {
+  padding: 15px;
+}
+.history-table-row {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+.history-result {
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+}
+.history-result.churn {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+.history-result.nochurn {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+}
+
+.glass-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+}
+
+.history-panel {
+  padding: 1rem;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1.5px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+  backdrop-filter: blur(14px) saturate(120%);
+  -webkit-backdrop-filter: blur(14px) saturate(120%);
+}
+
+
+
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: none;
+}
+
+.history-table th,
+.history-table td {
+  padding: 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.history-table th {
+  color: var(--accent-blue);
+  font-weight: 600;
+  background: none;
+}
+
+.history-table tr:last-child td {
+  border-bottom: none;
+}
+
+.history-result {
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(6px) saturate(120%);
+  backdrop-filter: blur(6px) saturate(120%);
+}
+
+.history-result.churn {
+  background: rgba(239, 68, 68, 0.18);
+  color: var(--accent-red);
+}
+
+.history-result.nochurn {
+  background: rgba(16, 185, 129, 0.18);
+  color: var(--accent-green);
+}
+
+/* Responsividad para pantallas pequeñas */
+@media (max-width: 900px) {
+  .page-container {
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    padding: 0.25rem;
+    align-items: stretch;
+  }
+    .history-panel {
+    width: 100%;
+    margin: 0;
+    padding: 0.5rem;
+    box-sizing: border-box;
+    overflow-x: auto;
+  }
+  .history-header {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+  .history-table {
+    font-size: 0.75rem;
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  .history-table th,
+  .history-table td {
+    padding: 6px 3px;
+  }
+  .glass-panel {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+  }
+  .history-actions{
+    flex-direction: column;
+  }
+  
+}
+
+/* Estilos para la columna de mensaje */
+.history-message {
+  max-width: 300px;
+  word-wrap: break-word;
+  white-space: normal;
+  line-height: 1.4;
+  font-size: 0.9rem;
+}
+
+/* Estados de loading y error */
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: #94a3b8;
+  font-size: 1.1rem;
+}
+
+.error {
+  text-align: center;
+  padding: 2rem;
+  color: #ef4444;
+  font-size: 1.1rem;
+}
+
+/* Responsividad: mostrar/ocultar vistas */
+.desktop-only {
+  display: block;
+}
+
+.mobile-only {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .desktop-only {
+    display: none;
+  }
+  .mobile-only {
+    display: block;
+  }
+  .history-card{
+    margin-top: 20px;
+  }
+  
+}
+
+/* Estilos para tarjetas móviles */
+.history-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.history-card {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 4px 16px rgba(31, 38, 135, 0.1);
+  backdrop-filter: blur(10px) saturate(120%);
+  -webkit-backdrop-filter: blur(10px) saturate(120%);
+}
+
+.history-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 0.5rem;
+}
+
+.history-card-id {
+  font-weight: 600;
+  color: var(--accent-blue);
+}
+
+.history-card-date {
+  font-size: 0.9rem;
+  color: #94a3b8;
+}
+
+.history-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.history-card-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.history-card-item strong {
+  color: #cbd5e1;
+  font-weight: 500;
+  min-width: 100px;
+}
+
+.history-message {
+  word-wrap: break-word;
+  white-space: normal;
+  line-height: 1.4;
+  font-size: 0.9rem;
+  color: #e2e8f0;
+}

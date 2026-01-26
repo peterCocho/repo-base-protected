@@ -1,0 +1,1 @@
+ALTER TABLE predictions DROP COLUMN IF EXISTS otros_datos;

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+  <filter id="liquid-glass" x="-20%" y="-20%" width="140%" height="140%">
+    <feTurbulence id="turb" type="turbulence" baseFrequency="0.012 0.025" numOctaves="1" seed="2" result="turb">
+      <animate attributeName="seed" values="2;12;2" dur="8s" repeatCount="indefinite"/>
+      <animate attributeName="baseFrequency" values="0.012 0.025;0.018 0.035;0.012 0.025" dur="8s" repeatCount="indefinite"/>
+    </feTurbulence>
+    <feDisplacementMap in2="turb" in="SourceGraphic" scale="7" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</svg>

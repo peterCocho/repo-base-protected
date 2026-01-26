@@ -1,0 +1,117 @@
+.verification-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100vw;
+  background: none;
+  padding: 2rem 0;
+  box-sizing: border-box;
+}
+
+.verification-form {
+  width: 100%;
+  max-width: 400px;
+  padding: 3rem 2rem;
+  background: rgba(255,255,255,0.08);
+  border-radius: 22px;
+  border: 1.5px solid rgba(255,255,255,0.18);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18), 0 1.5px 8px 0 rgba(59,130,246,0.08);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  text-align: center;
+}
+
+.verification-form__header {
+  margin-bottom: 2rem;
+}
+
+.verification-form__note {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-top: 0.5rem;
+}
+
+.verification-form__form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  width: 100%; 
+  align-items: stretch;
+}
+.input-with-icon {
+  padding-left: 3rem !important; 
+}
+.verification-form__input-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.verification-form__input-group input.input-glass {
+  padding-left: 3rem !important; 
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.verification-form__icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+  z-index: 5;
+  pointer-events: none;
+  
+}
+
+.verification-form__error {
+  color: var(--accent-red);
+  font-size: 0.95rem;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.verification-form__resend-btn {
+  margin-top: 0.5rem;
+}
+
+.verification-form__footer {
+  margin-top: 2rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  opacity: 0.8;
+}
+
+.verification-success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.verification-success h3 {
+  color: var(--text-primary);
+}
+
+.verification-success p {
+  color: var(--text-secondary);
+}
+
+.verification-form__footer {
+  margin-top: 2rem;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  opacity: 0.8;
+}
+
+/* Responsividad para pantallas pequeñas */
+@media (max-width: 900px) {
+  
+  .verification-form{
+    margin: 1rem;
+  }
+
+}

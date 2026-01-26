@@ -1,0 +1,188 @@
+package com.churninsight_dev.backend_api.controller;
+
+import org.springframework.web.bind.annotation.CrossOrigin;
+import com.churninsight_dev.backend_api.dto.LoginDto;
+import com.churninsight_dev.backend_api.dto.RegisterDto;
+import com.churninsight_dev.backend_api.dto.AuthErrorResponse;
+import com.churninsight_dev.backend_api.dto.LoginJwtResponse;
+import com.churninsight_dev.backend_api.exception.EmailAlreadyExistsException;
+import com.churninsight_dev.backend_api.exception.PasswordMismatchException;
+import com.churninsight_dev.backend_api.model.User;
+import com.churninsight_dev.backend_api.repository.UserRepository;
+import com.churninsight_dev.backend_api.security.JwtUtil;
+import com.churninsight_dev.backend_api.model.VerificationCode;
+import com.churninsight_dev.backend_api.repository.VerificationCodeRepository;
+import com.churninsight_dev.backend_api.service.EmailService;
+import java.util.UUID;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid;
+import java.time.LocalDateTime;
+import java.util.Optional;
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * Controlador REST para manejar la autenticación de usuarios.
+ * Proporciona endpoints para login y registro, incluyendo verificación de email.
+ * Utiliza JWT para la autenticación y maneja errores de forma estructurada.
+ */
+@RestController
+@CrossOrigin(origins = "http://localhost:5173") // Cambia el puerto si tu frontend usa otro
+public class AuthController {
+    
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
+    private final VerificationCodeRepository verificationCodeRepository;
+    private final EmailService emailService;
+
+    /**
+     * Constructor para inyección de dependencias.
+     * @param userRepository Repositorio para acceder a los datos de usuarios.
+     * @param passwordEncoder Codificador de contraseñas para seguridad.
+     * @param jwtUtil Utilidad para generar y validar tokens JWT.
+     * @param verificationCodeRepository Repositorio para códigos de verificación.
+     * @param emailService Servicio para envío de emails.
+     */
+    @Autowired
+    public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil,
+                        VerificationCodeRepository verificationCodeRepository, EmailService emailService) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtUtil = jwtUtil;
+        this.verificationCodeRepository = verificationCodeRepository;
+        this.emailService = emailService;
+    }
+
+    /**
+     * Endpoint para iniciar sesión de un usuario.
+     * Valida las credenciales, verifica el estado de la cuenta y genera un token JWT si es exitoso.
+     * @param loginDto DTO con los datos de login (email y contraseña).
+     * @return ResponseEntity con el token JWT o un error estructurado.
+     */
+    @PostMapping(value = "/login", consumes = "application/json")
+    public ResponseEntity<?> loginUser(@RequestBody LoginDto loginDto) {
+        String email = (loginDto.getEmail() == null) ? null : loginDto.getEmail().trim();
+        String password = loginDto.getPassword();
+        if (email == null || password == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    new AuthErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(),
+                            "Error de Login", "Email y contraseña requeridos.", "email/password",
+                            "CREDENTIALS_REQUIRED"));
+        }
+        Optional<User> userOpt = userRepository.findByEmail(email);
+        String genericLoginError = "Algunos de los datos ingresados es incorrecto. Vuelve a ingresarlos y revisa que estén bien escritos. ¿Olvidaste tu contraseña?";
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                    new AuthErrorResponse(LocalDateTime.now(), HttpStatus.UNAUTHORIZED.value(),
+                            "Error de Login", genericLoginError, "email/password", "INVALID_CREDENTIALS"));
+        }
+        
+        User user = userOpt.get();
+        boolean isVerified = user.getStatus();
+        if (!isVerified) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                    new AuthErrorResponse(LocalDateTime.now(), HttpStatus.UNAUTHORIZED.value(),
+                            "Error de Login", "Debes verificar tu cuenta antes de iniciar sesión.", "status",
+                            "ACCOUNT_NOT_VERIFIED"));
+        }
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                    new AuthErrorResponse(LocalDateTime.now(), HttpStatus.UNAUTHORIZED.value(),
+                            "Error de Login", genericLoginError, "email/password", "INVALID_CREDENTIALS"));
+        }
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("email", user.getEmail());
+        claims.put("username", user.getUserName());
+        claims.put("status", isVerified);
+        claims.put("roles", user.getProfiles().stream().map(Enum::name).toList()); // Agrega los roles como lista de strings
+        String token = jwtUtil.generateToken(user.getEmail(), claims);
+        return ResponseEntity.ok(
+            new LoginJwtResponse("¡Bienvenido!", user.getEmail(), user.getUserName(), isVerified, token));
+    }
+
+    /**
+     * Endpoint para registrar un nuevo usuario.
+     * Valida los datos, crea el usuario, genera un código de verificación y envía un email.
+     * @param registerDto DTO con los datos de registro.
+     * @return ResponseEntity con mensaje de éxito o error estructurado.
+     */
+    @PostMapping(value = "/register", consumes = "application/json")
+    public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterDto registerDto) {
+        String email = (registerDto.getEmail() == null) ? null : registerDto.getEmail().trim();
+        String username = (registerDto.getUserName() == null) ? null : registerDto.getUserName().trim();
+        String password = registerDto.getPassword();
+        String repeatPassword = registerDto.getRepeatPassword();
+        String companyName = (registerDto.getCompanyName() == null) ? null : registerDto.getCompanyName().trim();
+        if (email == null || !email.matches("^.+@.+\\..+")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                new AuthErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(),
+                    "Error de Registro", "Correo inválido.", "email", "INVALID_EMAIL")
+            );
+        }
+        if (username == null || username.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                new AuthErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(),
+                    "Error de Registro", "El nombre de usuario es obligatorio.", "username", "USERNAME_REQUIRED")
+            );
+        }
+        if (password == null || password.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                new AuthErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(),
+                    "Error de Registro", "La contraseña es obligatoria.", "password", "PASSWORD_REQUIRED")
+            );
+        }
+        if (companyName == null || companyName.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                new AuthErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(),
+                    "Error de Registro", "El nombre de la empresa es obligatorio.", "companyName", "COMPANY_REQUIRED")
+            );
+        }
+        if (!password.equals(repeatPassword)) {
+            throw new PasswordMismatchException("Las contraseñas no coinciden. Asegúrate de que ambas sean iguales.");
+        }
+        Optional<User> existing = userRepository.findByEmail(email);
+        if (existing.isPresent()) {
+            throw new EmailAlreadyExistsException("El email que has introducido ya está asociado a una cuenta.");
+        }
+        // Persistir usuario
+        User user = new User();
+        user.setEmail(email);
+        user.setUserName(username);
+        user.setPassword(passwordEncoder.encode(password));
+        user.setStatus(false);
+        user.setCompanyName(companyName);
+        User savedUser = userRepository.save(user);
+
+        // Eliminar código anterior si existe
+        VerificationCode oldCode = verificationCodeRepository.findByUser_Id(savedUser.getId());
+        if (oldCode != null) {
+            verificationCodeRepository.delete(oldCode);
+        }
+
+        // Generar y guardar nuevo código de verificación con expiración
+        String code = UUID.randomUUID().toString().substring(0, 6).toUpperCase();
+        VerificationCode verificationCode = new VerificationCode(code, savedUser);
+        verificationCodeRepository.save(verificationCode);
+
+        try {
+            emailService.sendVerificationCode(savedUser.getEmail(), code);
+        } catch (Exception e) {
+            verificationCodeRepository.delete(verificationCode);
+            userRepository.delete(savedUser);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                new AuthErrorResponse(LocalDateTime.now(), HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    "Error de Registro", "No se pudo enviar el correo de verificación: " + e.getMessage(),
+                    "email", "EMAIL_SEND_FAILED")
+            );
+        }
+
+        return ResponseEntity.ok("Usuario registrado correctamente. Verifica tu correo.");
+    }
+}

@@ -1,42 +1,164 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
+/* Ajuste del contenido principal para dejar espacio a la navbar */
+.main-content {
+  padding-top: 72px;
+  padding-left: 0;
+  padding-right: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+/* App.css */
+
+:root {
+  --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #312e81 100%);
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-highlight: rgba(255, 255, 255, 0.2);
+  --text-primary: #f8fafc; /* más claro */
+  --text-secondary: #cbd5e1; /* más claro para contraste */
+  --accent-blue: #3b82f6;
+  --accent-green: #10b981;
+  --accent-red: #ef4444;
+  --accent-yellow: #f59e0b;
+}
+
+html, body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  min-width: 0;
+  max-width: 100vw;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  background: var(--bg-gradient, #222846);
+}
+
+body {
+  margin: 0;
+  background-image: url('/src/assets/fondo-degradado-app-1.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+}
+
+/* Panel con glasmorfismo */
+.glass-panel {
+  position: relative;
+  -webkit-backdrop-filter: blur(10px) saturate(130%);
+  backdrop-filter: blur(10px) saturate(130%);
+  background: rgba(0,0,0,0.35); /* overlay más oscuro para contraste */
+  border-radius: 22px;
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 6px 21px rgba(0,0,0,0.4),
+              inset 0 0 12px -2px var(--glass-highlight);
+  isolation: isolate;
+  overflow: hidden;
+}
+
+/* Overlay superior */
+.glass-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(to left top, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0) 50%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Overlay inferior */
+.glass-panel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Texto dentro del panel */
+.glass-panel h2,
+.glass-panel p {
+  position: relative;
+  z-index: 2;
+  color: #fff;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.8); /* sombra fuerte para legibilidad */
+}
+
+/* Asegura que el contenido (p.ej. gráficas) no quede debajo de los overlays */
+.glass-panel > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* Inputs */
+.input-glass {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--glass-border);
+  color: #fff;
+  padding: 10px 15px;
+  border-radius: 8px;
+  width: 100%;
+  outline: none;
+  transition: all 0.3s;
+}
+
+.input-glass:focus {
+  border-color: var(--accent-blue);
+  background: rgba(0, 0, 0, 0.6);
+}
+
+/* Botón */
+.btn-primary {
+  background: var(--accent-blue);
+  color: #fff;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+}
+
+.btn-primary:hover {
+  background: #2563eb;
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+}
+
+.btn-primary:disabled {
+  background: #475569;
+  cursor: not-allowed;
+}
+
+/* Layout */
+.page-container {
   padding: 2rem;
-  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0 auto;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+
+
+@media (max-width: 768px) {
+  .grid-2 { grid-template-columns: 1fr; }
+  .page-container {
+    padding: 0.25rem;
   }
-  to {
-    transform: rotate(360deg);
+  .glass-panel {
+    border-radius: 12px;
+    margin: 0;
   }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
 }
