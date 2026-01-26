@@ -1,22 +1,32 @@
 -- V10__Change_customer_model.sql
--- Cambiar el modelo de customers para permitir customer_id duplicados por empresa
+-- Limpiar duplicados y agregar constraint de unicidad por empresa
 
--- Primero, eliminar la FK en predictions
-ALTER TABLE predictions DROP CONSTRAINT IF EXISTS fk_prediction_customer;
+-- Paso 1: Reasignar foreign keys de predictions para que apunten a los customers que mantendremos
+-- (el registro con id máximo para cada grupo user_id, customer_id)
+UPDATE predictions
+SET customer_id = (
+    SELECT MAX(c.id)
+    FROM customers c
+    WHERE c.user_id = (SELECT user_id FROM customers WHERE id = predictions.customer_id)
+    AND c.customer_id = (SELECT customer_id FROM customers WHERE id = predictions.customer_id)
+)
+WHERE customer_id IN (
+    SELECT id FROM customers
+    WHERE (user_id, customer_id) IN (
+        SELECT user_id, customer_id
+        FROM customers
+        GROUP BY user_id, customer_id
+        HAVING COUNT(*) > 1
+    )
+);
 
--- Quitar PRIMARY KEY de customer_id
-ALTER TABLE customers DROP CONSTRAINT customers_pkey;
+-- Paso 2: Eliminar duplicados de customers (mantener el registro con id más alto)
+DELETE FROM customers
+WHERE id NOT IN (
+    SELECT MAX(id)
+    FROM customers
+    GROUP BY user_id, customer_id
+);
 
--- Agregar nueva columna id
-ALTER TABLE customers ADD COLUMN id SERIAL;
-
--- Establecer id como PRIMARY KEY
-ALTER TABLE customers ADD CONSTRAINT customers_pkey PRIMARY KEY (id);
-
--- Cambiar predictions.customer_id de VARCHAR UNIQUE a INTEGER FK a customers.id
-ALTER TABLE predictions DROP CONSTRAINT IF EXISTS predictions_customer_id_key;
-
-ALTER TABLE predictions DROP COLUMN customer_id;
-ALTER TABLE predictions ADD COLUMN customer_id INTEGER;
-
-ALTER TABLE predictions ADD CONSTRAINT fk_prediction_customer FOREIGN KEY (customer_id) REFERENCES customers(id);
+-- Paso 3: Agregar UNIQUE constraint para (user_id, customer_id)
+ALTER TABLE customers ADD CONSTRAINT uk_customer_user_customer_id UNIQUE (user_id, customer_id);
