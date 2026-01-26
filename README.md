@@ -43,7 +43,7 @@ El sistema combina **Data Science (Python, Scikit-learn)** y **Back-End (Java + 
 ### Machine Learning
 
 - **Python 3.13+** con FastAPI
-- **Scikit-learn 1.6.1** para modelos ML
+- **Scikit-learn 1.6.0** para modelos ML
 - **Pandas, NumPy** para procesamiento de datos
 - **Matplotlib, Seaborn** para visualización de datos
 - **Joblib** para serialización de modelos
@@ -106,7 +106,7 @@ backend-api/             # Backend Java Spring Boot
 
 ### Variables de entorno requeridas
 
-Crear un archivo `.env` en el directorio `backend-api/src/main/java/com/churninsight_dev/backend_api/` con las siguientes variables:
+Crear un archivo `aplication.properties` en el directorio `backend-api/src/main/java/com/churninsight_dev/backend_api/` con las siguientes variables:
 
 ```bash
 # Base de datos PostgreSQL
@@ -374,7 +374,6 @@ npm run dev
 - **Machine Learning (FastAPI):** Microservicio especializado en predicciones de churn usando modelos entrenados
 - **Base de Datos (PostgreSQL):** Almacenamiento de datos de clientes, predicciones y usuarios
 
-## 🔄 Flujo de datos
 
 1. **Usuario** interactúa con el dashboard en React
 2. **Frontend** envía requests al backend Java
