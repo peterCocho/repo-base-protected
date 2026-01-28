@@ -413,8 +413,7 @@ El sistema sigue una arquitectura de microservicios desacoplada para garantizar 
 2.  **Solicitud:** El frontend envía las solicitudes al backend en Java.
 3.  **Orquestación:** El Backend consulta estadísticas o envía los datos limpios al microservicio de ML.
 4.  **Inferencia:** FastAPI procesa la predicción usando el modelo y devuelve el resultado.
-5.  **Resultado:** La información fluye de vuelta al usuario a través del backend, permitiendo visualizar la estrategia recomendada.
-6.  
+5.  **Resultado:** La información fluye de vuelta al usuario a través del backend, permitiendo visualizar la estrategia recomendada. 
 
 ---
 
