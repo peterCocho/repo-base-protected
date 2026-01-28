@@ -143,12 +143,44 @@ PAYPAL_CLIENT_SECRET=tu_client_secret_sandbox
 
 ### Configuración de email (Gmail)
 
-1. **Habilitar autenticación de 2 factores** en tu cuenta Gmail
-2. **Generar una app password:**
-   - Ve a [Google Account Settings](https://myaccount.google.com/)
-   - Security → 2-Step Verification → App passwords
-   - Genera una contraseña para "Mail"
-3. **Usar la app password** en la variable `PASSWORD_EMAIL_TEMP`
+---
+
+## 1. Crear la cuenta Gmail
+- Accede a [https://accounts.google.com/signup](https://accounts.google.com/signup).
+- Completa el formulario con nombre, usuario y contraseña.
+- Verifica tu número de teléfono mediante SMS o llamada (Google lo exige para evitar abusos).
+- Una vez validado, tu cuenta estará lista.
+
+---
+
+## 2. Activar verificación en dos pasos
+- Ve a [https://myaccount.google.com/security](https://myaccount.google.com/security).
+- En la sección **“Cómo inicias sesión en Google”**, activa **Verificación en dos pasos**.
+- Configura tu teléfono o la aplicación Google Authenticator.
+
+---
+
+## 3. Generar contraseña de aplicación
+- Regresa a la página de **Seguridad** de tu cuenta.
+- Aparecerá la opción **Contraseñas de aplicaciones**.
+- Selecciona:
+  - Aplicación: **Correo**
+  - Dispositivo: **Otro (Spring Boot)**
+- Copia la contraseña de 16 caracteres que te da Google.
+
+---
+
+## 4. Configuración en `application.properties`
+Agrega lo siguiente a tu proyecto:
+
+```properties
+spring.mail.host=smtp.gmail.com
+spring.mail.port=587
+spring.mail.username=TU_CORREO_GMAIL
+spring.mail.password=CONTRASEÑA_DE_APLICACIÓN
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true
+
 
 ---
 
