@@ -1,0 +1,21 @@
+customer_id,age,gender,subscription_type,watch_hours,last_login_days,region,device,monthly_fee,churned,payment_method,number_of_profiles,avg_watch_time_per_day,favorite_genre
+a18a,70,Female,Standard,19.11,28,Africa,Laptop,13.99,0,PayPal,4,0.66,Romance
+72ad,47,Male,Premium,22.31,6,Africa,TV,17.99,0,Gift Card,3,3.19,Comedy
+8925,18,Female,Basic,13.51,53,North America,Laptop,8.99,1,Debit Card,4,0.25,Documentary
+e12d,44,Male,Standard,27.08,16,Asia,Desktop,13.99,0,Crypto,3,1.59,Horror
+2fae,70,Other,Basic,61.47,7,Europe,Mobile,8.99,0,PayPal,1,7.68,Romance
+1e2c,59,Male,Standard,4.14,55,South America,Desktop,13.99,1,Crypto,5,0.07,Horror
+fbf7,54,Other,Standard,27.56,28,Asia,Laptop,13.99,0,PayPal,5,0.95,Horror
+1abb,57,Other,Basic,4.59,54,Africa,TV,8.99,1,PayPal,4,0.08,Documentary
+e55e,51,Female,Premium,16.96,15,Oceania,Laptop,17.99,0,Credit Card,5,1.06,Sci-Fi
+0210,65,Female,Standard,2.26,60,South America,Mobile,13.99,1,Credit Card,2,0.04,Horror
+10e3,52,Other,Standard,1.79,38,Africa,Mobile,13.99,1,Credit Card,1,0.05,Drama
+ab11,54,Other,Basic,30.06,37,Oceania,TV,8.99,0,Gift Card,2,0.79,Action
+aa01,47,Other,Standard,2.11,24,Africa,Mobile,13.99,1,Crypto,4,0.08,Comedy
+6dc6,63,Female,Standard,16.91,20,North America,Desktop,13.99,0,Gift Card,1,0.81,Horror
+45ed,59,Male,Standard,7.33,21,Oceania,Mobile,13.99,0,PayPal,4,0.33,Documentary
+a5e5,37,Female,Standard,1.64,8,Asia,Laptop,13.99,1,Credit Card,1,0.18,Action
+d0ee,18,Female,Standard,1.48,27,Europe,Desktop,13.99,0,Debit Card,4,0.05,Sci-Fi
+b010,64,Other,Premium,8.46,20,Asia,Laptop,17.99,0,Debit Card,4,0.4,Romance
+c434,67,Female,Basic,19.58,44,Europe,Tablet,8.99,1,Debit Card,3,0.44,Romance
+3928,23,Other,Basic,10.85,13,North America,Mobile,8.99,0,PayPal,3,0.78,Romance

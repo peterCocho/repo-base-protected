@@ -12,6 +12,7 @@ import VerificationScreen from './pages/Verification/VerificationScreen';
 import UpgradeToPremium from './pages/Premium/UpgradeToPremium';
 import PaymentSuccess from './pages/Premium/PaymentSuccess';
 import PaymentCancel from './pages/Premium/PaymentCancel';
+
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 
 function AppRoutes({ isLoggedIn, setIsLoggedIn, currentScreen, setCurrentScreen, predictionData, setPredictionData }) {

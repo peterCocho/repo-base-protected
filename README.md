@@ -192,19 +192,26 @@ source venv/bin/activate
 #### Instalar librerías
 
 ```bash
-python -m pip install fastapi uvicorn pydantic numpy joblib pandas
-pip install scikit-learn==1.6.0
-pip install python-multipart
+# Opción 1: Instalar globalmente (recomendado para desarrollo)
+pip install fastapi uvicorn pydantic scikit-learn==1.6.0 joblib numpy pandas python-multipart
+
+# Opción 2: Usando entorno virtual (si prefieres aislamiento)
+python -m venv venv
+.\venv\Scripts\activate
+pip install -r requirements.txt
 ```
 
 #### Ejecutar el microservicio
 
 ```bash
-# Producción
-uvicorn main:app --host 0.0.0.0 --port 8000
+# Opción 1: Usando python -m (recomendado)
+python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
 
-# Desarrollo (con recarga automática)
-.\venv\Scripts\python.exe -m uvicorn main:app --reload
+# Opción 2: Usando uvicorn directamente (si está en PATH)
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
+
+# Producción (sin reload)
+uvicorn main:app --host 0.0.0.0 --port 8000
 ```
 
 #### Probar el endpoint desde el navegador
@@ -384,20 +391,120 @@ npm run dev
 
 ---
 
-## � Solución de problemas
+## 🚀 Despliegue
 
-### Problemas comunes
+### Opción 1: Despliegue Gratuito con Railway (Recomendado)
 
-**Error de conexión a PostgreSQL:**
+Railway es ideal para aplicaciones full-stack con múltiples servicios. Soporta Docker y PostgreSQL integrado.
+
+#### Pasos para desplegar:
+
+1. **Crear cuenta en Railway:**
+   - Ve a [railway.app](https://railway.app) y regístrate
+   - Conecta tu cuenta de GitHub
+
+2. **Crear proyecto:**
+   - Haz clic en "New Project" > "Deploy from GitHub repo"
+   - Selecciona tu repositorio `ChurnInsight_dev`
+
+3. **Configurar servicios:**
+
+   **Base de datos PostgreSQL:**
+   - Railway crea automáticamente una instancia PostgreSQL
+   - Copia las variables de entorno generadas
+
+   **Backend (Spring Boot):**
+   - Railway detectará automáticamente el Dockerfile
+   - Variables de entorno necesarias:
+     ```
+     SPRING_PROFILES_ACTIVE=production
+     SPRING_DATASOURCE_URL=${DATABASE_URL}
+     DS_SERVICE_URL=https://ml-service-production.up.railway.app
+     JWT_SECRET=tu-jwt-secret-seguro
+     ```
+
+   **ML Service (FastAPI):**
+   - Railway detectará el Dockerfile
+   - Variables de entorno:
+     ```
+     PORT=8000
+     ```
+
+   **Frontend (React):**
+   - Railway detectará el Dockerfile
+   - Variables de entorno:
+     ```
+     VITE_API_BASE_URL=https://backend-production.up.railway.app
+     ```
+
+4. **Configurar dominios:**
+   - Railway asigna automáticamente subdominios gratuitos
+   - Para dominio personalizado: Settings > Domains
+
+5. **Desplegar:**
+   - Railway desplegará automáticamente al hacer push a main
+   - Monitorea logs en el dashboard
+
+### Opción 2: Desarrollo Local con Docker
 
 ```bash
-# Verificar que PostgreSQL esté corriendo
-sudo systemctl status postgresql
+# Clonar el repositorio
+git clone https://github.com/tu-usuario/ChurnInsight_dev.git
+cd ChurnInsight_dev
 
-# Verificar credenciales en application.properties
-# Asegurarse de que la base de datos existe
-psql -U postgres -d churninsight
+# Copiar variables de entorno
+cp .env.example .env
+
+# Levantar todos los servicios
+docker-compose up --build
+
+# Acceder a la aplicación:
+# Frontend: http://localhost:3000
+# Backend API: http://localhost:8080
+# ML Service: http://localhost:8000
+# PostgreSQL: localhost:5432
 ```
+
+### Variables de Entorno Requeridas
+
+Copia `.env.example` a `.env` y configura:
+
+```bash
+# Base de datos
+SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/churninsight
+SPRING_DATASOURCE_USERNAME=postgres
+SPRING_DATASOURCE_PASSWORD=password
+
+# ML Service
+DS_SERVICE_URL=http://localhost:8000
+
+# JWT
+JWT_SECRET=genera-un-secret-seguro-aqui
+
+# Email (opcional)
+SPRING_MAIL_HOST=smtp.gmail.com
+SPRING_MAIL_PORT=587
+SPRING_MAIL_USERNAME=tu-email@gmail.com
+SPRING_MAIL_PASSWORD=tu-app-password
+
+# Frontend
+VITE_API_BASE_URL=http://localhost:8080
+```
+
+### Otras Plataformas Gratuitas
+
+- **Render:** Similar a Railway, soporta Docker
+- **Fly.io:** Bueno para apps contenerizadas
+- **Heroku:** Limitado, pero fácil para principiantes
+
+### Notas Importantes
+
+- Asegúrate de que los puertos (8080, 8000, 3000) estén disponibles
+- Para producción, usa variables de entorno seguras
+- El modelo ML debe estar en `ml-service/` con los archivos necesarios
+- La base de datos PostgreSQL debe tener las migraciones Flyway aplicadas
+
+---
 
 **Error al enviar emails:**
 

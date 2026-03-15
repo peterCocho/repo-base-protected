@@ -1,0 +1,8 @@
+{
+  "build": {
+    "builder": "dockerfile"
+  },
+  "deploy": {
+    "startCommand": "java -jar target/backend-api-0.0.1-SNAPSHOT.jar"
+  }
+}

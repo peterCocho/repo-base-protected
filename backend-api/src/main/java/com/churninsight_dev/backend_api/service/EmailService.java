@@ -26,7 +26,7 @@ public class EmailService {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to.trim());
         message.setSubject("Código de Verificación para tu Cuenta");
-        message.setText("Hola,\n\nGracias por registrarte. Tu código de verificación es: " + code + "\n\nEste código expirará en 24 horas.\n\nSaludos.");
+        message.setText("Hola,\n\nGracias por registrarte. Tu código de verificación es: " + code + "\n\nEste código expirará en 5 minutos.\n\nSaludos.");
         mailSender.send(message);
     }
 }
