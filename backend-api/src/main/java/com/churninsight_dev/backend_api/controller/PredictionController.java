@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.LinkedHashMap;
 
+
 /**
  * Controlador REST que expone los endpoints para la predicción de Churn.
  * Actúa como punto de entrada para las peticiones del Frontend y Postman.

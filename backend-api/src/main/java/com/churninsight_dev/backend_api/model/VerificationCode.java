@@ -14,7 +14,7 @@ import java.sql.Timestamp;
 public class VerificationCode {
 
     // Tiempo de expiración del código en segundos
-    private static final int EXPIRATION_SECONDS = 120; // 120 segundos
+    private static final int EXPIRATION_SECONDS = 300; // 300 segundos (5 minutos)
 
     // Identificador único del código
     @Id
