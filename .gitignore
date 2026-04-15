@@ -75,8 +75,13 @@ Thumbs.db
 *.temp
 logs/
 
-# Docker (if needed)
-# .dockerignore is separate
+# Docker
+.env
+.env.local
+.env.*.local
+docker-compose.override.yml
+docker-compose.local.yml
+*.log
 
 # Railway (deployment)
 # railway.json is included in repo
