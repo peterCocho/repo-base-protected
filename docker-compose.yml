@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: churninsight
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build: ./backend-api
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    environment:
+      - APLICATION_NAME=backend-api
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - DATABASE_PASSWORD_P=${DATABASE_PASSWORD_P}
+      - DATABASE_URL_CHURNINSIGHT=jdbc:postgresql://localhost:8081/churn_db
+      - DATABASE_USERNAME=${DATABASE_USERNAME}
+      - DATABASE_USERNAME_P=${DATABASE_USERNAME_P}
+      - DB_SERVER=localhost
+      - DRIVER_POSTGRES=org.postgresql.Driver
+      - DS_SERVICE_URL=http://localhost:8000/predict
+      - HOST_EMAIL_TEMP=smtp.gmail.com
+      - JDBC_DATABASE_URL=jdbc:mysql://127.0.0.1:3306/programa_db1?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false
+      - PASSWORD_EMAIL_TEMP=${PASSWORD_EMAIL_TEMP}
+      - PORT_EMAIL_TEMP=587
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/churninsight
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
+      - USERNAME_EMAIL_TEMP=${USERNAME_EMAIL_TEMP}
+    depends_on:
+      - postgres
+      - ml-service
+
+  frontend:
+    build: ./churn-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - VITE_API_BASE_URL=http://localhost:8080
+
+  ml-service:
+    build: ./ml-service
+    ports:
+      - "8000:8000"
+
+volumes:
+  postgres_data:
