@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Activity, User, CreditCard, MonitorPlay } from "lucide-react";
 import "./AnalyzerScreen.css";
-import successSound from "../../audio/success.mp3";
-import errorSound from "../../audio/error.mp3";
-import errorSound2 from "../../audio/advertence.mp3";
+// import successSound from "../../audio/success.mp3";
+// import errorSound from "../../audio/error.mp3";
+// import errorSound2 from "../../audio/advertence.mp3";
 import api from "../../services/api";
 
 export default function AnalyzerScreen() {
@@ -17,8 +17,8 @@ export default function AnalyzerScreen() {
 
   useEffect(() => {
     try {
-      console.log("[Analyzer] audio URLs:", { successSound, errorSound, errorSound2 });
-      successAudioRef.current = new Audio(successSound);
+      console.log("[Analyzer] initializing audio...");
+      successAudioRef.current = new Audio('/audio/success.mp3');
       successAudioRef.current.preload = "auto";
       successAudioRef.current.load();
       successAudioRef.current.addEventListener("canplaythrough", () => {
@@ -28,7 +28,7 @@ export default function AnalyzerScreen() {
         console.error("[Analyzer] success audio error:", ev);
       });
 
-      errorAudioRef.current = new Audio(errorSound);
+      errorAudioRef.current = new Audio('/audio/error.mp3');
       errorAudioRef.current.preload = "auto";
       errorAudioRef.current.load();
       errorAudioRef.current.addEventListener("canplaythrough", () => {
@@ -38,7 +38,7 @@ export default function AnalyzerScreen() {
         console.error("[Analyzer] error audio error:", ev);
       });
 
-      advertenceAudioRef.current = new Audio(errorSound2);
+      advertenceAudioRef.current = new Audio('/audio/advertence.mp3');
       advertenceAudioRef.current.preload = "auto";
       advertenceAudioRef.current.load();
       advertenceAudioRef.current.addEventListener("canplaythrough", () => {
