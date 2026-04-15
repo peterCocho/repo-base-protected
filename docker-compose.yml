@@ -17,11 +17,24 @@ services:
     ports:
       - "8080:8080"
     environment:
+      - APLICATION_NAME=backend-api
+      - DATABASE_PASSWORD=miContrasena771---
+      - DATABASE_PASSWORD_P=12345
+      - DATABASE_URL_CHURNINSIGHT=jdbc:postgresql://localhost:8081/churn_db
+      - DATABASE_USERNAME=root
+      - DATABASE_USERNAME_P=postgres
+      - DB_SERVER=localhost
+      - DRIVER_POSTGRES=org.postgresql.Driver
+      - DS_SERVICE_URL=http://localhost:8000/predict
+      - HOST_EMAIL_TEMP=smtp.gmail.com
+      - JDBC_DATABASE_URL=jdbc:mysql://127.0.0.1:3306/programa_db1?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false
+      - PASSWORD_EMAIL_TEMP=qjnrdejlblnkgsgj
+      - PORT_EMAIL_TEMP=587
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/churninsight
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=password
-      - DS_SERVICE_URL=http://ml-service:8000
+      - USERNAME_EMAIL_TEMP=temp.mail.act.sena@gmail.com
     depends_on:
       - postgres
       - ml-service
